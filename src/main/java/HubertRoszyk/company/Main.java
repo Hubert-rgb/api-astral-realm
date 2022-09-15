@@ -19,6 +19,7 @@ import java.sql.SQLException;
 @SpringBootApplication
 @EnableJpaRepositories
 @EntityScan()
+
 public class Main {
     //TODO tests
     //TODO comments
