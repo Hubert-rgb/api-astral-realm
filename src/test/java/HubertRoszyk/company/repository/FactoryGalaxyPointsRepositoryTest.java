@@ -1,7 +1,7 @@
 package HubertRoszyk.company.repository;
 
 import HubertRoszyk.company.entiti_class.Galaxy;
-import HubertRoszyk.company.entiti_class.FactoryPoints;
+import HubertRoszyk.company.entiti_class.GalaxyPoints;
 import HubertRoszyk.company.entiti_class.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,9 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
-class FactoryFactoryPointsRepositoryTest {
+class FactoryGalaxyPointsRepositoryTest {
     @Autowired
-    FactoryPointsRepository factoryPointsRepository;
+    GalaxyPointsRepository galaxyPointsRepository;
 
     @Test
     void itShouldFindPointsByUserId() {
@@ -22,14 +22,14 @@ class FactoryFactoryPointsRepositoryTest {
         User user = new User();
         Galaxy galaxy = new Galaxy();
 
-        FactoryPoints factoryPoints = new FactoryPoints(user, galaxy);
+        GalaxyPoints galaxyPoints = new GalaxyPoints(user, galaxy);
 
-        factoryPointsRepository.save(factoryPoints);
+        galaxyPointsRepository.save(galaxyPoints);
 
         //when
-        Set<FactoryPoints> gotPoints = factoryPointsRepository.findFactory_PointsByUserId(user.getId());
+        Set<GalaxyPoints> gotPoints = galaxyPointsRepository.findGalaxy_PointsByUserId(user.getId());
         //then
-        assertThat(gotPoints).contains(factoryPoints);
+        assertThat(gotPoints).contains(galaxyPoints);
     }
     @Test
     void itShouldFindPointsByUserIdAndGalaxyId() {
@@ -37,14 +37,14 @@ class FactoryFactoryPointsRepositoryTest {
         User user = new User();
         Galaxy galaxy = new Galaxy();
 
-        FactoryPoints factoryPoints = new FactoryPoints(user, galaxy);
+        GalaxyPoints galaxyPoints = new GalaxyPoints(user, galaxy);
 
-        factoryPointsRepository.save(factoryPoints);
+        galaxyPointsRepository.save(galaxyPoints);
 
         //when
-        FactoryPoints gotFactoryPoints = factoryPointsRepository.findFactory_PointsByUserIdAndGalaxyId(user.getId(), galaxy.getId());
+        GalaxyPoints gotGalaxyPoints = galaxyPointsRepository.findGalaxy_PointsByUserIdAndGalaxyId(user.getId(), galaxy.getId());
 
         //then
-        assertThat(gotFactoryPoints).isEqualTo(factoryPoints);
+        assertThat(gotGalaxyPoints).isEqualTo(galaxyPoints);
     }
 }

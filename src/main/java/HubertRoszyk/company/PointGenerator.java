@@ -1,10 +1,10 @@
 package HubertRoszyk.company;
 
-import HubertRoszyk.company.entiti_class.ArmyPoints;
-import HubertRoszyk.company.entiti_class.FactoryPoints;
+import HubertRoszyk.company.entiti_class.PlanetPoints;
+import HubertRoszyk.company.entiti_class.GalaxyPoints;
 import HubertRoszyk.company.configuration.GameProperties;
-import HubertRoszyk.company.service.ArmyPointsService;
-import HubertRoszyk.company.service.FactoryPointsService;
+import HubertRoszyk.company.service.PlanetPointsService;
+import HubertRoszyk.company.service.GalaxyPointsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +15,10 @@ import java.util.TimerTask;
 @Component
 public class PointGenerator {
     @Autowired
-    FactoryPointsService factoryPointsService;
+    GalaxyPointsService galaxyPointsService;
 
     @Autowired
-    ArmyPointsService armyPointsService;
+    PlanetPointsService planetPointsService;
 
     @Autowired
     GameProperties gameProperties;
@@ -34,31 +34,31 @@ public class PointGenerator {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                List<FactoryPoints> factoryPointsList = factoryPointsService.getPointsList();
-                List<ArmyPoints> armyPointsList = armyPointsService.getArmyPointsList();
-                for (FactoryPoints factoryPoints : factoryPointsList) {
-                    double gotIndustryPoints = factoryPoints.getIndustryPoints();
-                    double gotSciencePoints = factoryPoints.getSciencePoints();
+                List<GalaxyPoints> galaxyPointsList = galaxyPointsService.getPointsList();
+                List<PlanetPoints> planetPointsList = planetPointsService.getPlanetPointsList();
+                for (GalaxyPoints galaxyPoints : galaxyPointsList) {
+                    double gotSciencePoints = galaxyPoints.getSciencePoints();
 
-                    double setIndustryPoints = gotIndustryPoints + factoryPoints.getIndustryPointsIncome();
-                    double setSciencePoints = gotSciencePoints + factoryPoints.getSciencePointsIncome();
+                    double setSciencePoints = gotSciencePoints + galaxyPoints.getSciencePointsIncome();
 
-                    factoryPoints.setIndustryPoints(setIndustryPoints);
-                    factoryPoints.setSciencePoints(setSciencePoints);
+                    galaxyPoints.setSciencePoints(setSciencePoints);
 
-                    factoryPointsService.updatePoints(factoryPoints);
+                    galaxyPointsService.updatePoints(galaxyPoints);
                 }
-                for (ArmyPoints armyPoints : armyPointsList) {
-                    double gotDefencePoints = armyPoints.getDefensePoints();
-                    double gotAttackPoints = armyPoints.getAttackPoints();
+                for (PlanetPoints planetPoints : planetPointsList) {
+                    double gotDefencePoints = planetPoints.getDefensePoints();
+                    double gotAttackPoints = planetPoints.getAttackPoints();
+                    double gotIndustryPoints = planetPoints.getIndustryPoints();
 
-                    double setDefencePoints = gotDefencePoints + armyPoints.getDefensePointsIncome();
-                    double setAttackPoints = gotAttackPoints + armyPoints.getAttackPointsIncome();
+                    double setDefencePoints = gotDefencePoints + planetPoints.getDefensePointsIncome();
+                    double setAttackPoints = gotAttackPoints + planetPoints.getAttackPointsIncome();
+                    double setIndustryPoints = gotIndustryPoints + planetPoints.getIndustryPointsIncome();
 
-                    armyPoints.setDefensePoints(setDefencePoints);
-                    armyPoints.setAttackPoints(setAttackPoints);
+                    planetPoints.setDefensePoints(setDefencePoints);
+                    planetPoints.setAttackPoints(setAttackPoints);
+                    planetPoints.setIndustryPoints(setIndustryPoints);
 
-                    armyPointsService.saveArmyPoints(armyPoints);
+                    planetPointsService.savePoints(planetPoints);
                 }
                // System.out.println("wygenerowano");
             }

@@ -1,6 +1,6 @@
 package HubertRoszyk.company.repository;
 
-import HubertRoszyk.company.entiti_class.ArmyPoints;
+import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.PlanetType;
 import org.junit.jupiter.api.Test;
@@ -10,9 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-class ArmyPointsRepositoryTest {
+class PlanetPointsRepositoryTest {
     @Autowired
-    ArmyPointsRepository underTest;
+    PlanetPointsRepository underTest;
 
     @Test
     void findArmyPointsByPlanetId() {
@@ -25,14 +25,14 @@ class ArmyPointsRepositoryTest {
                 123,
                 1451
         );
-        ArmyPoints armyPoints = new ArmyPoints(
+        PlanetPoints planetPoints = new PlanetPoints(
                 planet
         );
 
-        underTest.save(armyPoints);
+        underTest.save(planetPoints);
         //when
-        ArmyPoints gotArmyPoints = underTest.findArmyPointsByPlanetId(planet.getId());
+        PlanetPoints gotPlanetPoints = underTest.findPlanetPointsByPlanetId(planet.getId());
         //then
-        assertThat(gotArmyPoints).isEqualTo(gotArmyPoints);
+        assertThat(gotPlanetPoints).isEqualTo(gotPlanetPoints);
     }
 }

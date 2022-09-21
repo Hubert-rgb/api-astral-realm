@@ -14,17 +14,15 @@ import javax.persistence.*;
 
 @Entity
 @Table
-public class FactoryPoints {
+public class GalaxyPoints {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "factoryPointsId")
+    @Column(name = "galaxyPointsId")
     private int id;
 
-    private double industryPoints;
     private double sciencePoints;
 
-    private double industryPointsIncome;
     private double sciencePointsIncome;
 
 
@@ -36,11 +34,10 @@ public class FactoryPoints {
     @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
     private Galaxy galaxy;
 
-    public FactoryPoints(User user, Galaxy galaxy) {
+    public GalaxyPoints(User user, Galaxy galaxy) {
         this.galaxy = galaxy;
         this.user = user;
 
-        industryPoints = 0;
         sciencePoints = 0;
     }
 

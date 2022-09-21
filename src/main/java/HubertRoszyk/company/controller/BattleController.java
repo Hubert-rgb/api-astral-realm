@@ -1,12 +1,12 @@
 package HubertRoszyk.company.controller;
 
-import HubertRoszyk.company.entiti_class.ArmyPoints;
+import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.entiti_class.Battle;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.RandomDraw;
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.User;
-import HubertRoszyk.company.service.ArmyPointsService;
+import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.BattleService;
 import HubertRoszyk.company.service.PlanetService;
 import HubertRoszyk.company.service.UserService;
@@ -25,7 +25,7 @@ public class BattleController {
     PlanetService planetService;
 
     @Autowired
-    ArmyPointsService armyPointsService;
+    PlanetPointsService planetPointsService;
 
     @Autowired
     GameProperties gameProperties;
@@ -43,8 +43,8 @@ public class BattleController {
         int defensePlanetId = (int) jsonInput.get("defensePlanetId");
 
 
-        /*ArmyPoints attackArmyPoints = armyPointsService.getArmyPointsByPlanetId(attackPlanetId);
-        ArmyPoints defenseArmyPoints = armyPointsService.getArmyPointsByPlanetId(defensePlanetId);
+        /*ArmyPoints attackArmyPoints = planetPointsService.getPointsByPlanetId(attackPlanetId);
+        ArmyPoints defenseArmyPoints = planetPointsService.getPointsByPlanetId(defensePlanetId);
 
         double attackPoints = attackArmyPoints.getAttackPoints();
         double defensePoints = defenseArmyPoints.getDefensePoints();*/
@@ -76,20 +76,20 @@ public class BattleController {
     public String changeArmyPlanet(int giverPlanetId, int receiverPlanetId, int battleId) {
         Battle battle = battleService.getBattleById(battleId);
 
-        ArmyPoints giverArmyPoints = armyPointsService.getArmyPointsByPlanetId(giverPlanetId);
-        ArmyPoints receiverArmyPoints = armyPointsService.getArmyPointsByPlanetId(receiverPlanetId);
+        PlanetPoints giverPlanetPoints = planetPointsService.getPointsByPlanetId(giverPlanetId);
+        PlanetPoints receiverPlanetPoints = planetPointsService.getPointsByPlanetId(receiverPlanetId);
 
-        double gotGiverAttackPoints = giverArmyPoints.getAttackPoints();
-        double gotReceiverAttackPoints = receiverArmyPoints.getAttackPoints();
+        double gotGiverAttackPoints = giverPlanetPoints.getAttackPoints();
+        double gotReceiverAttackPoints = receiverPlanetPoints.getAttackPoints();
 
         double setGiverAttackPoints = 0;
         double setReceiverAttackPoints = gotReceiverAttackPoints + gotGiverAttackPoints;
 
-        giverArmyPoints.setAttackPoints(setGiverAttackPoints);
-        receiverArmyPoints.setAttackPoints(setReceiverAttackPoints);
+        giverPlanetPoints.setAttackPoints(setGiverAttackPoints);
+        receiverPlanetPoints.setAttackPoints(setReceiverAttackPoints);
 
-        armyPointsService.saveArmyPoints(giverArmyPoints);
-        armyPointsService.saveArmyPoints(receiverArmyPoints);
+        planetPointsService.savePoints(giverPlanetPoints);
+        planetPointsService.savePoints(receiverPlanetPoints);
 
         battle.setStatus("army changed planet");
         battleService.saveBattle(battle);
@@ -105,11 +105,11 @@ public class BattleController {
         Planet attackPlanet = planetService.getPlanetById(attackPlanetId);
         Planet defensePlanet = planetService.getPlanetById(defensePlanetId);
 
-        ArmyPoints attackArmyPoints = armyPointsService.getArmyPointsByPlanetId(attackPlanetId);
-        ArmyPoints defenseArmyPoints = armyPointsService.getArmyPointsByPlanetId(defensePlanetId);
+        PlanetPoints attackPlanetPoints = planetPointsService.getPointsByPlanetId(attackPlanetId);
+        PlanetPoints defensePlanetPoints = planetPointsService.getPointsByPlanetId(defensePlanetId);
 
-        double attackPoints = attackArmyPoints.getAttackPoints();
-        double defensePoints = defenseArmyPoints.getDefensePoints();
+        double attackPoints = attackPlanetPoints.getAttackPoints();
+        double defensePoints = defensePlanetPoints.getDefensePoints();
 
         double battleMultiplier = RandomDraw.battleMultiplierDraw();
 
@@ -121,24 +121,24 @@ public class BattleController {
 
             double setDefencePlanetAttackPoints = attackPoints - (defensePoints * 2);
 
-            attackArmyPoints.setAttackPoints(0);
-            defenseArmyPoints.setDefensePoints(0); //to chyba nie będzie za bardzo zrównoważone
-            defenseArmyPoints.setAttackPoints(setDefencePlanetAttackPoints);
+            attackPlanetPoints.setAttackPoints(0);
+            defensePlanetPoints.setDefensePoints(0); //to chyba nie będzie za bardzo zrównoważone
+            defensePlanetPoints.setAttackPoints(setDefencePlanetAttackPoints);
 
-            armyPointsService.saveArmyPoints(attackArmyPoints);
-            armyPointsService.saveArmyPoints(defenseArmyPoints);
+            planetPointsService.savePoints(attackPlanetPoints);
+            planetPointsService.savePoints(defensePlanetPoints);
 
             battle.setStatus("attack won");
             battleService.saveBattle(battle);
             return "attack won";
         } else {
             double setDefencePoints =  defensePoints - (attackPoints / 2);
-            defenseArmyPoints.setDefensePoints(setDefencePoints);
+            defensePlanetPoints.setDefensePoints(setDefencePoints);
 
-            attackArmyPoints.setAttackPoints(0);
+            attackPlanetPoints.setAttackPoints(0);
 
-            armyPointsService.saveArmyPoints(attackArmyPoints);
-            armyPointsService.saveArmyPoints(defenseArmyPoints);
+            planetPointsService.savePoints(attackPlanetPoints);
+            planetPointsService.savePoints(defensePlanetPoints);
 
             battle.setStatus("attack lost");
             battleService.saveBattle(battle);

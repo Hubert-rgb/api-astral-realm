@@ -3,16 +3,14 @@ package HubertRoszyk.company.controller;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.Validator;
 import HubertRoszyk.company.RandomDraw;
-import HubertRoszyk.company.service.ArmyPointsService;
+import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.GalaxyService;
 import HubertRoszyk.company.service.PlanetService;
 import HubertRoszyk.company.service.UserService;
-import lombok.NonNull;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +27,7 @@ public class GalaxyController {
     UserService userService;
 
     @Autowired
-    ArmyPointsService armyPointsService;
+    PlanetPointsService planetPointsService;
 
     @Autowired
     Binder binder;
@@ -39,7 +37,7 @@ public class GalaxyController {
 
     //@CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
 
-    @GetMapping("/galaxy-controller/users/{userId}/galaxies/{galaxyId}")
+    @PostMapping("/galaxy-controller/users/{userId}/galaxies/{galaxyId}")
     public Set<Planet> connectToGalaxy(@PathVariable("userId") int userId, @PathVariable("galaxyId") int galaxyId) {
 
         User user = userService.getUserById(userId);
@@ -47,8 +45,8 @@ public class GalaxyController {
         Set<Planet> galaxyPlanets = planetService.getPlanetsByGalaxy(galaxyId);
 
         //nie wiem czy nie lepiej po prostu zawsze bindować
-        for (FactoryPoints factoryPoints : user.getPoints()) {
-            if (factoryPoints.getGalaxy().getId() == galaxyId) {
+        for (GalaxyPoints galaxyPoints : user.getPoints()) {
+            if (galaxyPoints.getGalaxy().getId() == galaxyId) {
                 return galaxyPlanets;
             }
         }
@@ -101,9 +99,9 @@ public class GalaxyController {
             //validator
 
             Planet planet = new Planet(planetType,industryPointsMultiplier, sciencePointsMultiplier, size, planetLocation.xLocation, planetLocation.yLocation);
-            ArmyPoints armyPoints = new ArmyPoints(planet);
+            PlanetPoints planetPoints = new PlanetPoints(planet);
 
-            armyPointsService.saveArmyPoints(armyPoints);
+            planetPointsService.savePoints(planetPoints);
 
             planet.asignGalaxy(galaxy);
             planets.add(planet);

@@ -10,31 +10,35 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table
-public class ArmyPoints {
+public class PlanetPoints {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "armyPointsId")
+    @Column(name = "planetPointsId")
     private int id;
 
     private double defensePoints;
     private double attackPoints;
+    private double industryPoints;
 
     private double defensePointsIncome;
     private double attackPointsIncome;
+    private double industryPointsIncome;
 
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "planet_id")
     private Planet planet;
 
-    public ArmyPoints(Planet planet) {
+    public PlanetPoints(Planet planet) {
         this.planet = planet;
 
         defensePoints = planet.getPlanetType().getDefaultDefencePoints();
         attackPoints = 0;
+        industryPoints = 0;
 
         defensePointsIncome = 0;
         attackPointsIncome = 0;
+        industryPointsIncome = 0;
     }
 
 }

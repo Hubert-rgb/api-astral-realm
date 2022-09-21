@@ -23,26 +23,22 @@ import java.sql.SQLException;
 public class Main {
     //TODO tests
     //TODO comments
-    //TODO code refreshment, building management, battle management strategy
+    //TODO code refreshment
+    // building management
+    // battle management strategy
 
-    /** battle time update*/
-    //DONE TODO battle time doesn't work properly I guess
-    //DONE TODO battle status
-    //DONE TODO saving sending army start date and subtracting actual date\
-    //DONE TODO separate table for battle with status (ongoing, won, lost)
-    //DONE TODO get army status and time left
+    /** stroages update */
+    //DONE TODO industry points stored on planet
+    //DONE TODO redo industryPoints and FactoryPoints to galaxyPoints and PlanetPoints
+    //TODO storage building
+    //TODO default small storage on planet
+    //TODO GET Buildings types
 
     /** code review update*/
-    //DONE TODO Config
-    //DONE TODO rest api naming. GET uri pathParam, POST JSON RequestBody
-    //DONE TODO repository function naming
     //TODO JACSON
 
     /** code debuging*/
-    //DONE TODO connecting to galaxy, user not asign (raz nie działało) can be postman issue, it's working almost every time
-    //TODO not sure cors settings is working
-    //DONE TODO check request types. I thing connectToGalaxy should be POST
-    //DONE TODO zabezpieczenie na budowanie na nieswojej planecie problem z planet.getUser()
+    //TODO distance between planet issue
     public static void main(String[] args) throws SQLException, IOException, ParseException {
         GameProperties configOperator = new GameProperties();
 

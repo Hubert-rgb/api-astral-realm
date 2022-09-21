@@ -6,7 +6,6 @@ import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.service.GalaxyService;
 import HubertRoszyk.company.service.PlanetService;
 import HubertRoszyk.company.service.UserService;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,10 @@ public class Binder {
     GalaxyService galaxyService;
 
     @Autowired
-    FactoryPointsController factoryPointsController;
+    GalaxyPointsController galaxyPointsController;
+
+    @Autowired
+    PlanetPointsController planetPointsController;
 
     @PostMapping("/binder/user/{userId}/planet/{planetId}")
     Planet bindPlanetToUser(@PathVariable int userId, @PathVariable int planetId) {
@@ -39,7 +41,7 @@ public class Binder {
             planet.asignUser(user);
 
             planetService.savePlanet(planet); //najpierw trzeba zapisać planetę usera a potem szukać jej punkty
-            factoryPointsController.getTotalIndustryPointsIncome(userId, planet.getGalaxy().getId());
+            planetPointsController.getTotalIndustryPointsIncome(planet.getId());
 
             return planet;
         }
@@ -53,7 +55,7 @@ public class Binder {
         } else {
             galaxy.addUser();
 
-            factoryPointsController.createFactoryPoints(user, galaxy);
+            galaxyPointsController.createGalaxyPoints(user, galaxy);
 
             return galaxyService.saveGalaxy(galaxy);
         }

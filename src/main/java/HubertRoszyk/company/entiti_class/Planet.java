@@ -54,7 +54,7 @@ public class Planet {
 
     @JsonIgnore
     @OneToOne(mappedBy = "planet")
-    private ArmyPoints armyPoints;
+    private PlanetPoints planetPoints;
 
     public Planet(PlanetType planetType, int industryPointsMultiplier, int sciencePointsMultiplier, int size, int xLocation, int yLocation) {
         this.industryPointsMultiplier = industryPointsMultiplier;

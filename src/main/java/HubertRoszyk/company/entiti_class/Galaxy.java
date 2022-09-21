@@ -41,7 +41,7 @@ public class Galaxy {
 
     @JsonIgnore
     @OneToMany(mappedBy = "galaxy")
-    private Set<FactoryPoints> enrolledPoits = new HashSet<>();
+    private Set<GalaxyPoints> enrolledPoits = new HashSet<>();
 
     public void addUser() {
         //users.add(user);
