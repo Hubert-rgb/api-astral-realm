@@ -1,4 +1,4 @@
-package HubertRoszyk.company.entiti_class;
+package HubertRoszyk.company.enums;
 
 import lombok.Getter;
 
@@ -8,14 +8,15 @@ public enum BuildingType {
     SCIENCE(6, 20, 2),
     DEFENSE(4, 15, 1),
     ATTACK(4, 15, 2),
-    STORAGE(10,15,0);
+    STORAGE(10,15,10),
+    SHIPYARD(3, 25, 0);
 
     private final int levelNums;
     private int buildingPrice;
-    private int pointsProduces;
-    BuildingType(int levelNums, int buildingPrice, int pointsProduces) {
+    private int volume;
+    BuildingType(int levelNums, int buildingPrice, int volume) {
         this.levelNums = levelNums;
         this.buildingPrice = buildingPrice;
-        this.pointsProduces = pointsProduces;
+        this.volume = volume;
     }
 }

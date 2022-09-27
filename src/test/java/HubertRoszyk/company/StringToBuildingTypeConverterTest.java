@@ -1,6 +1,6 @@
 package HubertRoszyk.company;
 
-import HubertRoszyk.company.entiti_class.BuildingType;
+import HubertRoszyk.company.enums.BuildingType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

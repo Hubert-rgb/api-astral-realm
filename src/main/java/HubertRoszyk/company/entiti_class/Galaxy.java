@@ -43,6 +43,10 @@ public class Galaxy {
     @OneToMany(mappedBy = "galaxy")
     private Set<GalaxyPoints> enrolledPoits = new HashSet<>();
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "galaxy")
+    private TimerEntity timerEntity;
+
     public void addUser() {
         //users.add(user);
         userNumber += 1;

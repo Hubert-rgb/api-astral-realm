@@ -1,14 +1,20 @@
 package HubertRoszyk.company.controller;
 
+import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Galaxy;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.User;
+import HubertRoszyk.company.enums.BuildingType;
+import HubertRoszyk.company.enums.PlanetStatus;
+import HubertRoszyk.company.service.BuildingService;
 import HubertRoszyk.company.service.GalaxyService;
 import HubertRoszyk.company.service.PlanetService;
 import HubertRoszyk.company.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
 @RestController
@@ -29,22 +35,38 @@ public class Binder {
     @Autowired
     PlanetPointsController planetPointsController;
 
+    @Autowired
+    BuildingService buildingService;
+
     @PostMapping("/binder/user/{userId}/planet/{planetId}")
     Planet bindPlanetToUser(@PathVariable int userId, @PathVariable int planetId) {
 
         User user = userService.getUserById(userId);
         Planet planet = planetService.getPlanetById(planetId);
 
-        if (planet == null || user == null) {
-            return null;
-        } else {
-            planet.asignUser(user);
+        Set<Planet> userPlanets = planetService.getPlanetsByUserIdAndGalaxyId(userId, planet.getGalaxy().getId());
 
-            planetService.savePlanet(planet); //najpierw trzeba zapisać planetę usera a potem szukać jej punkty
-            planetPointsController.getTotalIndustryPointsIncome(planet.getId());
+        if (userPlanets.isEmpty()) {
+            int gotPlanetSize = planet.getSize();
+            int setPlanetSize = gotPlanetSize + 3;
+            planet.setSize(setPlanetSize);
 
-            return planet;
+            Building industry = new Building(BuildingType.INDUSTRY, planet);
+            Building storage = new Building(BuildingType.STORAGE, planet);
+            Building shipYard = new Building(BuildingType.SHIPYARD, planet);
+
+            buildingService.saveBuilding(industry);
+            buildingService.saveBuilding(storage);
+            buildingService.saveBuilding(shipYard);
         }
+
+        planet.asignUser(user);
+        planet.setPlanetStatus(PlanetStatus.CLAIMED);
+
+        planetService.savePlanet(planet); //najpierw trzeba zapisać planetę usera a potem szukać jej punkty
+        planetPointsController.getTotalIndustryPointsIncome(planet.getId());
+
+        return planet;
     }
     public Galaxy bindGalaxyToUser(int userId, int galaxyId) {
         User user = userService.getUserById(userId);

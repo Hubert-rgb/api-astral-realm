@@ -1,8 +1,8 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.*;
-import HubertRoszyk.company.Validator;
 import HubertRoszyk.company.RandomDraw;
+import HubertRoszyk.company.enums.PlanetType;
 import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.GalaxyService;
 import HubertRoszyk.company.service.PlanetService;
@@ -32,9 +32,6 @@ public class GalaxyController {
     @Autowired
     Binder binder;
 
-    @Autowired
-    Validator validator;
-
     //@CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
 
     @PostMapping("/galaxy-controller/users/{userId}/galaxies/{galaxyId}")
@@ -60,7 +57,7 @@ public class GalaxyController {
 
     @CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
     @PostMapping("/galaxy-controller/galaxies")
-    public List<Planet> galaxyInit(/*@RequestHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN)*/ @RequestBody JSONObject jsonInput){ //do przeanalizowania bo nie wygląda za ładnie
+    public List<Planet> galaxyInit(@RequestBody JSONObject jsonInput){ //do przeanalizowania bo nie wygląda za ładnie
         //json to galaxy with jackson
         int maximalUserNumber = (int) jsonInput.get("maximalUserNumber");
         String galaxyName = (String) jsonInput.get("galaxyName");
@@ -75,10 +72,10 @@ public class GalaxyController {
             planets.addAll(createPlanet(planetType, galaxy));
         }
 
-        List<Planet> validatedPlanets = validator.validatePlanetPositionInGalaxy(planets);
-        planetService.savePlanetsList(validatedPlanets);
+        //List<Planet> validatedPlanets = validator.validatePlanetPositionInGalaxy(planets);
+        planetService.savePlanetsList(planets);
 
-        return validatedPlanets;
+        return planets;
     }
     public List<Planet> createPlanet(PlanetType planetType, Galaxy galaxy) {
         List<Planet> planets = new ArrayList<>();
@@ -88,9 +85,8 @@ public class GalaxyController {
 
         for(int i = 0; i < planetsNum; i++){
             int size = RandomDraw.sizeDraw(planetType);
-            size++;
 
-            int localRandomVariablesSum = randomVariablesSum - size;
+            int localRandomVariablesSum = randomVariablesSum - size / 2;
 
             int industryPointsMultiplier = RandomDraw.industryPointsMultiplierDraw(localRandomVariablesSum); //te dwie linijki coś bym zmienił
             int sciencePointsMultiplier = localRandomVariablesSum - industryPointsMultiplier;
@@ -98,7 +94,15 @@ public class GalaxyController {
             PlanetLocation planetLocation = RandomDraw.locationDraw();
             //validator
 
-            Planet planet = new Planet(planetType,industryPointsMultiplier, sciencePointsMultiplier, size, planetLocation.xLocation, planetLocation.yLocation);
+            Planet planet = new Planet(
+                    planetType,
+                    industryPointsMultiplier,
+                    sciencePointsMultiplier,
+                    (size * 2),
+                    planetLocation.xLocation,
+                    planetLocation.yLocation
+            ); //size * 2 to make it size = places to build
+
             PlanetPoints planetPoints = new PlanetPoints(planet);
 
             planetPointsService.savePoints(planetPoints);

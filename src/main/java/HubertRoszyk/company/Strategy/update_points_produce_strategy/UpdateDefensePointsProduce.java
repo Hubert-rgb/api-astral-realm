@@ -19,7 +19,7 @@ public class UpdateDefensePointsProduce implements UpdatePointsProduceStrategy {
         Planet planet = planetService.getPlanetById(building.getPlanet().getId());
 
         int gotDefensePoints = planet.getDefensePointsProduce();
-        int producesPoints = building.getBuildingType().getPointsProduces();
+        int producesPoints = building.getBuildingType().getVolume();
 
         int setDefensePoints = gotDefensePoints + producesPoints;
         planet.setDefensePointsProduce(setDefensePoints);

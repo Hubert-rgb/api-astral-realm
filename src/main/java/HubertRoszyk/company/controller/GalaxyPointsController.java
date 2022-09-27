@@ -1,18 +1,17 @@
 package HubertRoszyk.company.controller;
 
-import HubertRoszyk.company.entiti_class.Galaxy;
-import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.entiti_class.GalaxyPoints;
-import HubertRoszyk.company.entiti_class.User;
+import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.PointGenerator;
 import HubertRoszyk.company.service.PlanetService;
 import HubertRoszyk.company.service.GalaxyPointsService;
+import HubertRoszyk.company.service.TimerEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -24,6 +23,9 @@ public class GalaxyPointsController {
 
     @Autowired
     private PlanetService planetService;
+
+    @Autowired
+    private TimerEntityService timerEntityService;
 
     @Autowired
     private PointGenerator pointGenerator;
@@ -38,7 +40,8 @@ public class GalaxyPointsController {
         GalaxyPoints galaxyPoints = new GalaxyPoints(user, galaxy);
         galaxyPointsService.savePoints(galaxyPoints);
 
-        //getTotalFactoryIncome(user.getId(), galaxy.getId());
+        TimerEntity timerEntity = new TimerEntity(0, LocalDateTime.now());
+        timerEntityService.saveTimerEntity(timerEntity);
 
         pointGenerator.generatePoints();
     }

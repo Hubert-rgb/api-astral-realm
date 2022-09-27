@@ -3,7 +3,6 @@ package HubertRoszyk.company.Strategy.update_points_produce_strategy;
 import HubertRoszyk.company.controller.PlanetPointsController;
 import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.controller.GalaxyPointsController;
 import HubertRoszyk.company.service.PlanetService;
 
 public class UpdateIndustryPointsProduce implements UpdatePointsProduceStrategy {
@@ -21,7 +20,7 @@ public class UpdateIndustryPointsProduce implements UpdatePointsProduceStrategy 
         Planet planet = planetService.getPlanetById(building.getPlanet().getId());
 
         int gotIndustryPoints = planet.getIndustryPointsProduce();
-        int producesPoints = building.getBuildingType().getPointsProduces();
+        int producesPoints = building.getBuildingType().getVolume();
 
         int setIndustryPoints = gotIndustryPoints + producesPoints;
         planet.setIndustryPointsProduce(setIndustryPoints);

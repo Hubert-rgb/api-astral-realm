@@ -18,7 +18,7 @@ public class UpdateSciencePointsProduce implements UpdatePointsProduceStrategy {
         Planet planet = planetService.getPlanetById(building.getPlanet().getId());
 
         int gotSciencePoints = planet.getSciencePointsProduce();
-        int producesPoints = building.getBuildingType().getPointsProduces();
+        int producesPoints = building.getBuildingType().getVolume();
 
         int setSciencePoints = gotSciencePoints + producesPoints;
         planet.setSciencePointsProduce(setSciencePoints);

@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enums.BuildingType;
 import lombok.*;
 
 import javax.persistence.*;

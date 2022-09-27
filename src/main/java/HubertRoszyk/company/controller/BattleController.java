@@ -155,7 +155,7 @@ public class BattleController {
         int distanceY = attackPlanet.getPlanetLocationY() - defensePlanet.getPlanetLocationY();
 
         double distance = ((distanceX * distanceX) + (distanceY * distanceY)) ^ (1 / 2);
-        int speed = gameProperties.getSpeed();
+        int speed = gameProperties.getSpeed();//related to ship in future
         long battleTime = (long) (distance / speed);
 
         String[] output = new String[1];

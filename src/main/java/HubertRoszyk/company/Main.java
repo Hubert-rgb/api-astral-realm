@@ -23,22 +23,35 @@ import java.sql.SQLException;
 public class Main {
     //TODO tests
     //TODO comments
+
     //TODO code refreshment
     // building management
     // battle management strategy
 
     /** stroages update */
-    //DONE TODO industry points stored on planet
-    //DONE TODO redo industryPoints and FactoryPoints to galaxyPoints and PlanetPoints
-    //TODO storage building
-    //TODO default small storage on planet
-    //TODO GET Buildings types
+    //TODO not storage capacity and points stored, not generating points while is full
+    // TODO Building redo:
+    //  building class abstract or interface
+    //  every building separate class with own variables
+
+    /** planet generation update */
+    //TO DISCUSS TODO radial positioning
+    //SEMI DONE (not after battle) TODO planet status
+    //DONE TODO default buildings industry, storage and shipyard
+    //DONE TODO planet size = places to build => random size * 2
+
+    /** timer update */
+    //SEMI DONE (battle not done) TODO global timer (for galaxy) repeating every 15min
+    //DONE TODO get left time on timer request
+
+    /** FUTURE battle update*/
+    //TODO changing planet status after getting it
+    //TODO battle time in cycles
 
     /** code review update*/
-    //TODO JACSON
+    //TODO JACSON - every json to entity
 
     /** code debuging*/
-    //TODO distance between planet issue
     public static void main(String[] args) throws SQLException, IOException, ParseException {
         GameProperties configOperator = new GameProperties();
 

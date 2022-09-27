@@ -19,7 +19,7 @@ public class UpdateAttackPointsProduce implements UpdatePointsProduceStrategy {
         Planet planet = planetService.getPlanetById(building.getPlanet().getId());
 
         int gotAttackPoints = planet.getAttackPointsProduce();
-        int producesPoints = building.getBuildingType().getPointsProduces();
+        int producesPoints = building.getBuildingType().getVolume();
 
         int setAttackPoints = gotAttackPoints + producesPoints;
         planet.setAttackPointsProduce(setAttackPoints);

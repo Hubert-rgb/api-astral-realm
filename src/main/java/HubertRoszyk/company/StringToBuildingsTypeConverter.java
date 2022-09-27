@@ -1,6 +1,6 @@
 package HubertRoszyk.company;
 
-import HubertRoszyk.company.entiti_class.BuildingType;
+import HubertRoszyk.company.enums.BuildingType;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;

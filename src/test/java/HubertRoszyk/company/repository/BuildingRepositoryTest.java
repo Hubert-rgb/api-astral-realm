@@ -1,7 +1,7 @@
 package HubertRoszyk.company.repository;
 
 import HubertRoszyk.company.entiti_class.Building;
-import HubertRoszyk.company.entiti_class.BuildingType;
+import HubertRoszyk.company.enums.BuildingType;
 import HubertRoszyk.company.entiti_class.Planet;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

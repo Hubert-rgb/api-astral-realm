@@ -1,4 +1,4 @@
-package HubertRoszyk.company.entiti_class;
+package HubertRoszyk.company.enums;
 
 import lombok.Getter;
 

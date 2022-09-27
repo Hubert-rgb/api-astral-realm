@@ -1,5 +1,7 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enums.PlanetStatus;
+import HubertRoszyk.company.enums.PlanetType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -19,8 +21,12 @@ public class Planet {
     @Column(name = "planetId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Enumerated
     private PlanetType planetType;
+    @Enumerated
+    private PlanetStatus planetStatus;
+
     private int industryPointsMultiplier;
     private int sciencePointsMultiplier;
     private int defencePointsMultiplier = 1;
@@ -66,6 +72,8 @@ public class Planet {
 
         PlanetLocation location = new PlanetLocation(xLocation, yLocation);
         planetLocation = location;
+
+        planetStatus = PlanetStatus.UNCLAIMED;
     }
 
     public void asignUser(User user) {
