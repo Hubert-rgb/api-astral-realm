@@ -24,7 +24,7 @@ public class TimerEntity {
     @NonNull
     private LocalDateTime timerStartTime;
 
-
+    @NonNull
     @OneToOne
     @JoinColumn(name = "galaxy_id")
     private Galaxy galaxy; //or galaxyPoints

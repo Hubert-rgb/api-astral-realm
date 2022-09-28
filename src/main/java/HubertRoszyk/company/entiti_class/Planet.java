@@ -38,7 +38,7 @@ public class Planet {
     @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
     private Galaxy galaxy; //przydałoby się coś rzeby nie dało się tego zmienić, może buildier pattern
 
-    private int industryPointsProduce = 1;
+    private int industryPointsProduce = 0;
     private int sciencePointsProduce = 0;
     private int defensePointsProduce = 0;
     private int attackPointsProduce = 0;

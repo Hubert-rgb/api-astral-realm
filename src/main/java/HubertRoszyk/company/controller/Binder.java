@@ -38,6 +38,9 @@ public class Binder {
     @Autowired
     BuildingService buildingService;
 
+    @Autowired
+    BuildingsController buildingsController;
+
     @PostMapping("/binder/user/{userId}/planet/{planetId}")
     Planet bindPlanetToUser(@PathVariable int userId, @PathVariable int planetId) {
 
@@ -45,6 +48,7 @@ public class Binder {
         Planet planet = planetService.getPlanetById(planetId);
 
         Set<Planet> userPlanets = planetService.getPlanetsByUserIdAndGalaxyId(userId, planet.getGalaxy().getId());
+
 
         if (userPlanets.isEmpty()) {
             int gotPlanetSize = planet.getSize();
@@ -54,10 +58,14 @@ public class Binder {
             Building industry = new Building(BuildingType.INDUSTRY, planet);
             Building storage = new Building(BuildingType.STORAGE, planet);
             Building shipYard = new Building(BuildingType.SHIPYARD, planet);
+            //buildingsController.updatePointsIncome(shipYard);
 
             buildingService.saveBuilding(industry);
             buildingService.saveBuilding(storage);
             buildingService.saveBuilding(shipYard);
+
+            buildingsController.updatePointsIncome(industry);
+            buildingsController.updatePointsIncome(storage);
         }
 
         planet.asignUser(user);

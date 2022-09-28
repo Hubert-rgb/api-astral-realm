@@ -35,14 +35,7 @@ public class Main {
     //  every building separate class with own variables
 
     /** planet generation update */
-    //TO DISCUSS TODO radial positioning
-    //SEMI DONE (not after battle) TODO planet status
-    //DONE TODO default buildings industry, storage and shipyard
-    //DONE TODO planet size = places to build => random size * 2
-
-    /** timer update */
-    //SEMI DONE (battle not done) TODO global timer (for galaxy) repeating every 15min
-    //DONE TODO get left time on timer request
+    //TODO radial positioning
 
     /** FUTURE battle update*/
     //TODO changing planet status after getting it

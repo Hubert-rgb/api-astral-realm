@@ -27,9 +27,6 @@ public class GalaxyPointsController {
     @Autowired
     private TimerEntityService timerEntityService;
 
-    @Autowired
-    private PointGenerator pointGenerator;
-
     @GetMapping("/galaxy-points-controller/users/{userId}/galaxies/{galaxyId}")
     public GalaxyPoints getGalaxyPoints(@PathVariable int userId, @PathVariable int galaxyId) {
         GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(userId, galaxyId);
@@ -39,11 +36,6 @@ public class GalaxyPointsController {
     public void createGalaxyPoints(User user, Galaxy galaxy) {
         GalaxyPoints galaxyPoints = new GalaxyPoints(user, galaxy);
         galaxyPointsService.savePoints(galaxyPoints);
-
-        TimerEntity timerEntity = new TimerEntity(0, LocalDateTime.now());
-        timerEntityService.saveTimerEntity(timerEntity);
-
-        pointGenerator.generatePoints();
     }
     public void getTotalSciencePointsIncome(int userId, int galaxyId) {
         GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(userId, galaxyId);

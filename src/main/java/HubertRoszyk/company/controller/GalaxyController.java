@@ -3,14 +3,12 @@ package HubertRoszyk.company.controller;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.RandomDraw;
 import HubertRoszyk.company.enums.PlanetType;
-import HubertRoszyk.company.service.PlanetPointsService;
-import HubertRoszyk.company.service.GalaxyService;
-import HubertRoszyk.company.service.PlanetService;
-import HubertRoszyk.company.service.UserService;
+import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +26,12 @@ public class GalaxyController {
 
     @Autowired
     PlanetPointsService planetPointsService;
+
+    @Autowired
+    TimerEntityService timerEntityService;
+
+    @Autowired
+    TimerEntityController timerEntityController;
 
     @Autowired
     Binder binder;
@@ -64,6 +68,10 @@ public class GalaxyController {
 
         Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName);
         galaxyService.saveGalaxy(galaxy);
+
+        TimerEntity timerEntity = new TimerEntity(0, LocalDateTime.now(), galaxy);
+        timerEntityService.saveTimerEntity(timerEntity);
+        timerEntityController.timerExecution(galaxy.getId());
 
         List<Planet> planets = new ArrayList<>();
 

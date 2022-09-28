@@ -19,6 +19,7 @@ public class PlanetPoints {
     private double defensePoints;
     private double attackPoints;
     private double industryPoints;
+    private int totalStorageSize;
 
     private double defensePointsIncome;
     private double attackPointsIncome;

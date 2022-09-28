@@ -138,6 +138,7 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
             case SCIENCE -> context.setStrategy(new UpdateSciencePointsProduce(planetService, galaxyPointsController));
             case DEFENSE -> context.setStrategy(new UpdateDefensePointsProduce(planetService, planetPointsController));
             case ATTACK -> context.setStrategy(new UpdateAttackPointsProduce(planetService, planetPointsController));
+            case STORAGE -> context.setStrategy(new UpdateTotalStorageSize(planetPointsService, planetPointsController));
         }
         context.executeStrategy(building);
     }
