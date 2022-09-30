@@ -2,7 +2,7 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
-import HubertRoszyk.company.enumTypes.BuildingType;
+import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
 import HubertRoszyk.company.enumTypes.cardsType.EconomyCardType;
 import HubertRoszyk.company.service.*;
@@ -41,7 +41,7 @@ public class ShipController {
     IndustryPointsController industryPointsController;
 
     @PostMapping("ship-controller/ship")
-    public Ship buildShip(@RequestBody JSONObject jsonObject){//Industry points
+    public PurchaseStatus buildShip(@RequestBody JSONObject jsonObject){//Industry points
         String shipTypeString = (String) jsonObject.get("shipType");
         int planetId = (int) jsonObject.get("planetId");
         int userId = (int) jsonObject.get("userId");
@@ -60,26 +60,38 @@ public class ShipController {
             speedLevel = 0;
         }
 
+
+        Ship ship = new Ship(shipType, speedLevel, 0, user);
         //building by industry points methode
-        Ship ship = new Ship(shipType, speedLevel, planetPoints.getShipYardLevel(), user);
 
-        industryPointsController.executePurchase(planetId, ship);
+        return industryPointsController.executePurchase(planetId, ship);
+    }
+    @PutMapping("ship-controller/ship/{shipId}")
+    public PurchaseStatus upgradeShip(@PathVariable int shipId){
+        Ship ship = shipService.getShipById(shipId);
+        TravelRoute lastRoute = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1);
+        Planet planet = lastRoute.getArrivalPlanet();
 
-        return ship;
+        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planet.getId());
+
+        int gotLevel = ship.getCapacityLevel();
+        int shipYardLevel = planetPoints.getShipYardLevel();
+
+
+        Ship shipAfterPurchase = shipService.getShipById(shipId);
+
+        shipService.saveShip(shipAfterPurchase);
+        return industryPointsController.executePurchase(planet.getId(), ship);
     }
-    /*@PutMapping("ship-controller/ship/{shipId}")
-    public Ship upgradeShip(){
-        //Industry points and shipYard level
-    }
-    @PutMapping("ship-controller/ship/{shipId}/load/{volume}")
+    /*@PutMapping("ship-controller/ship/{shipId}/load/{volume}")
     public Ship loadShip(){
 
-    }
-    @PutMapping("ship-controller/ship/{shipId}/unload/{volume}")
+    }*/
+    /*@PutMapping("ship-controller/ship/{shipId}/unload/{volume}")
     public Ship unloadShip(){
 
-    }
-    @PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
+    }*/
+    /*@PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
     public TravelRoute sendShip(){
 
     }*/

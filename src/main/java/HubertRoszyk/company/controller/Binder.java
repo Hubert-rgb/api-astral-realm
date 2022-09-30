@@ -57,7 +57,7 @@ public class Binder {
 
             /*Building industry = new Building(BuildingType.INDUSTRY, planet);
             Building storage = new Building(BuildingType.STORAGE, planet);
-            Building shipYard = new Building(BuildingType.SHIPYARD, planet);
+            Building shipYard = new Building(BuildingType.SHIP_YARD, planet);
             //buildingsController.updatePointsIncome(shipYard);
 
             buildingService.saveBuilding(industry);

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,7 +38,7 @@ public class Ship {
 
     @JsonIgnore
     @OneToMany(mappedBy = "ship")
-    private Set<TravelRoute> travelRoute;
+    private List<TravelRoute> travelRoute;
 
 
     @ManyToOne

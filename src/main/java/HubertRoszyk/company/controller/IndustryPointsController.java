@@ -2,20 +2,13 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.Strategy.update_points_produce_strategy.*;
 import HubertRoszyk.company.configuration.GameProperties;
-import HubertRoszyk.company.entiti_class.Building;
-import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.entiti_class.PlanetPoints;
-import HubertRoszyk.company.entiti_class.Ship;
+import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
-import HubertRoszyk.company.service.BuildingService;
-import HubertRoszyk.company.service.PlanetPointsService;
-import HubertRoszyk.company.service.PlanetService;
-import HubertRoszyk.company.service.ShipService;
+import HubertRoszyk.company.service.*;
+import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import java.util.concurrent.Callable;
 
 @Controller
 public class IndustryPointsController {
@@ -38,6 +31,12 @@ public class IndustryPointsController {
     GalaxyPointsController galaxyPointsController;
 
     @Autowired
+    TravelRouteService travelRouteService;
+
+    @Autowired
+    TimerEntityService timerEntityService;
+
+    @Autowired
     ShipService shipService;
 
     public <T> PurchaseStatus executePurchase(int planetId, T object) {
@@ -45,6 +44,7 @@ public class IndustryPointsController {
         Planet planet = planetService.getPlanetById(planetId);
 
         int setLevel = upgradeLevel(object);
+        System.out.println(setLevel);
 
         double price = getPrice(object);
         double gotIndustryPoints = planetPoints.getIndustryPoints();
@@ -52,33 +52,45 @@ public class IndustryPointsController {
         boolean isEnoughPoints;
         boolean isNotOnMaximumLevel;
         boolean isEnoughSpaceOnPlanet;
+        boolean isShipYardEnoughLevel;
+        if(object instanceof Ship) {
+            int shipYardLevel = planetPoints.getShipYardLevel();
+            isShipYardEnoughLevel = shipYardLevel >= setLevel;
+        } else {
+            isShipYardEnoughLevel = true;
+        }
+
 
         isEnoughPoints = gotIndustryPoints >= price;
         isNotOnMaximumLevel = getIsNotOnMaximumLevel(object);
 
-        if(setLevel > 1) {
-            isEnoughSpaceOnPlanet = true;
-        } else {
-            isEnoughSpaceOnPlanet = planet.getSize() > planet.getBuildingList().size();
-        }
+        isEnoughSpaceOnPlanet = getIsEnoughSpace(object, planet);
 
-        if (isEnoughPoints && isNotOnMaximumLevel  && isEnoughSpaceOnPlanet) {  //strategy
+        if (isEnoughPoints && isNotOnMaximumLevel  && isEnoughSpaceOnPlanet && isShipYardEnoughLevel) {  //strategy
             double setIndustryPoints = gotIndustryPoints - price;
             planetPoints.setIndustryPoints(setIndustryPoints);
 
+            saveObject(object);
             if(object instanceof Building) {
                 updatePointsIncome(((Building) object).getBuildingType(), planetId);
-                //upgrade ship capacity
+            } else if (object instanceof Ship) {
+                TravelRoute travelRoute = new TravelRoute(planet, planet, (Ship) object, 0, timerEntityService);
+                travelRouteService.saveTravelRoutes(travelRoute);
+                if(setLevel <= 1) {
+                    int gotHarbourLoad = planetPoints.getTotalHarbourLoad();
+                    int setHarbourLoad = gotHarbourLoad + 1;
+                    planetPoints.setTotalHarbourLoad(setHarbourLoad);
+                }
             }
             planetPointsService.savePoints(planetPoints);
-            saveObject(object);
-
             return PurchaseStatus.UPGRADED;
         } else if (!isNotOnMaximumLevel) {
             return PurchaseStatus.MAX_LEVEL;
         } else if (!isEnoughSpaceOnPlanet){
             return PurchaseStatus.NOT_ENOUGH_SPACE;
-        }  else {
+        }  else if(!isShipYardEnoughLevel) {
+            return PurchaseStatus.NOT_ENOUGH_SHIP_YARD_LEVEL;
+        } else {
             return PurchaseStatus.NOT_ENOUGH_POINTS;
         }
     }
@@ -92,9 +104,36 @@ public class IndustryPointsController {
             case DEFENSE -> context.setStrategy(new UpdateDefensePointsProduce(planetService, planetPointsController));
             case ATTACK -> context.setStrategy(new UpdateAttackPointsProduce(planetService, planetPointsController));
             case STORAGE -> context.setStrategy(new UpdateTotalStorageSize(planetPointsService, planetPointsController));
+            case SHIP_YARD -> context.setStrategy(new UpdateShipYardLevel(planetPointsService));
+            case HARBOUR -> context.setStrategy(new UpdateTotalHarbourSize(planetPointsService, planetPointsController));
         }
         context.executeStrategy(buildingType, planetId);
     }
+    private <T> boolean getIsEnoughSpace(T object, Planet planet) {
+        if(object instanceof Building) {
+            return getIsEnoughSpaceForBuilding((Building) object, planet);
+        } else if (object instanceof Ship) {
+            return getIsEnoughSpaceForShip((Ship) object, planet);
+        } else {
+            return false;
+        }
+    }
+    private boolean getIsEnoughSpaceForShip(Ship ship, Planet planet){
+        if(ship.getCapacityLevel() > 1) {
+            return true;
+        } else {
+            PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planet.getId());
+            return  planetPoints.getTotalHarbourSize() > planetPoints.getTotalHarbourLoad() + 1;
+        }
+    }
+    private boolean getIsEnoughSpaceForBuilding(Building building, Planet planet){
+        if(building.getBuildingLevel() > 1) {
+            return true;
+        } else {
+            return planet.getSize() > planet.getBuildingList().size();
+        }
+    }
+
     private  <T> void saveObject(T object){
         if(object instanceof Building) {
             saveBuilding((Building) object);

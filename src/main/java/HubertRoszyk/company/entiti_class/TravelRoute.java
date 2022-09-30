@@ -1,9 +1,10 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.service.TimerEntityService;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class TravelRoute {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -29,11 +31,14 @@ public class TravelRoute {
     private int routeStartingCycle;
     private int routeCyclesDuration;
 
-    TravelRoute(Planet departurePlanetId, Planet arrivalPlanetId, Ship ship) {
-        this.departurePlanet = departurePlanetId;
-        this.arrivalPlanet = arrivalPlanetId;
+    public TravelRoute(Planet departurePlanet, Planet arrivalPlanet, Ship ship, int routeCyclesDuration, TimerEntityService timerEntityService) {
+        this.departurePlanet = departurePlanet;
+        this.arrivalPlanet = arrivalPlanet;
         this.ship = ship;
 
-        
+        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(this.departurePlanet.getGalaxy().getId());
+        routeStartingCycle = timerEntity.getCyclesNum();
+
+        this.routeCyclesDuration = routeCyclesDuration;
     }
 }

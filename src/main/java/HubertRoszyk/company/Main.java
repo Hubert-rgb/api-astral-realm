@@ -34,11 +34,11 @@ public class Main {
 
     /** ship update */
     //DONE TODO ships are built on shipyard level
-    //TODO upgrade ship on planet with higher shipyard level
+    //DONE TODO upgrade ship on planet with higher shipyard level
     //DONE TODO building ships takes industry points as buildings
     //TODO loading ships
     //TODO deloading ships
-    //TODO ships are stored in harbour
+    //DONE TODO ships are stored in harbour
 
     /** planet generation update */
     //TODO radial positioning

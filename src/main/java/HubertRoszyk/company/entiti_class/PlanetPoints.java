@@ -26,6 +26,7 @@ public class PlanetPoints {
 
     private int totalStorageSize;
     private int totalHarbourSize;
+    private int totalHarbourLoad;
     private int shipYardLevel;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "planet_id")
@@ -44,7 +45,7 @@ public class PlanetPoints {
 
         totalStorageSize = planet.getPlanetType().getDefaultStorageSize();
         totalHarbourSize = planet.getPlanetType().getDefaultHarbourSize();
-        shipYardLevel = 0;
+        shipYardLevel = 1;
     }
 
 }

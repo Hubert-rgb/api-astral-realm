@@ -23,10 +23,10 @@ public class UpdateTotalHarbourSize implements UpdatePointsProduceStrategy{
         int updatedSize = buildingType.getVolume();
 
         int setHarbourSize = gotHarbourSize + updatedSize;
-        planetPoints.setTotalStorageSize(setHarbourSize);
+        planetPoints.setTotalHarbourSize(setHarbourSize);
 
         planetPointsService.savePoints(planetPoints);
 
-        planetPointsController.getTotalHarbourSize(planetId);
+        //planetPointsController.getTotalHarbourSize(planetId);
     }
 }
