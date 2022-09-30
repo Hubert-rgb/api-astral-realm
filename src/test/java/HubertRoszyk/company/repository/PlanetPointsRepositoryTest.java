@@ -2,7 +2,7 @@ package HubertRoszyk.company.repository;
 
 import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.enums.PlanetType;
+import HubertRoszyk.company.enumTypes.PlanetType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

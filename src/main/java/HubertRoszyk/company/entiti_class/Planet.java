@@ -1,7 +1,8 @@
 package HubertRoszyk.company.entiti_class;
 
-import HubertRoszyk.company.enums.PlanetStatus;
-import HubertRoszyk.company.enums.PlanetType;
+import HubertRoszyk.company.enumStatus.PlanetStatus;
+import HubertRoszyk.company.enumStatus.ShipStatus;
+import HubertRoszyk.company.enumTypes.PlanetType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -61,6 +62,18 @@ public class Planet {
     @JsonIgnore
     @OneToOne(mappedBy = "planet")
     private PlanetPoints planetPoints;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "planet")
+    private Set<Ship> ships;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "arrivalPlanet")
+    private Set<TravelRoute> arrivalTravelRoutes;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "departurePlanet")
+    private Set<TravelRoute> departureTravelRoutes;
 
     public Planet(PlanetType planetType, int industryPointsMultiplier, int sciencePointsMultiplier, int size, int xLocation, int yLocation) {
         this.industryPointsMultiplier = industryPointsMultiplier;

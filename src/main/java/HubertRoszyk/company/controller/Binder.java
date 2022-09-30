@@ -4,8 +4,8 @@ import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Galaxy;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.User;
-import HubertRoszyk.company.enums.BuildingType;
-import HubertRoszyk.company.enums.PlanetStatus;
+import HubertRoszyk.company.enumTypes.BuildingType;
+import HubertRoszyk.company.enumStatus.PlanetStatus;
 import HubertRoszyk.company.service.BuildingService;
 import HubertRoszyk.company.service.GalaxyService;
 import HubertRoszyk.company.service.PlanetService;
@@ -55,7 +55,7 @@ public class Binder {
             int setPlanetSize = gotPlanetSize + 3;
             planet.setSize(setPlanetSize);
 
-            Building industry = new Building(BuildingType.INDUSTRY, planet);
+            /*Building industry = new Building(BuildingType.INDUSTRY, planet);
             Building storage = new Building(BuildingType.STORAGE, planet);
             Building shipYard = new Building(BuildingType.SHIPYARD, planet);
             //buildingsController.updatePointsIncome(shipYard);
@@ -65,7 +65,7 @@ public class Binder {
             buildingService.saveBuilding(shipYard);
 
             buildingsController.updatePointsIncome(industry);
-            buildingsController.updatePointsIncome(storage);
+            buildingsController.updatePointsIncome(storage);*/
         }
 
         planet.asignUser(user);

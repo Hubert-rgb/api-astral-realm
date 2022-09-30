@@ -4,7 +4,7 @@ import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.Strategy.update_points_produce_strategy.*;
 import HubertRoszyk.company.StringToBuildingsTypeConverter;
 import HubertRoszyk.company.configuration.GameProperties;
-import HubertRoszyk.company.enums.BuildingType;
+import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.BuildingService;
 import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.PlanetService;

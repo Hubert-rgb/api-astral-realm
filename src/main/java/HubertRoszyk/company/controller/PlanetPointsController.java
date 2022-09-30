@@ -1,8 +1,7 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.*;
-import HubertRoszyk.company.PointGenerator;
-import HubertRoszyk.company.enums.BuildingType;
+import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.BuildingService;
 import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.PlanetService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RestController

@@ -28,11 +28,17 @@ public class Main {
     // building management
     // battle management strategy
 
-    /** stroages update */
-    //TODO not storage capacity and points stored, not generating points while is full
     // TODO Building redo:
     //  building class abstract or interface
     //  every building separate class with own variables
+
+    /** ship update */
+    //TODO ships are built on shipyard level
+    //TODO upgrade ship on planet with higher shipyard level
+    //TODO building ships takes industry points as buildings
+    //TODO loading ships
+    //TODO deloading ships
+    //TODO ships are stored in harbour
 
     /** planet generation update */
     //TODO radial positioning

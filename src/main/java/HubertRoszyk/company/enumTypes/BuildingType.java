@@ -1,4 +1,4 @@
-package HubertRoszyk.company.enums;
+package HubertRoszyk.company.enumTypes;
 
 import lombok.Getter;
 

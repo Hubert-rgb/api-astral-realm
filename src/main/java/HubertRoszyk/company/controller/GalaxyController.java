@@ -2,7 +2,7 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.RandomDraw;
-import HubertRoszyk.company.enums.PlanetType;
+import HubertRoszyk.company.enumTypes.PlanetType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,8 +107,8 @@ public class GalaxyController {
                     industryPointsMultiplier,
                     sciencePointsMultiplier,
                     (size * 2),
-                    planetLocation.xLocation,
-                    planetLocation.yLocation
+                    planetLocation.getXLocation(),
+                    planetLocation.getYLocation()
             ); //size * 2 to make it size = places to build
 
             PlanetPoints planetPoints = new PlanetPoints(planet);
