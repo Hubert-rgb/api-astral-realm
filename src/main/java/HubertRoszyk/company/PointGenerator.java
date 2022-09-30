@@ -43,7 +43,6 @@ public class PointGenerator {
     }*/
     //@EventListener(ApplicationReadyEvent.class)
     public void generatePoints() {
-        System.out.println("genetuje");
 
         List<GalaxyPoints> galaxyPointsList = galaxyPointsService.getPointsList(); //both by galaxy
         List<PlanetPoints> planetPointsList = planetPointsService.getPlanetPointsList();

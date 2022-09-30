@@ -1,5 +1,8 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enumTypes.cardsType.EconomyCardType;
+import HubertRoszyk.company.enumTypes.cardsType.MilitaryCardType;
+import HubertRoszyk.company.enumTypes.cardsType.PoliticalCardType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -27,6 +31,23 @@ public class GalaxyPoints {
 
     private double sciencePointsIncome;
 
+    @ElementCollection(targetClass = MilitaryCardType.class)
+    @JoinTable(name = "militaryCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
+    @Column()
+    @Enumerated()
+    private Set<MilitaryCardType> militaryCards;
+
+    @ElementCollection(targetClass = PoliticalCardType.class)
+    @JoinTable(name = "politicalCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
+    @Column()
+    @Enumerated()
+    private Set<PoliticalCardType> politicalCards;
+
+    @ElementCollection(targetClass = EconomyCardType.class)
+    @JoinTable(name = "economyCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
+    @Column()
+    @Enumerated()
+    private Set<EconomyCardType> economyCards;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "userId")

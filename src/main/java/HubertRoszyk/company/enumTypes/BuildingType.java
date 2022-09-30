@@ -9,11 +9,12 @@ public enum BuildingType {
     DEFENSE(4, 15, 1),
     ATTACK(4, 15, 2),
     STORAGE(10,15,25),
-    SHIPYARD(3, 25, 0);
+    SHIPYARD(3, 25, 2),
+    HARBOUR(5, 30, 3);
 
     private final int levelNums;
-    private int buildingPrice;
-    private int volume;
+    private final int buildingPrice;
+    private final int volume;
     BuildingType(int levelNums, int buildingPrice, int volume) {
         this.levelNums = levelNums;
         this.buildingPrice = buildingPrice;

@@ -1,8 +1,8 @@
 package HubertRoszyk.company.Strategy.update_points_produce_strategy;
 
 import HubertRoszyk.company.controller.PlanetPointsController;
-import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Planet;
+import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.PlanetService;
 
 public class UpdateIndustryPointsProduce implements UpdatePointsProduceStrategy {
@@ -16,13 +16,13 @@ public class UpdateIndustryPointsProduce implements UpdatePointsProduceStrategy 
     }
 
     @Override
-    public void update(Building building) {
-        Planet planet = planetService.getPlanetById(building.getPlanet().getId());
+    public void update(BuildingType buildingType, int planetId) {
+        Planet planet = planetService.getPlanetById(planetId);
 
-        int gotIndustryPoints = planet.getIndustryPointsProduce();
-        int producesPoints = building.getBuildingType().getVolume();
+        double gotIndustryPoints = planet.getIndustryPointsProduce();
+        int producesPoints = buildingType.getVolume();
 
-        int setIndustryPoints = gotIndustryPoints + producesPoints;
+        double setIndustryPoints = gotIndustryPoints + producesPoints;
         planet.setIndustryPointsProduce(setIndustryPoints);
 
         planetService.savePlanet(planet);

@@ -34,6 +34,12 @@ public class MovementController {
     @Autowired
     BattleService battleService;
 
+    @Autowired
+    BattleController battleController;
+
+    @Autowired
+    MilitaryCargoController militaryCargoController;
+
     @PostMapping("/battle-controller/battles")
     public String armyMovement(@RequestBody JSONObject jsonInput) {
         int userId = (int) jsonInput.get("userId");
@@ -53,9 +59,9 @@ public class MovementController {
 
         if (attackPlanet.getUser().getId() == userId) {
             if (attackPlanet.getUser().equals(defensePlanet.getUser())) {
-                return changeArmyPlanet(attackPlanetId, defensePlanetId, battleId);
+                return militaryCargoController.changeArmyPlanet(attackPlanetId, defensePlanetId, battleId);
             } else {
-                return battle(attackPlanetId, defensePlanetId, battleId);
+                return battleController.battle(attackPlanetId, defensePlanetId, battleId);
             }
         } else {
             battle1.setStatus("not your planet");

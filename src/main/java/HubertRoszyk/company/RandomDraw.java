@@ -19,7 +19,7 @@ public class RandomDraw {
     }
     public static int sizeDraw(PlanetType planetType) {
         int size;
-        size = random.nextInt(planetType.getMaximalSize()) + 1; //do config
+        size = random.nextInt(planetType.getMaximalSize() - 1) + 2; //do config
 
         return size;
     }

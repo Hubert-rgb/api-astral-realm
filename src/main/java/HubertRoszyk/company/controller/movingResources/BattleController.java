@@ -8,7 +8,9 @@ import HubertRoszyk.company.service.BattleService;
 import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class BattleController {
     @Autowired
     BattleService battleService;

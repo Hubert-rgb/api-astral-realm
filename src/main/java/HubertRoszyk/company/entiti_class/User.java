@@ -38,4 +38,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Battle> battles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Ship> ships = new HashSet<>();
 }

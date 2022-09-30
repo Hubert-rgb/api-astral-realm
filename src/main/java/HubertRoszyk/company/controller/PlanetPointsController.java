@@ -58,25 +58,39 @@ public class PlanetPointsController {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
 
-        int planetIndustryPointsIncome = planet.getIndustryPointsProduce() * planet.getIndustryPointsMultiplier();
+        double planetIndustryPointsIncome = planet.getIndustryPointsProduce() * planet.getIndustryPointsMultiplier();
 
         planetPoints.setIndustryPointsIncome(planetIndustryPointsIncome);
 
         planetPointsService.savePoints(planetPoints);
     }
-    public void getTotalStorageSize(int planetId){
-        System.out.println("exe");
+    /*public void getTotalStorageSize(int planetId){
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         List<Building> buildingList = buildingService.getBuildingsByPlanetId(planetId);
 
+        int gotStorageSize = planetPoints.getTotalStorageSize();
         int totalStorageSize = 0;
         for(Building building: buildingList) {
-            System.out.println("bud");
-            if (building.getBuildingType().equals(BuildingType.STORAGE)) {
-                totalStorageSize += building.getBuildingType().getVolume(); //game balance
+            System.out.println(building.getBuildingType());
+            if (building.getBuildingType() == BuildingType.STORAGE) {
+                System.out.println("jest");
+                totalStorageSize += building.getBuildingType().getVolume();
             }
         }
         planetPoints.setTotalStorageSize(totalStorageSize);
+        planetPointsService.savePoints(planetPoints);
+    }*/
+    public void getTotalHarbourSize(int planetId) {
+        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
+        List<Building> buildingList = buildingService.getBuildingsByPlanetId(planetId);
+
+        int totalHarbourSize = 0;
+        for(Building building: buildingList) {
+            if (building.getBuildingType().equals(BuildingType.HARBOUR)) {
+                totalHarbourSize += building.getBuildingType().getVolume();
+            }
+        }
+        planetPoints.setTotalHarbourSize(totalHarbourSize);
         planetPointsService.savePoints(planetPoints);
     }
 }

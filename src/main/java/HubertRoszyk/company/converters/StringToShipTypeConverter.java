@@ -1,16 +1,17 @@
-package HubertRoszyk.company;
+package HubertRoszyk.company.converters;
 
 import HubertRoszyk.company.enumTypes.BuildingType;
+import HubertRoszyk.company.enumTypes.ShipType;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StringToBuildingsTypeConverter implements Converter<String, BuildingType> {
+public class StringToShipTypeConverter implements Converter<String, ShipType> {
     @Override
-    public BuildingType convert(String source) {
-        return BuildingType.valueOf(source);
+    public ShipType convert(String source) {
+        return ShipType.valueOf(source);
     }
 
     @Override

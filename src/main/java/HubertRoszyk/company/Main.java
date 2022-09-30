@@ -33,15 +33,16 @@ public class Main {
     //  every building separate class with own variables
 
     /** ship update */
-    //TODO ships are built on shipyard level
+    //DONE TODO ships are built on shipyard level
     //TODO upgrade ship on planet with higher shipyard level
-    //TODO building ships takes industry points as buildings
+    //DONE TODO building ships takes industry points as buildings
     //TODO loading ships
     //TODO deloading ships
     //TODO ships are stored in harbour
 
     /** planet generation update */
     //TODO radial positioning
+    //DONE TODO planets doesn't have default buildings, just generating points
 
     /** FUTURE battle update*/
     //TODO changing planet status after getting it
@@ -51,6 +52,8 @@ public class Main {
     //TODO JACSON - every json to entity
 
     /** code debuging*/
+    //DONE TODO Storage upgrade
+    //TODO Getting industry income on planet 2
     public static void main(String[] args) throws SQLException, IOException, ParseException {
         GameProperties configOperator = new GameProperties();
 

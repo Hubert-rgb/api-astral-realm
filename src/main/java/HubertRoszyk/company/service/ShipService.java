@@ -1,7 +1,6 @@
 package HubertRoszyk.company.service;
 
 import HubertRoszyk.company.entiti_class.Ship;
-import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class ShipService {
         repository.deleteAll();
         System.out.println("All Ships deleted");
     }
-    public List<Ship> getShipsByPlanetId(int planetId) {
-        return repository.findShipByPlanetId(planetId);
-    }
+    /*public List<Ship> getShipsByPlanetId(int planetId) {
+        return repository.findByPlanetId(planetId);
+    }*/
 }

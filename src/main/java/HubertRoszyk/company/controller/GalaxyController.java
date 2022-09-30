@@ -2,6 +2,7 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.RandomDraw;
+import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.enumTypes.PlanetType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +37,12 @@ public class GalaxyController {
 
     @Autowired
     Binder binder;
+
+    @Autowired
+    PlanetPointsController planetPointsController;
+
+    @Autowired
+    IndustryPointsController industryPointsController;
 
     //@CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
 
@@ -106,18 +114,25 @@ public class GalaxyController {
                     planetType,
                     industryPointsMultiplier,
                     sciencePointsMultiplier,
-                    (size * 2),
+                    size,
                     planetLocation.getXLocation(),
-                    planetLocation.getYLocation()
-            ); //size * 2 to make it size = places to build
+                    planetLocation.getYLocation(),
+                    galaxy
+            );
 
             PlanetPoints planetPoints = new PlanetPoints(planet);
 
             planetPointsService.savePoints(planetPoints);
+            planetService.savePlanet(planet);
 
-            planet.asignGalaxy(galaxy);
+            planetPointsController.getTotalIndustryPointsIncome(planet.getId());
+
+            //planet.asignGalaxy(galaxy);
             planets.add(planet);
+
+            //industryPointsController.updatePointsIncome(BuildingType.INDUSTRY, planet.getId());
         }
+
         return planets;
     }
 

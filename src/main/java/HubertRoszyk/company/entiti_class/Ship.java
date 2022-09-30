@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "Ship")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,15 +17,16 @@ import java.util.Set;
 public class Ship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
+    //@Setter(AccessLevel.NONE)
     private int id;
 
     @Enumerated
     private ShipType shipType;
-    private int speed; //developed by science cards
-    private int capacity; //developed by industry
 
-    private int load;
+    private int speedLevel; //developed by science cards
+    private int capacityLevel; //developed by industry
+
+    private int shipLoad;
 
     @Enumerated
     private ShipStatus shipStatus;
@@ -37,4 +38,19 @@ public class Ship {
     @JsonIgnore
     @OneToMany(mappedBy = "ship")
     private Set<TravelRoute> travelRoute;
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_user_id")
+    private User user;
+
+    public Ship(ShipType shipType, int speedLevel, int capacityLevel, User user) {
+        this.shipType = shipType;
+        this.speedLevel = speedLevel;
+        this.capacityLevel = capacityLevel;
+        this.user = user;
+
+        shipLoad = 0;
+        shipStatus = ShipStatus.DOCKED;
+    }
 }

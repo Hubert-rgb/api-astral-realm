@@ -37,10 +37,11 @@ public class Planet {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
-    private Galaxy galaxy; //przydałoby się coś rzeby nie dało się tego zmienić, może buildier pattern
+    @Setter(AccessLevel.NONE)
+    private Galaxy galaxy;
 
-    private int industryPointsProduce = 0;
-    private int sciencePointsProduce = 0;
+    private double industryPointsProduce;
+    private double sciencePointsProduce;
     private int defensePointsProduce = 0;
     private int attackPointsProduce = 0;
 
@@ -63,9 +64,9 @@ public class Planet {
     @OneToOne(mappedBy = "planet")
     private PlanetPoints planetPoints;
 
-    @JsonIgnore
+    /*@JsonIgnore
     @OneToMany(mappedBy = "planet")
-    private Set<Ship> ships;
+    private Set<Ship> ships;*/
 
     @JsonIgnore
     @OneToMany(mappedBy = "arrivalPlanet")
@@ -75,13 +76,17 @@ public class Planet {
     @OneToMany(mappedBy = "departurePlanet")
     private Set<TravelRoute> departureTravelRoutes;
 
-    public Planet(PlanetType planetType, int industryPointsMultiplier, int sciencePointsMultiplier, int size, int xLocation, int yLocation) {
+    public Planet(PlanetType planetType, int industryPointsMultiplier, int sciencePointsMultiplier, int size, int xLocation, int yLocation, Galaxy galaxy) {
         this.industryPointsMultiplier = industryPointsMultiplier;
         this.sciencePointsMultiplier = sciencePointsMultiplier;
         this.planetLocationX = xLocation;
         this.planetLocationY = yLocation;
         this.size = size;
         this.planetType = planetType;
+        this.galaxy = galaxy;
+
+        this.industryPointsProduce = planetType.getDefaultIndustryProduce();
+        this.sciencePointsProduce = planetType.getDefaultScienceProduce();
 
         PlanetLocation location = new PlanetLocation(xLocation, yLocation);
         planetLocation = location;
@@ -91,9 +96,5 @@ public class Planet {
 
     public void asignUser(User user) {
         this.user = user;
-    }
-
-    public void asignGalaxy(Galaxy galaxy) {
-        this.galaxy = galaxy;
     }
 }

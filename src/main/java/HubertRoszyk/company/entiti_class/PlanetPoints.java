@@ -19,13 +19,14 @@ public class PlanetPoints {
     private double defensePoints;
     private double attackPoints;
     private double industryPoints;
-    private int totalStorageSize;
 
     private double defensePointsIncome;
     private double attackPointsIncome;
     private double industryPointsIncome;
 
-
+    private int totalStorageSize;
+    private int totalHarbourSize;
+    private int shipYardLevel;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "planet_id")
     private Planet planet;
@@ -40,6 +41,10 @@ public class PlanetPoints {
         defensePointsIncome = 0;
         attackPointsIncome = 0;
         industryPointsIncome = 0;
+
+        totalStorageSize = planet.getPlanetType().getDefaultStorageSize();
+        totalHarbourSize = planet.getPlanetType().getDefaultHarbourSize();
+        shipYardLevel = 0;
     }
 
 }

@@ -5,7 +5,9 @@ import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.service.BattleService;
 import HubertRoszyk.company.service.PlanetPointsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class MilitaryCargoController {
     @Autowired
     BattleService battleService;

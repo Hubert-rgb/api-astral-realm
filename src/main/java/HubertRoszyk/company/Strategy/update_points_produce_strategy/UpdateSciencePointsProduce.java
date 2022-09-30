@@ -3,6 +3,7 @@ package HubertRoszyk.company.Strategy.update_points_produce_strategy;
 import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.controller.GalaxyPointsController;
+import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.PlanetService;
 
 public class UpdateSciencePointsProduce implements UpdatePointsProduceStrategy {
@@ -14,17 +15,17 @@ public class UpdateSciencePointsProduce implements UpdatePointsProduceStrategy {
     }
 
     @Override
-    public void update(Building building) {
-        Planet planet = planetService.getPlanetById(building.getPlanet().getId());
+    public void update(BuildingType buildingType, int planetId) {
+        Planet planet = planetService.getPlanetById(planetId);
 
-        int gotSciencePoints = planet.getSciencePointsProduce();
-        int producesPoints = building.getBuildingType().getVolume();
+        double gotSciencePoints = planet.getSciencePointsProduce();
+        int producesPoints = buildingType.getVolume();
 
-        int setSciencePoints = gotSciencePoints + producesPoints;
+        double setSciencePoints = gotSciencePoints + producesPoints;
         planet.setSciencePointsProduce(setSciencePoints);
 
         planetService.savePlanet(planet);
 
-        galaxyPointsController.getTotalSciencePointsIncome(building.getPlanet().getUser().getId(), building.getPlanet().getGalaxy().getId());
+        galaxyPointsController.getTotalSciencePointsIncome(planet.getUser().getId(), planet.getGalaxy().getId());
     }
 }

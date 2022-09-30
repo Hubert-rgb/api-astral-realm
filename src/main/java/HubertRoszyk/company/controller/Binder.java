@@ -72,7 +72,7 @@ public class Binder {
         planet.setPlanetStatus(PlanetStatus.CLAIMED);
 
         planetService.savePlanet(planet); //najpierw trzeba zapisać planetę usera a potem szukać jej punkty
-        planetPointsController.getTotalIndustryPointsIncome(planet.getId());
+        //planetPointsController.getTotalIndustryPointsIncome(planet.getId());
 
         return planet;
     }
