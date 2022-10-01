@@ -3,6 +3,7 @@ package HubertRoszyk.company.controller;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
+import HubertRoszyk.company.enumStatus.ShipLoadStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
 import HubertRoszyk.company.enumTypes.cardsType.EconomyCardType;
 import HubertRoszyk.company.service.*;
@@ -83,14 +84,84 @@ public class ShipController {
         shipService.saveShip(shipAfterPurchase);
         return industryPointsController.executePurchase(planet.getId(), ship);
     }
-    /*@PutMapping("ship-controller/ship/{shipId}/load/{volume}")
-    public Ship loadShip(){
+    @PutMapping("ship-controller/ship/{shipId}/load/{volume}")
+    public ShipLoadStatus loadShip(@PathVariable int shipId, @PathVariable int volume){
+        Ship ship = shipService.getShipById(shipId);
+        int planetId = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
+        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
-    }*/
-    /*@PutMapping("ship-controller/ship/{shipId}/unload/{volume}")
-    public Ship unloadShip(){
+        int capacity = ship.getShipCapacity();
+        double gotLoad = ship.getShipLoad();
 
-    }*/
+        //volume <= industry points
+
+        if(capacity >= gotLoad + volume) {
+            double setLoad = gotLoad + volume;
+
+            ship.setShipLoad(setLoad);
+            shipService.saveShip(ship);
+
+            double gotIndustryPoints = planetPoints.getIndustryPoints();
+            double setIndustryPoints = gotIndustryPoints - volume;
+            planetPoints.setIndustryPoints(setIndustryPoints);
+            planetPointsService.savePoints(planetPoints);
+
+            return ShipLoadStatus.EVERYTHING_LOADED;
+        } else if (capacity == gotLoad) {
+            return ShipLoadStatus.NOTHING_LOAD;
+        } else {
+            double notLoaded = gotLoad + volume - capacity;
+            double setLoad = gotLoad + volume - notLoaded;
+
+            ship.setShipLoad(setLoad);
+            shipService.saveShip(ship);
+
+            double gotIndustryPoints = planetPoints.getIndustryPoints();
+            double setIndustryPoints = gotIndustryPoints - volume + notLoaded;
+            planetPoints.setIndustryPoints(setIndustryPoints);
+            planetPointsService.savePoints(planetPoints);
+
+            return ShipLoadStatus.NOT_EVERYTHING_LOAD;
+        }
+    }
+    @PutMapping("ship-controller/ship/{shipId}/unload/{volume}")
+    public ShipLoadStatus unloadShip(@PathVariable int shipId, @PathVariable int volume){
+        Ship ship = shipService.getShipById(shipId);
+        int planetId = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
+        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
+
+        int capacity = planetPoints.getTotalStorageSize();
+        double gotIndustryPoints = planetPoints.getIndustryPoints();
+
+        double gotLoad = ship.getShipLoad();
+
+        if(capacity >= gotIndustryPoints + volume) {
+            double setLoad = gotLoad - volume;
+
+            ship.setShipLoad(setLoad);
+            shipService.saveShip(ship);
+
+            double setIndustryPoints = gotIndustryPoints + volume;
+            planetPoints.setIndustryPoints(setIndustryPoints);
+            planetPointsService.savePoints(planetPoints);
+
+            return ShipLoadStatus.EVERYTHING_LOADED;
+        } else if (capacity == gotLoad) {
+            return ShipLoadStatus.NOTHING_LOAD;
+        } else {
+            double notLoaded = gotIndustryPoints + volume - capacity;
+            double setLoad = gotLoad - volume + notLoaded;
+
+            ship.setShipLoad(setLoad);
+            shipService.saveShip(ship);
+
+            double setIndustryPoints = gotIndustryPoints + volume - notLoaded;
+            planetPoints.setIndustryPoints(setIndustryPoints);
+            planetPointsService.savePoints(planetPoints);
+
+            return ShipLoadStatus.NOT_EVERYTHING_LOAD;
+        }
+    }
     /*@PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
     public TravelRoute sendShip(){
 

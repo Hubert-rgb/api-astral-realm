@@ -8,7 +8,7 @@ public enum BuildingType {
     SCIENCE(6, 20, 2),
     DEFENSE(4, 15, 1),
     ATTACK(4, 15, 2),
-    STORAGE(10,15,25),
+    STORAGE(10,15,30),
     SHIP_YARD(4, 25, 2),
     HARBOUR(5, 30, 3);
 

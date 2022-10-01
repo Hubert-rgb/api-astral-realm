@@ -6,7 +6,6 @@ import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.*;
-import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -38,7 +37,6 @@ public class IndustryPointsController {
 
     @Autowired
     ShipService shipService;
-
     public <T> PurchaseStatus executePurchase(int planetId, T object) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
@@ -48,6 +46,9 @@ public class IndustryPointsController {
 
         double price = getPrice(object);
         double gotIndustryPoints = planetPoints.getIndustryPoints();
+
+        System.out.println("cena: " + price);
+        System.out.println("industry: " + gotIndustryPoints);
 
         boolean isEnoughPoints;
         boolean isNotOnMaximumLevel;
@@ -81,6 +82,8 @@ public class IndustryPointsController {
                     int setHarbourLoad = gotHarbourLoad + 1;
                     planetPoints.setTotalHarbourLoad(setHarbourLoad);
                 }
+
+                ((Ship) object).getCapacity();
             }
             planetPointsService.savePoints(planetPoints);
             return PurchaseStatus.UPGRADED;

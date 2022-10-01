@@ -7,7 +7,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "Ship")
@@ -27,7 +26,9 @@ public class Ship {
     private int speedLevel; //developed by science cards
     private int capacityLevel; //developed by industry
 
-    private int shipLoad;
+
+    private int shipCapacity;
+    private double shipLoad;
 
     @Enumerated
     private ShipStatus shipStatus;
@@ -51,7 +52,13 @@ public class Ship {
         this.capacityLevel = capacityLevel;
         this.user = user;
 
+        getCapacity();
+
         shipLoad = 0;
         shipStatus = ShipStatus.DOCKED;
+    }
+
+    public void getCapacity() {
+        shipCapacity = capacityLevel * shipType.getCapacity();
     }
 }
