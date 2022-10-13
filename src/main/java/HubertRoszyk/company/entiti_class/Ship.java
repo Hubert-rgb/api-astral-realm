@@ -24,8 +24,8 @@ public class Ship {
     private ShipType shipType;
 
     private int speedLevel; //developed by science cards
+    private int speed;
     private int capacityLevel; //developed by industry
-
 
     private int shipCapacity;
     private double shipLoad;
@@ -56,6 +56,8 @@ public class Ship {
 
         shipLoad = 0;
         shipStatus = ShipStatus.DOCKED;
+
+        this.speed = speedLevel * shipType.getSpeed();
     }
 
     public void getCapacity() {

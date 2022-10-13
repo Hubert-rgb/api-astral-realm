@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -28,4 +30,11 @@ public class TimerEntity {
     @OneToOne
     @JoinColumn(name = "galaxy_id")
     private Galaxy galaxy; //or galaxyPoints
+
+    @OneToMany(mappedBy = "timerEntity", fetch = FetchType.EAGER)
+    private List<TimerAction> timerActionList;
+
+    public void addTimerAction(TimerAction timerAction) {
+        timerActionList.add(timerAction);
+    }
 }

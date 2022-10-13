@@ -30,7 +30,34 @@ public class TravelRoute {
 
     private int routeStartingCycle;
     private int routeCyclesDuration;
+    private int routeEndingCycle;
 
+    public TravelRoute(Planet departurePlanet, Planet arrivalPlanet, Ship ship, TimerEntityService timerEntityService) {
+        this.departurePlanet = departurePlanet;
+        this.arrivalPlanet = arrivalPlanet;
+        this.ship = ship;
+
+        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(this.departurePlanet.getGalaxy().getId());
+        routeStartingCycle = timerEntity.getCyclesNum();
+
+        double distance = Math.sqrt(
+                Math.pow ((
+                        arrivalPlanet.getPlanetLocationX() - departurePlanet.getPlanetLocationX()
+                ), 2)  + Math.pow ((
+                        arrivalPlanet.getPlanetLocationY() - departurePlanet.getPlanetLocationY()
+                ), 2)
+        );
+
+        System.out.println("dist");
+        System.out.println(distance);
+
+        int routeCyclesDuration =  ((int)distance / ship.getSpeed());
+
+        System.out.println(routeCyclesDuration);
+
+        this.routeCyclesDuration = routeCyclesDuration;
+        this.routeEndingCycle = routeCyclesDuration + routeStartingCycle;
+    }
     public TravelRoute(Planet departurePlanet, Planet arrivalPlanet, Ship ship, int routeCyclesDuration, TimerEntityService timerEntityService) {
         this.departurePlanet = departurePlanet;
         this.arrivalPlanet = arrivalPlanet;
@@ -40,5 +67,6 @@ public class TravelRoute {
         routeStartingCycle = timerEntity.getCyclesNum();
 
         this.routeCyclesDuration = routeCyclesDuration;
+        this.routeEndingCycle = routeCyclesDuration + routeStartingCycle;
     }
 }

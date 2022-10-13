@@ -36,8 +36,8 @@ public class Main {
     //DONE TODO ships are built on shipyard level
     //DONE TODO upgrade ship on planet with higher shipyard level
     //DONE TODO building ships takes industry points as buildings
-    //TODO loading ships
-    //TODO deloading ships
+    //DONE TODO loading ships
+    //DONE TODO deloading ships
     //DONE TODO ships are stored in harbour
 
     /** planet generation update */
@@ -53,8 +53,10 @@ public class Main {
 
     /** code debuging*/
     //DONE TODO Storage upgrade
-    //TODO Getting industry income on planet 2
+    //DONE TODO Getting industry income on planet 2
+    //TODO Ships only travels between users planets and only there can load points except battle situation
     public static void main(String[] args) throws SQLException, IOException, ParseException {
+
         GameProperties configOperator = new GameProperties();
 
         SpringApplication.run(Main.class, args);

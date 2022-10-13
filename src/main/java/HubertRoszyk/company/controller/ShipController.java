@@ -4,7 +4,9 @@ import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumStatus.ShipLoadStatus;
+import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
+import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.enumTypes.cardsType.EconomyCardType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
@@ -41,6 +43,12 @@ public class ShipController {
     @Autowired
     IndustryPointsController industryPointsController;
 
+    @Autowired
+    TimerEntityService timerEntityService;
+
+    @Autowired
+    TimerActionService timerActionService;
+
     @PostMapping("ship-controller/ship")
     public PurchaseStatus buildShip(@RequestBody JSONObject jsonObject){//Industry points
         String shipTypeString = (String) jsonObject.get("shipType");
@@ -56,9 +64,9 @@ public class ShipController {
         //card leveling TO DISCUSS
         int speedLevel;
         if(galaxyPoints.getEconomyCards().contains(EconomyCardType.FASTER_INDUSTRY_CARGO_SHIP)) {
-            speedLevel = 1;
+            speedLevel = 2;
         } else {
-            speedLevel = 0;
+            speedLevel = 1;
         }
 
 
@@ -95,7 +103,7 @@ public class ShipController {
 
         //volume <= industry points
 
-        if(capacity >= gotLoad + volume) {
+        if(capacity >= gotLoad + volume && ship.getShipStatus().equals(ShipStatus.DOCKED)) {
             double setLoad = gotLoad + volume;
 
             ship.setShipLoad(setLoad);
@@ -109,6 +117,8 @@ public class ShipController {
             return ShipLoadStatus.EVERYTHING_LOADED;
         } else if (capacity == gotLoad) {
             return ShipLoadStatus.NOTHING_LOAD;
+        } else if (!ship.getShipStatus().equals(ShipStatus.DOCKED)) {
+            return ShipLoadStatus.TRAVELLING;
         } else {
             double notLoaded = gotLoad + volume - capacity;
             double setLoad = gotLoad + volume - notLoaded;
@@ -135,7 +145,7 @@ public class ShipController {
 
         double gotLoad = ship.getShipLoad();
 
-        if(capacity >= gotIndustryPoints + volume) {
+        if(capacity >= gotIndustryPoints + volume && ship.getShipStatus().equals(ShipStatus.DOCKED)) {
             double setLoad = gotLoad - volume;
 
             ship.setShipLoad(setLoad);
@@ -148,6 +158,8 @@ public class ShipController {
             return ShipLoadStatus.EVERYTHING_LOADED;
         } else if (capacity == gotLoad) {
             return ShipLoadStatus.NOTHING_LOAD;
+        } else if (!ship.getShipStatus().equals(ShipStatus.DOCKED)) {
+            return ShipLoadStatus.TRAVELLING;
         } else {
             double notLoaded = gotIndustryPoints + volume - capacity;
             double setLoad = gotLoad - volume + notLoaded;
@@ -162,13 +174,41 @@ public class ShipController {
             return ShipLoadStatus.NOT_EVERYTHING_LOAD;
         }
     }
-    /*@PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
-    public TravelRoute sendShip(){
+    @PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
+    public TravelRoute sendShip(@PathVariable int shipId, @PathVariable int destinationPlanetId){
+        Ship ship = shipService.getShipById(shipId);
+        Planet destinationPlanet = planetService.getPlanetById(destinationPlanetId);
+        Planet departurePlanet = ship.getTravelRoute().get(ship.getTravelRoute().size()-1).getArrivalPlanet();
 
-    }*/
+        if(ship.getShipStatus().equals(ShipStatus.DOCKED)) {
+            ship.setShipStatus(ShipStatus.TRAVELING);
+
+            TravelRoute travelRoute = new TravelRoute(departurePlanet, destinationPlanet, ship, timerEntityService);
+
+            //after time ship changes status
+
+            shipService.saveShip(ship);
+            travelRouteService.saveTravelRoutes(travelRoute);
+            TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(destinationPlanet.getGalaxy().getId());
+            //timerEntity.addTimerAction(timerAction);
+
+            TimerAction timerAction = new TimerAction(TimerActionType.TRAVEL, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
+
+            timerEntityService.saveTimerEntity(timerEntity);
+            timerActionService.saveTimerAction(timerAction);
+
+            return travelRoute;
+        } else {
+            return null;
+        }
+    }
     @GetMapping("ship-controller/ship-types")
     public List<Enum> getShipTypes(){
         List<Enum> shipTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(ShipType.class));
         return shipTypesEnumValues;
+    }
+
+    public void TravelExecution() {
+
     }
 }

@@ -2,7 +2,9 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.PointGenerator;
 import HubertRoszyk.company.configuration.GameProperties;
+import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.entiti_class.TimerEntity;
+import HubertRoszyk.company.service.TimerActionService;
 import HubertRoszyk.company.service.TimerEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+
 @Controller
 public class TimerEntityController {
     @Autowired
@@ -24,6 +26,12 @@ public class TimerEntityController {
 
     @Autowired
     PointGenerator pointGenerator;
+
+    @Autowired
+    TimerActionController timerActionController;
+
+    @Autowired
+    TimerActionService timerActionService;
 
     @GetMapping(value = "timer-entity-controller/galaxy/{galaxyId}")
     @ResponseBody
@@ -47,6 +55,7 @@ public class TimerEntityController {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+                System.out.println("wukonane");
                 TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(galaxyId);
                 int gotCycles = timerEntity.getCyclesNum();
                 int setCycles = gotCycles + 1;
@@ -54,6 +63,21 @@ public class TimerEntityController {
                 timerEntityService.saveTimerEntity(timerEntity);
 
                 pointGenerator.generatePoints();
+
+                List<TimerAction> timerActionList = timerActionService.getAllTimerActionsByTimerEntityId(timerEntity.getId());
+
+                if (timerActionList != null) {
+                    for (TimerAction timerAction: timerActionList) {
+                        System.out.println("e" + timerAction.getEndingCycle());
+                        System.out.println("s" + setCycles);
+                        if (setCycles >= timerAction.getEndingCycle()){
+                            timerActionController.execute(timerAction);
+                            timerActionService.removeTimerActionById(timerAction.getId());
+                        }
+                    }
+
+                }
+
                 /** method checking changes between cycles (battles, ships making etc.)*/
             }
         };
