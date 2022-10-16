@@ -117,8 +117,10 @@ public class ShipController {
             return ShipLoadStatus.EVERYTHING_LOADED;
         } else if (capacity == gotLoad) {
             return ShipLoadStatus.NOTHING_LOAD;
-        } else if (!ship.getShipStatus().equals(ShipStatus.DOCKED)) {
+        } else if (ship.getShipStatus().equals(ShipStatus.TRAVELING)) {
             return ShipLoadStatus.TRAVELLING;
+        } else if (ship.getShipStatus().equals(ShipStatus.IN_BUILD)) {
+            return ShipLoadStatus.IN_BUILD;
         } else {
             double notLoaded = gotLoad + volume - capacity;
             double setLoad = gotLoad + volume - notLoaded;
@@ -158,8 +160,10 @@ public class ShipController {
             return ShipLoadStatus.EVERYTHING_LOADED;
         } else if (capacity == gotLoad) {
             return ShipLoadStatus.NOTHING_LOAD;
-        } else if (!ship.getShipStatus().equals(ShipStatus.DOCKED)) {
+        } else if (ship.getShipStatus().equals(ShipStatus.TRAVELING)) {
             return ShipLoadStatus.TRAVELLING;
+        } else if (ship.getShipStatus().equals(ShipStatus.IN_BUILD)) {
+            return ShipLoadStatus.IN_BUILD;
         } else {
             double notLoaded = gotIndustryPoints + volume - capacity;
             double setLoad = gotLoad - volume + notLoaded;
@@ -190,7 +194,6 @@ public class ShipController {
             shipService.saveShip(ship);
             travelRouteService.saveTravelRoutes(travelRoute);
             TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(destinationPlanet.getGalaxy().getId());
-            //timerEntity.addTimerAction(timerAction);
 
             TimerAction timerAction = new TimerAction(TimerActionType.TRAVEL, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
 
@@ -199,6 +202,7 @@ public class ShipController {
 
             return travelRoute;
         } else {
+            //returning status (travelling, in build, done)
             return null;
         }
     }

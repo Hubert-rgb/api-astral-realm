@@ -5,6 +5,7 @@ import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
+import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,9 @@ public class IndustryPointsController {
 
     @Autowired
     TimerEntityService timerEntityService;
+
+    @Autowired
+    TimerActionService timerActionService;
 
     @Autowired
     ShipService shipService;
@@ -73,7 +77,15 @@ public class IndustryPointsController {
 
             saveObject(object);
             if(object instanceof Building) {
-                updatePointsIncome(((Building) object).getBuildingType(), planetId);
+                /** timer action*/
+                TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(((Building) object).getPlanet().getGalaxy().getId());
+                int currentCycle = timerEntity.getCyclesNum();
+                int buildingEndCycle = ((Building) object).getBuildingType().getConstructionCycles() + currentCycle;
+
+                TimerAction timerAction = new TimerAction(TimerActionType.BUILDING, buildingEndCycle, ((Building) object).getId(), timerEntity);
+
+                timerEntityService.saveTimerEntity(timerEntity);
+                timerActionService.saveTimerAction(timerAction);
             } else if (object instanceof Ship) {
                 TravelRoute travelRoute = new TravelRoute(planet, planet, (Ship) object, 0, timerEntityService);
                 travelRouteService.saveTravelRoutes(travelRoute);
@@ -83,7 +95,15 @@ public class IndustryPointsController {
                     planetPoints.setTotalHarbourLoad(setHarbourLoad);
                 }
 
-                ((Ship) object).getCapacity();
+                /** timer action */
+                TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(planet.getGalaxy().getId());
+                int currentCycle = timerEntity.getCyclesNum();
+                int buildingEndCycle = ((Ship) object).getShipType().getConstructionCycles() + currentCycle;
+
+                TimerAction timerAction = new TimerAction(TimerActionType.SHIP, buildingEndCycle, ((Ship) object).getId(), timerEntity);
+
+                timerEntityService.saveTimerEntity(timerEntity);
+                timerActionService.saveTimerAction(timerAction);
             }
             planetPointsService.savePoints(planetPoints);
             return PurchaseStatus.UPGRADED;

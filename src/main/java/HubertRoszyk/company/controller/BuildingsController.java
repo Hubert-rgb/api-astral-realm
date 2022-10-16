@@ -5,10 +5,8 @@ import HubertRoszyk.company.converters.StringToBuildingsTypeConverter;
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
-import HubertRoszyk.company.service.BuildingService;
-import HubertRoszyk.company.service.PlanetPointsService;
-import HubertRoszyk.company.service.PlanetService;
-import HubertRoszyk.company.service.GalaxyPointsService;
+import HubertRoszyk.company.enumTypes.TimerActionType;
+import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +30,12 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
 
     @Autowired
     IndustryPointsController industryPointsController;
+
+    @Autowired
+    TimerEntityService timerEntityService;
+
+    @Autowired
+    TimerActionService timerActionService;
 
     @PostMapping("/building-controller/buildings")
     public PurchaseStatus addBuilding(@RequestBody JSONObject jsonInput) { //exception not string

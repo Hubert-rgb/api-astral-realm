@@ -55,7 +55,7 @@ public class Ship {
         getCapacity();
 
         shipLoad = 0;
-        shipStatus = ShipStatus.DOCKED;
+        shipStatus = ShipStatus.IN_BUILD;
 
         this.speed = speedLevel * shipType.getSpeed();
     }

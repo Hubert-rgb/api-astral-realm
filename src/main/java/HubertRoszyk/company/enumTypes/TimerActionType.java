@@ -4,5 +4,5 @@ public enum TimerActionType {
     BATTLE,
     TRAVEL,
     BUILDING,
-    UPGRADING;
+    SHIP;
 }
