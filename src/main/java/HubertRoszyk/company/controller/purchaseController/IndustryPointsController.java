@@ -1,7 +1,10 @@
-package HubertRoszyk.company.controller;
+/*
+package HubertRoszyk.company.controller.purchaseController;
 
 import HubertRoszyk.company.Strategy.update_points_produce_strategy.*;
 import HubertRoszyk.company.configuration.GameProperties;
+import HubertRoszyk.company.controller.GalaxyPointsController;
+import HubertRoszyk.company.controller.PlanetPointsController;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
@@ -9,6 +12,9 @@ import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+*/
+/** redid *//*
 
 @Controller
 public class IndustryPointsController {
@@ -77,7 +83,9 @@ public class IndustryPointsController {
 
             saveObject(object);
             if(object instanceof Building) {
-                /** timer action*/
+                */
+/** timer action*//*
+
                 TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(((Building) object).getPlanet().getGalaxy().getId());
                 int currentCycle = timerEntity.getCyclesNum();
                 int buildingEndCycle = ((Building) object).getBuildingType().getConstructionCycles() + currentCycle;
@@ -95,7 +103,9 @@ public class IndustryPointsController {
                     planetPoints.setTotalHarbourLoad(setHarbourLoad);
                 }
 
-                /** timer action */
+                */
+/** timer action *//*
+
                 TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(planet.getGalaxy().getId());
                 int currentCycle = timerEntity.getCyclesNum();
                 int buildingEndCycle = ((Ship) object).getShipType().getConstructionCycles() + currentCycle;
@@ -235,3 +245,4 @@ public class IndustryPointsController {
 
 
 }
+*/

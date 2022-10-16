@@ -1,5 +1,6 @@
 package HubertRoszyk.company.controller;
 
+import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
@@ -41,7 +42,7 @@ public class ShipController {
     UserService userService;
 
     @Autowired
-    IndustryPointsController industryPointsController;
+    ShipPurchase shipPurchase;
 
     @Autowired
     TimerEntityService timerEntityService;
@@ -73,7 +74,7 @@ public class ShipController {
         Ship ship = new Ship(shipType, speedLevel, 0, user);
         //building by industry points methode
 
-        return industryPointsController.executePurchase(planetId, ship);
+        return shipPurchase.executePurchase(planetId, ship);
     }
     @PutMapping("ship-controller/ship/{shipId}")
     public PurchaseStatus upgradeShip(@PathVariable int shipId){
@@ -90,7 +91,7 @@ public class ShipController {
         Ship shipAfterPurchase = shipService.getShipById(shipId);
 
         shipService.saveShip(shipAfterPurchase);
-        return industryPointsController.executePurchase(planet.getId(), ship);
+        return shipPurchase.executePurchase(planet.getId(), ship);
     }
     @PutMapping("ship-controller/ship/{shipId}/load/{volume}")
     public ShipLoadStatus loadShip(@PathVariable int shipId, @PathVariable int volume){

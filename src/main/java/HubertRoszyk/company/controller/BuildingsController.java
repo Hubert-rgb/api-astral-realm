@@ -1,11 +1,10 @@
 package HubertRoszyk.company.controller;
 
+import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.converters.StringToBuildingsTypeConverter;
-import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
-import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
     StringToBuildingsTypeConverter converter;
 
     @Autowired
-    IndustryPointsController industryPointsController;
+    BuildingPurchase buildingPurchase;
 
     @Autowired
     TimerEntityService timerEntityService;
@@ -54,7 +53,7 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
 
         Building building = new Building(buildingType, planet);
 
-        return industryPointsController.executePurchase(building.getPlanet().getId(), building);
+        return buildingPurchase.executePurchase(building.getPlanet().getId(), building);
     }
     @PutMapping("/building-controller/buildings/{buildingId}")
     public PurchaseStatus upgradeBuilding(@PathVariable int buildingId) {
@@ -62,7 +61,7 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
         Building building = buildingService.getBuildingById(buildingId);
        // Set<Planet> planets = planetService.getPlanetsByUserId(userId);
 
-        return industryPointsController.executePurchase(building.getPlanet().getId(), building);
+        return buildingPurchase.executePurchase(building.getPlanet().getId(), building);
     }
 
     @GetMapping("/building-controller/buildings/planets/{planetId}")

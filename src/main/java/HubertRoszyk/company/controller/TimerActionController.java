@@ -1,11 +1,11 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.Strategy.timerActionStategy.*;
+import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.BuildingService;
 import HubertRoszyk.company.service.ShipService;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -18,7 +18,7 @@ public class TimerActionController {
     BuildingService buildingService;
 
     @Autowired
-    IndustryPointsController industryPointsController;
+    BuildingPurchase buildingPurchase;
 
     public void execute(TimerAction timerAction) {
         TimerActionType timerActionType = timerAction.getTimerActionType();
@@ -27,7 +27,7 @@ public class TimerActionController {
         switch (timerActionType) {
             case BATTLE -> context.setStrategy(new TimerActionBattle());
             case TRAVEL -> context.setStrategy(new TimerActionTravel(shipService));
-            case BUILDING -> context.setStrategy(new TimerActionBuild(industryPointsController, buildingService));
+            case BUILDING -> context.setStrategy(new TimerActionBuild(buildingPurchase, buildingService));
             case SHIP -> context.setStrategy(new TimerActionShip(shipService));
         }
         context.executeStrategy(timerAction);

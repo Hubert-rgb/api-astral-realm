@@ -2,7 +2,6 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.RandomDraw;
-import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.enumTypes.PlanetType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,9 +38,6 @@ public class GalaxyController {
 
     @Autowired
     PlanetPointsController planetPointsController;
-
-    @Autowired
-    IndustryPointsController industryPointsController;
 
     //@CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
 

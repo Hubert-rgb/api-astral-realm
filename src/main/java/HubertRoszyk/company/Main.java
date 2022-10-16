@@ -31,7 +31,7 @@ public class Main {
     // TODO Building redo:
     //ABANDONED  building class abstract or interface
     //ABANDONED  every building separate class with own variables
-    //TODO building in time
+    //DONE TODO building in time
 
     /** planet generation update */
     //TODO radial positioning
@@ -39,6 +39,8 @@ public class Main {
     /** FUTURE battle update*/
     //TODO changing planet status after getting it
     //TODO battle time in cycles
+    //TODO making army in barrack as ships. Max army level is barrack level
+    //TODO loading army on ship while attack
 
     /** code review update*/
     //TODO JACSON - every json to entity

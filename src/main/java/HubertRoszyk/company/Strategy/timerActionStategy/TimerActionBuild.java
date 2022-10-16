@@ -1,16 +1,16 @@
 package HubertRoszyk.company.Strategy.timerActionStategy;
 
-import HubertRoszyk.company.controller.IndustryPointsController;
+import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.service.BuildingService;
 
 public class TimerActionBuild implements TimerActionStrategy{
-    private IndustryPointsController industryPointsController;
+    private BuildingPurchase buildingPurchase;
     private BuildingService buildingService;
 
-    public TimerActionBuild(IndustryPointsController industryPointsController, BuildingService buildingService){
-        this.industryPointsController = industryPointsController;
+    public TimerActionBuild(BuildingPurchase buildingPurchase, BuildingService buildingService){
+        this.buildingPurchase = buildingPurchase;
         this.buildingService = buildingService;
     }
     @Override
@@ -18,6 +18,6 @@ public class TimerActionBuild implements TimerActionStrategy{
         int buildingId = timerAction.getExecutionId();
         Building building = buildingService.getBuildingById(buildingId);
 
-        industryPointsController.updatePointsIncome(building.getBuildingType(), building.getPlanet().getId());
+        buildingPurchase.updatePointsIncome(building.getBuildingType(), building.getPlanet().getId());
     }
 }
