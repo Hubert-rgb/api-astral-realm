@@ -25,7 +25,7 @@ public class ShipService {
         repository.deleteAll();
         System.out.println("All Ships deleted");
     }
-    /*public List<Ship> getShipsByPlanetId(int planetId) {
-        return repository.findByPlanetId(planetId);
+   /* public List<Ship> getShipsByPlanetId(int planetId) {
+        return repository.findByTravelRoute_DeparturePlanet_Id(planetId);
     }*/
 }

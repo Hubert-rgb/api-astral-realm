@@ -32,7 +32,7 @@ public class PlanetPointsController {
         return planetPoints;
     }
 
-    public void getTotalDefenceIncome(int planetId) {
+    /*public void getTotalDefenceIncome(int planetId) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
         Planet planet = planetService.getPlanetById(planetId);
@@ -42,8 +42,8 @@ public class PlanetPointsController {
         planetPoints.setDefensePointsIncome(planetDefenseIncome);
 
         planetPointsService.savePoints(planetPoints);
-    }
-    public void getTotalAttackIncome(int planetId) {
+    }*/
+    /*public void getTotalAttackIncome(int planetId) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
         Planet planet = planetService.getPlanetById(planetId);
@@ -53,7 +53,7 @@ public class PlanetPointsController {
         planetPoints.setAttackPointsIncome(planetAttackPointsIncome);
 
         planetPointsService.savePoints(planetPoints);
-    }
+    }*/
     public void getTotalIndustryPointsIncome(int planetId) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
@@ -64,22 +64,6 @@ public class PlanetPointsController {
 
         planetPointsService.savePoints(planetPoints);
     }
-    /*public void getTotalStorageSize(int planetId){
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-        List<Building> buildingList = buildingService.getBuildingsByPlanetId(planetId);
-
-        int gotStorageSize = planetPoints.getTotalStorageSize();
-        int totalStorageSize = 0;
-        for(Building building: buildingList) {
-            System.out.println(building.getBuildingType());
-            if (building.getBuildingType() == BuildingType.STORAGE) {
-                System.out.println("jest");
-                totalStorageSize += building.getBuildingType().getVolume();
-            }
-        }
-        planetPoints.setTotalStorageSize(totalStorageSize);
-        planetPointsService.savePoints(planetPoints);
-    }*/
     public void getTotalHarbourSize(int planetId) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         List<Building> buildingList = buildingService.getBuildingsByPlanetId(planetId);

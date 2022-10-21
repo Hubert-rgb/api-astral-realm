@@ -1,5 +1,8 @@
 package HubertRoszyk.company.entiti_class;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +20,8 @@ public class ScienceCard {
     @Enumerated
     private CascadeType cardType;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "galaxy_points_id")
     private GalaxyPoints galaxyPoints;

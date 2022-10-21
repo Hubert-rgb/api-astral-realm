@@ -1,7 +1,10 @@
 package HubertRoszyk.company.enumTypes;
 
+import HubertRoszyk.company.converters.serialize.ShipTypeSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 
+@JsonSerialize(using = ShipTypeSerialize.class)
 @Getter
 public enum ShipType {
     INDUSTRY_CARGO(20, 200, 10, 4, 5),

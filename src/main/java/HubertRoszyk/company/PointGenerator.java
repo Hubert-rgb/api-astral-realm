@@ -46,6 +46,8 @@ public class PointGenerator {
 
         List<GalaxyPoints> galaxyPointsList = galaxyPointsService.getPointsList(); //both by galaxy
         List<PlanetPoints> planetPointsList = planetPointsService.getPlanetPointsList();
+
+        //TODO interface
         for (GalaxyPoints galaxyPoints : galaxyPointsList) {
             double gotSciencePoints = galaxyPoints.getSciencePoints();
 
@@ -57,12 +59,8 @@ public class PointGenerator {
         }
 
         for (PlanetPoints planetPoints : planetPointsList) {
-            double gotDefencePoints = planetPoints.getDefensePoints();
-            double gotAttackPoints = planetPoints.getAttackPoints();
             double gotIndustryPoints = planetPoints.getIndustryPoints();
 
-            double setDefencePoints = gotDefencePoints + planetPoints.getDefensePointsIncome();
-            double setAttackPoints = gotAttackPoints + planetPoints.getAttackPointsIncome();
             double setIndustryPoints;
 
             //planetPointsController.getTotalStorageSize(planetPoints.getPlanet().getId());
@@ -72,8 +70,6 @@ public class PointGenerator {
                 setIndustryPoints = gotIndustryPoints + planetPoints.getIndustryPointsIncome();
             }
 
-            planetPoints.setDefensePoints(setDefencePoints);
-            planetPoints.setAttackPoints(setAttackPoints);
             planetPoints.setIndustryPoints(setIndustryPoints);
 
             planetPointsService.savePoints(planetPoints);

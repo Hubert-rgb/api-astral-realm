@@ -1,3 +1,4 @@
+/*
 package HubertRoszyk.company.Strategy.update_points_produce_strategy;
 
 import HubertRoszyk.company.entiti_class.Building;
@@ -30,3 +31,4 @@ public class UpdateAttackPointsProduce implements UpdatePointsProduceStrategy {
         planetPointsController.getTotalAttackIncome(planetId);
     }
 }
+*/

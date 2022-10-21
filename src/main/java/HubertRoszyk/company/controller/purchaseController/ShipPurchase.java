@@ -2,6 +2,7 @@ package HubertRoszyk.company.controller.purchaseController;
 
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.*;
+import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class ShipPurchase implements PurchaseInterface<Ship>{
 
     @Override
     public void saveObject(Ship ship) {
+        ship.setShipStatus(ShipStatus.IN_BUILD);
         shipService.saveShip(ship);
     }
 

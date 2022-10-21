@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ShipRepository extends JpaRepository<Ship, Integer> {
-    Ship findByTravelRoute_DeparturePlanet_Id(@NonNull int id);
+    Ship findByTravelRoute_ArrivalPlanet_Id(@NonNull int id);
     //public List<Ship> findByPlanetId(int planetId);
 }

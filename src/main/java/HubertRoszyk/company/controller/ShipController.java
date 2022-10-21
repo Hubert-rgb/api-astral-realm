@@ -190,10 +190,13 @@ public class ShipController {
 
             TravelRoute travelRoute = new TravelRoute(departurePlanet, destinationPlanet, ship, timerEntityService);
 
-            //after time ship changes status
+            //TODO if it's army cargo it should be after flight time
+            changeShipHarbour(departurePlanet.getId(), destinationPlanetId);
 
             shipService.saveShip(ship);
             travelRouteService.saveTravelRoutes(travelRoute);
+
+            /** timer task*/
             TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(destinationPlanet.getGalaxy().getId());
 
             TimerAction timerAction = new TimerAction(TimerActionType.TRAVEL, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
@@ -212,8 +215,26 @@ public class ShipController {
         List<Enum> shipTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(ShipType.class));
         return shipTypesEnumValues;
     }
+    /*@GetMapping("ship-controller/planet/{planetId}")
+    public List<Ship> getShipsByPlanetId(@PathVariable int planetId){
 
-    public void TravelExecution() {
+    }*/
+    @GetMapping("ship-controller/ship")
+    public List<Ship> getShips(){
+        return shipService.getShipsList();
+    }
+    private void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
+        PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
+        PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);
 
+        int gotDepartureHarbourLoad = departurePlanetPoints.getTotalHarbourLoad();
+        int setDepartureHarbourLoad = gotDepartureHarbourLoad - 1;
+        departurePlanetPoints.setTotalHarbourLoad(setDepartureHarbourLoad);
+        planetPointsService.savePoints(departurePlanetPoints);
+
+        int gotDestinationHarbourLoad = destinationPlanetPoints.getTotalHarbourLoad();
+        int setDestinationHarbourLoad = gotDestinationHarbourLoad + 1;
+        destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
+        planetPointsService.savePoints(departurePlanetPoints);
     }
 }

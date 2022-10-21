@@ -1,5 +1,8 @@
 package HubertRoszyk.company.entiti_class;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,14 +23,17 @@ public class PlanetPoints {
     private double attackPoints;
     private double industryPoints;
 
-    private double defensePointsIncome;
-    private double attackPointsIncome;
     private double industryPointsIncome;
 
     private int totalStorageSize;
     private int totalHarbourSize;
     private int totalHarbourLoad;
+
     private int shipYardLevel;
+    private int attackBuildingLevel;
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "planet_id")
     private Planet planet;
@@ -39,13 +45,13 @@ public class PlanetPoints {
         attackPoints = 0;
         industryPoints = 0;
 
-        defensePointsIncome = 0;
-        attackPointsIncome = 0;
         industryPointsIncome = 0;
 
         totalStorageSize = planet.getPlanetType().getDefaultStorageSize();
         totalHarbourSize = planet.getPlanetType().getDefaultHarbourSize();
+
         shipYardLevel = 1;
+        attackBuildingLevel = 1;
     }
 
 }

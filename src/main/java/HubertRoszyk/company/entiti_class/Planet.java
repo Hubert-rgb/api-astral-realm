@@ -3,10 +3,14 @@ package HubertRoszyk.company.entiti_class;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.PlanetType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,30 +34,32 @@ public class Planet {
 
     private int industryPointsMultiplier;
     private int sciencePointsMultiplier;
-    private int defencePointsMultiplier = 1;
-    private int attackPointsMultiplier = 1;
 
     private int size;
 
+    private double industryPointsProduce;
+    private double sciencePointsProduce;
+
+    private int planetLocationX;
+    private int planetLocationY;
+
+    private HashMap<Integer, Integer> army; //level number - number of army divisions on this level
+
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
     @Setter(AccessLevel.NONE)
     private Galaxy galaxy;
 
-    private double industryPointsProduce;
-    private double sciencePointsProduce;
-    private int defensePointsProduce = 0;
-    private int attackPointsProduce = 0;
-
-    private int planetLocationX;
-    private int planetLocationY;
-
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
     @Transient
+    @JsonIgnore
     private PlanetLocation planetLocation;
 
     @JsonIgnore

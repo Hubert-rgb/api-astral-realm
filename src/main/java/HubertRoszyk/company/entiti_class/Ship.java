@@ -2,7 +2,10 @@ package HubertRoszyk.company.entiti_class;
 
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -41,7 +44,8 @@ public class Ship {
     @OneToMany(mappedBy = "ship")
     private List<TravelRoute> travelRoute;
 
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "user_user_id")
     private User user;
@@ -55,7 +59,7 @@ public class Ship {
         getCapacity();
 
         shipLoad = 0;
-        shipStatus = ShipStatus.IN_BUILD;
+        //shipStatus;
 
         this.speed = speedLevel * shipType.getSpeed();
     }

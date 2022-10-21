@@ -3,7 +3,10 @@ package HubertRoszyk.company.entiti_class;
 import HubertRoszyk.company.enumTypes.cardsType.EconomyCardType;
 import HubertRoszyk.company.enumTypes.cardsType.MilitaryCardType;
 import HubertRoszyk.company.enumTypes.cardsType.PoliticalCardType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,10 +52,14 @@ public class GalaxyPoints {
     @Enumerated()
     private Set<EconomyCardType> economyCards;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
     private Galaxy galaxy;

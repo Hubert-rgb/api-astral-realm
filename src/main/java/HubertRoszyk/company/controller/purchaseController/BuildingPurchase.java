@@ -80,8 +80,8 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
         switch (buildingType) {
             case INDUSTRY -> context.setStrategy(new UpdateIndustryPointsProduce(planetService, planetPointsController));
             case SCIENCE -> context.setStrategy(new UpdateSciencePointsProduce(planetService, galaxyPointsController));
-            case DEFENSE -> context.setStrategy(new UpdateDefensePointsProduce(planetService, planetPointsController));
-            case ATTACK -> context.setStrategy(new UpdateAttackPointsProduce(planetService, planetPointsController));
+            //case DEFENSE -> context.setStrategy(new UpdateDefensePointsProduce(planetService, planetPointsController));
+            //case ATTACK -> context.setStrategy(new UpdateAttackPointsProduce(planetService, planetPointsController));
             case STORAGE -> context.setStrategy(new UpdateTotalStorageSize(planetPointsService, planetPointsController));
             case SHIP_YARD -> context.setStrategy(new UpdateShipYardLevel(planetPointsService));
             case HARBOUR -> context.setStrategy(new UpdateTotalHarbourSize(planetPointsService, planetPointsController));
@@ -100,10 +100,6 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
 
     @Autowired
     TimerActionService timerActionService;
-
-    @Autowired
-    TravelRouteService travelRouteService;
-
 
     @Override
     public PlanetPointsService getPlanetPointsService() {
