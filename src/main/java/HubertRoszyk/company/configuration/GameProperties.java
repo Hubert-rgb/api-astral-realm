@@ -40,4 +40,7 @@ public class GameProperties {
     @Value("${levelCostMultiplier}")
     private double levelCostMultiplier;
 
+    @Value("${armyCost}")
+    private int armyCost;
+
 }

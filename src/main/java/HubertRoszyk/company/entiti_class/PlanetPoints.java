@@ -6,8 +6,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.mapping.Collection;
 
 import javax.persistence.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,7 +35,12 @@ public class PlanetPoints {
     private int totalHarbourLoad;
 
     private int shipYardLevel;
-    private int attackBuildingLevel;
+    private int totalAttackBuildingSize;
+    private int totalAttackBuildingLoad;
+
+    @ElementCollection
+    @MapKeyColumn(name = "level_number")
+    private Map<Integer, Integer> army = new HashMap<>(); //level number - number of army divisions on this level
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
@@ -51,7 +61,11 @@ public class PlanetPoints {
         totalHarbourSize = planet.getPlanetType().getDefaultHarbourSize();
 
         shipYardLevel = 1;
-        attackBuildingLevel = 1;
+        totalAttackBuildingSize = planet.getPlanetType().getDefaultArmyBuildingSize();
+
+        for (int i = 1; i <= 7; i++){
+            army.put(i, 0);
+        }
     }
 
 }

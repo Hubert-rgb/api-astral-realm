@@ -35,22 +35,22 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
     }
 
     @Override
-    public void saveObject(Building building) {
+    public void saveObject(Building building, int planetId) {
         buildingService.saveBuilding(building);
     }
 
     @Override
-    public int upgradeLevel(Building building) {
-        int gotBuildingLevel = building.getBuildingLevel();
-        int setBuildingLevel = gotBuildingLevel + 1;
+    public void upgradeLevel(Building building, int setLevel, int planetId) {
+        /*int gotBuildingLevel = building.getBuildingLevel();
+        int setBuildingLevel = gotBuildingLevel + 1;*/
 
-        building.setBuildingLevel(setBuildingLevel);
+        building.setBuildingLevel(setLevel);
 
-        return setBuildingLevel;
+        //return setBuildingLevel;
     }
 
     @Override
-    public boolean getIsNotOnMaximumLevel(Building building) {
+    public boolean getIsNotOnMaximumLevel(Building building, int planetId) {
         return building.getBuildingLevel() < building.getBuildingType().getLevelNums();
     }
 

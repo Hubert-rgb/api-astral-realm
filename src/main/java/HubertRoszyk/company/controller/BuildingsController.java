@@ -53,15 +53,16 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
 
         Building building = new Building(buildingType, planet);
 
-        return buildingPurchase.executePurchase(building.getPlanet().getId(), building);
+        return buildingPurchase.executePurchase(building.getPlanet().getId(), building, 1);
     }
     @PutMapping("/building-controller/buildings/{buildingId}")
     public PurchaseStatus upgradeBuilding(@PathVariable int buildingId) {
 
         Building building = buildingService.getBuildingById(buildingId);
+        int level = building.getBuildingLevel();
        // Set<Planet> planets = planetService.getPlanetsByUserId(userId);
 
-        return buildingPurchase.executePurchase(building.getPlanet().getId(), building);
+        return buildingPurchase.executePurchase(building.getPlanet().getId(), building, level + 1);
     }
 
     @GetMapping("/building-controller/buildings/planets/{planetId}")

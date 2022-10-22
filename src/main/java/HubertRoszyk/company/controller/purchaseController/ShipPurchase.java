@@ -36,23 +36,23 @@ public class ShipPurchase implements PurchaseInterface<Ship>{
     }
 
     @Override
-    public void saveObject(Ship ship) {
+    public void saveObject(Ship ship, int planetId) {
         ship.setShipStatus(ShipStatus.IN_BUILD);
         shipService.saveShip(ship);
     }
 
     @Override
-    public int upgradeLevel(Ship ship) {
-        int gotShipLevel = ship.getCapacityLevel();
-        int setShipLevel = gotShipLevel + 1;
+    public void upgradeLevel(Ship ship, int setLevel, int planetId) {
+        /*int gotShipLevel = ship.getCapacityLevel();
+        int setShipLevel = gotShipLevel + 1;*/
 
-        ship.setCapacityLevel(setShipLevel);
+        ship.setCapacityLevel(setLevel);
 
-        return setShipLevel;
+        //return setLevel;
     }
 
     @Override
-    public boolean getIsNotOnMaximumLevel(Ship ship) {
+    public boolean getIsNotOnMaximumLevel(Ship ship, int planetId) {
         return ship.getCapacityLevel() < ship.getShipType().getLevelNums();
     }
 

@@ -43,8 +43,6 @@ public class Planet {
     private int planetLocationX;
     private int planetLocationY;
 
-    private HashMap<Integer, Integer> army; //level number - number of army divisions on this level
-
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.ALL)

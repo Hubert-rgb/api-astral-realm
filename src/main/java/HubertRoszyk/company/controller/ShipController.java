@@ -55,6 +55,7 @@ public class ShipController {
         String shipTypeString = (String) jsonObject.get("shipType");
         int planetId = (int) jsonObject.get("planetId");
         int userId = (int) jsonObject.get("userId");
+        int level = (int) jsonObject.get("level");
 
         ShipType shipType = stringToShipTypeConverter.convert(shipTypeString);
 
@@ -74,7 +75,7 @@ public class ShipController {
         Ship ship = new Ship(shipType, speedLevel, 0, user);
         //building by industry points methode
 
-        return shipPurchase.executePurchase(planetId, ship);
+        return shipPurchase.executePurchase(planetId, ship, level);
     }
     @PutMapping("ship-controller/ship/{shipId}")
     public PurchaseStatus upgradeShip(@PathVariable int shipId){
@@ -90,8 +91,10 @@ public class ShipController {
 
         Ship shipAfterPurchase = shipService.getShipById(shipId);
 
+        int level = ship.getCapacityLevel();
+
         shipService.saveShip(shipAfterPurchase);
-        return shipPurchase.executePurchase(planet.getId(), ship);
+        return shipPurchase.executePurchase(planet.getId(), ship, level + 1);
     }
     @PutMapping("ship-controller/ship/{shipId}/load/{volume}")
     public ShipLoadStatus loadShip(@PathVariable int shipId, @PathVariable int volume){

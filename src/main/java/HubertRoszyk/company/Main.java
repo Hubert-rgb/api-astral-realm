@@ -40,9 +40,9 @@ public class Main {
     /** FUTURE battle update*/
     //TODO changing planet status after getting it
     //TODO battle time in cycles
-    //TODO making army in barrack as ships. Max army level is barrack level
-    //TODO selecting army and ships level while creating them
-    //TODO saving army as hashMap on planet
+    //DONE TODO making army in barrack as ships. Max army level is barrack level
+    //DONE TODO selecting army and ships level while creating them
+    //DONE TODO saving army as hashMap on planet
     //TODO loading army on ship while attack
 
     /** code review update*/

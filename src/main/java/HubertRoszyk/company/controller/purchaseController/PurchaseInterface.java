@@ -13,14 +13,14 @@ public interface PurchaseInterface<T> {
     PlanetService getPlanetService();
 
 
-    default PurchaseStatus executePurchase(int planetId, T object) {
+    default PurchaseStatus executePurchase(int planetId, T object, int setLevel) {
         PlanetPointsService planetPointsService = getPlanetPointsService();
         PlanetService planetService = getPlanetService();
 
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
 
-        int setLevel = upgradeLevel(object);
+        upgradeLevel(object, setLevel, planetId);
         System.out.println(setLevel);
 
         double price = getPrice(object);
@@ -43,7 +43,7 @@ public interface PurchaseInterface<T> {
 
         isEnoughPoints = gotIndustryPoints >= price;
 
-        isNotOnMaximumLevel = getIsNotOnMaximumLevel(object);
+        isNotOnMaximumLevel = getIsNotOnMaximumLevel(object, planetId);
         isEnoughSpaceOnPlanet = getIsEnoughSpace(object, planet);
 
         //TODO maybe strategy not if
@@ -64,7 +64,7 @@ public interface PurchaseInterface<T> {
         double setIndustryPoints = gotIndustryPoints - price;
         planetPoints.setIndustryPoints(setIndustryPoints);
 
-        saveObject(object);
+        saveObject(object, planetPoints.getPlanet().getId());
 
         executeTimerAction(object, planetPoints.getPlanet().getId(), setLevel);
         //TODO method not if
@@ -73,10 +73,10 @@ public interface PurchaseInterface<T> {
 
     boolean getIsEnoughSpace(T object, Planet planet);
 
-    void saveObject(T object);
+    void saveObject(T object, int planetId);
 
-    int upgradeLevel(T object);
-    boolean getIsNotOnMaximumLevel(T object);
+    void upgradeLevel(T object, int setLevel, int planetId);
+    boolean getIsNotOnMaximumLevel(T object, int planetId);
     double getPrice(T object);
 
     void executeTimerAction(T object, int planetId, int setLevel);
