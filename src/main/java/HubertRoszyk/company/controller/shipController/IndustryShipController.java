@@ -4,25 +4,18 @@ import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.IndustryShip;
-import HubertRoszyk.company.entiti_class.ship.Ship;
-import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumStatus.ShipLoadStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
-import HubertRoszyk.company.enumTypes.TimerActionType;
-import HubertRoszyk.company.enumTypes.cardsType.EconomyCardType;
 import HubertRoszyk.company.service.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 @RestController
 @RequestMapping("/industry-ship-controller")
-public class IndustryShipController implements ShipControllerInterface{
+public class IndustryShipController implements ShipControllerInterface<IndustryShip, Integer>{
     @Autowired
     ShipService shipService;
 
@@ -54,31 +47,11 @@ public class IndustryShipController implements ShipControllerInterface{
     TimerActionService timerActionService;
 
     @Override
-    public Object createShip(int level, User user) {
+    public IndustryShip createShip(int level, User user) {
         return new IndustryShip(ShipType.INDUSTRY_CARGO, level, user);
     }
 
-    @Override
-    public ShipService getShipService() {
-        return shipService;
-    }
-
-    @Override
-    public ShipPurchase getShipPurchase() {
-        return shipPurchase;
-    }
-
-    @Override
-    public UserService getUserService() {
-        return userService;
-    }
-
-    @Override
-    public StringToShipTypeConverter getStringToShipTypeConverter() {
-        return stringToShipTypeConverter;
-    }
-
-    @Override
+    /*@Override
     public ShipLoadStatus loadShip(int shipId, JSONObject jsonObject){
         IndustryShip ship = (IndustryShip) shipService.getShipById(shipId);
         int volume = (int) jsonObject.get("volume");
@@ -92,15 +65,7 @@ public class IndustryShipController implements ShipControllerInterface{
         //volume <= industry points
 
         if(capacity >= gotLoad + volume && ship.getShipStatus().equals(ShipStatus.DOCKED)) {
-            double setLoad = gotLoad + volume;
 
-            ship.setShipLoad(setLoad);
-            shipService.saveShip(ship);
-
-            double gotIndustryPoints = planetPoints.getIndustryPoints();
-            double setIndustryPoints = gotIndustryPoints - volume;
-            planetPoints.setIndustryPoints(setIndustryPoints);
-            planetPointsService.savePoints(planetPoints);
 
             return ShipLoadStatus.EVERYTHING_LOADED;
         } else if (capacity == gotLoad) {
@@ -123,6 +88,35 @@ public class IndustryShipController implements ShipControllerInterface{
 
             return ShipLoadStatus.NOT_EVERYTHING_LOAD;
         }
+    }*/
+
+    @Override
+    public void executeLoad(IndustryShip ship, Integer load, PlanetPoints planetPoints) {
+        double shipLoad = ship.getShipLoad();
+        double setLoad = shipLoad + load;
+
+        ship.setShipLoad(setLoad);
+        shipService.saveShip(ship);
+
+        double gotIndustryPoints = planetPoints.getIndustryPoints();
+        double setIndustryPoints = gotIndustryPoints - load;
+        planetPoints.setIndustryPoints(setIndustryPoints);
+        planetPointsService.savePoints(planetPoints);
+    }
+
+    @Override
+    public int getVolume(Integer load) {
+        return load;
+    }
+
+    @Override
+    public int getLoad(IndustryShip industryShip) {
+        return (int) industryShip.getShipLoad();
+    }
+
+    @Override
+    public Integer getLoad(JSONObject jsonObject) throws JsonProcessingException {
+        return (int) jsonObject.get("volume");
     }
 
     @Override
@@ -241,4 +235,28 @@ public class IndustryShipController implements ShipControllerInterface{
     private void unLoadAttackShip(){
 
     }*/
+    @Override
+    public ShipService getShipService() {
+        return shipService;
+    }
+
+    @Override
+    public ShipPurchase getShipPurchase() {
+        return shipPurchase;
+    }
+
+    @Override
+    public UserService getUserService() {
+        return userService;
+    }
+
+    @Override
+    public StringToShipTypeConverter getStringToShipTypeConverter() {
+        return stringToShipTypeConverter;
+    }
+
+    @Override
+    public PlanetPointsService getPlanetPointsService() {
+        return planetPointsService;
+    }
 }

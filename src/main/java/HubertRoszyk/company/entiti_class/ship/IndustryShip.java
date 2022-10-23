@@ -21,7 +21,7 @@ public class IndustryShip extends Ship{
     //@Setter(AccessLevel.NONE)
     private int id;
 
-    private double shipLoad;
+    private int shipLoad;
     public IndustryShip(ShipType shipType, int capacityLevel, User user){
         super(shipType, capacityLevel, user);
     }

@@ -5,23 +5,22 @@ import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.entiti_class.TravelRoute;
-import HubertRoszyk.company.entiti_class.ship.IndustryShip;
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumStatus.ShipLoadStatus;
+import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
 import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.ShipService;
 import HubertRoszyk.company.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/ship-controller")
-public interface ShipControllerInterface<S> {
+public interface ShipControllerInterface<ShipT, LoadType> {
     @PostMapping("/ship")
     default PurchaseStatus buildShip(@RequestBody JSONObject jsonObject){
         ShipPurchase shipPurchase = getShipPurchase();
@@ -37,7 +36,7 @@ public interface ShipControllerInterface<S> {
 
         User user = userService.getUserById(userId);
 
-        S ship = createShip(level, user);
+        ShipT ship = createShip(level, user);
 
         return shipPurchase.executePurchase(planetId, (Ship) ship, level);
     }
@@ -55,14 +54,52 @@ public interface ShipControllerInterface<S> {
         return shipPurchase.executePurchase(planet.getId(), ship, level + 1);
     }
     @PutMapping("/ship/{shipId}/load")
-    ShipLoadStatus loadShip(@PathVariable int shipId, @RequestBody JSONObject jsonObject) throws IOException;
+    default ShipLoadStatus loadShip(@PathVariable int shipId, @RequestBody JSONObject jsonObject) throws JsonProcessingException {
+        ShipService shipService = getShipService();
+        PlanetPointsService planetPointsService = getPlanetPointsService();
+
+        ShipT gotShip = (ShipT) shipService.getShipById(shipId);
+        LoadType load = getLoad(jsonObject);
+
+        Ship ship = (Ship) gotShip;
+
+        int planetId =  ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
+        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
+
+        int capacity = ship.getShipCapacity();
+        int gotLoad = getLoad(gotShip);
+
+        int volume = getVolume(load);
+        System.out.println(volume);
+
+        if(capacity >= gotLoad + volume && ship.getShipStatus().equals(ShipStatus.DOCKED)) {
+            executeLoad(gotShip, load, planetPoints);
+
+            return ShipLoadStatus.EVERYTHING_LOADED;
+        } else if (ship.getShipStatus().equals(ShipStatus.TRAVELING)) {
+            return ShipLoadStatus.TRAVELLING;
+        } else if (ship.getShipStatus().equals(ShipStatus.IN_BUILD)) {
+            return ShipLoadStatus.IN_BUILD;
+        } else {
+            return ShipLoadStatus.NOTHING_LOAD;
+        }
+    }
+    void executeLoad(ShipT ship, LoadType load, PlanetPoints planetPoints);
+
+    int getVolume(LoadType load);
+
+    int getLoad(ShipT shipT);
+
+    LoadType getLoad(JSONObject jsonObject) throws JsonProcessingException;
 
     @PutMapping("ship/{shipId}/unload")
     ShipLoadStatus unloadShip(@PathVariable int shipId, @RequestBody JSONObject jsonObject);
-    S createShip(int level, User user);
+    ShipT createShip(int level, User user);
     ShipService getShipService();
     ShipPurchase getShipPurchase();
     UserService getUserService();
 
     StringToShipTypeConverter getStringToShipTypeConverter();
+
+    PlanetPointsService getPlanetPointsService();
 }

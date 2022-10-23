@@ -66,4 +66,5 @@ abstract public class Ship {
     public void getCapacity() {
         shipCapacity = capacityLevel * shipType.getCapacity();
     }
+
 }
