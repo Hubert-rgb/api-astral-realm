@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enumTypes.BuildingType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -55,7 +56,7 @@ public class PlanetPoints {
         attackPoints = 0;
         industryPoints = 0;
 
-        industryPointsIncome = 0;
+        industryPointsIncome = planet.getIndustryPointsMultiplier() * planet.getIndustryPointsProduce();
 
         totalStorageSize = planet.getPlanetType().getDefaultStorageSize();
         totalHarbourSize = planet.getPlanetType().getDefaultHarbourSize();
@@ -63,7 +64,7 @@ public class PlanetPoints {
         shipYardLevel = 1;
         totalAttackBuildingSize = planet.getPlanetType().getDefaultArmyBuildingSize();
 
-        for (int i = 1; i <= 7; i++){
+        for (int i = 1; i <= BuildingType.ATTACK.getLevelNums(); i++){
             army.put(i, 0);
         }
     }

@@ -1,6 +1,6 @@
 package HubertRoszyk.company.service;
 
-import HubertRoszyk.company.entiti_class.Ship;
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

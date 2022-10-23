@@ -37,7 +37,7 @@ public class Main {
     /** planet generation update */
     //TODO radial positioning
 
-    /** FUTURE battle update*/
+    /** battle update*/
     //TODO changing planet status after getting it
     //TODO battle time in cycles
     //DONE TODO making army in barrack as ships. Max army level is barrack level
@@ -50,9 +50,8 @@ public class Main {
 
     /** code debuging*/
     //TODO Ships only travels between users planets and only there can load points except battle situation
-    //NOT SEEN TODO while updating storage level, all points disappear
-    //DONE TODO not returning every value when requesting getBuilding ec.
-    //DONE TODO changing ship status while upgrading to IN_BUILD
+    //DONE TODO while updating storage level, all points disappear
+    //TODO changing user num in galaxy
     public static void main(String[] args) throws SQLException, IOException, ParseException {
 
         GameProperties configOperator = new GameProperties();

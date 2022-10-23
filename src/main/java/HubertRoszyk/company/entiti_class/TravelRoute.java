@@ -1,11 +1,11 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.service.TimerEntityService;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 

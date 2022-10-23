@@ -1,5 +1,7 @@
-package HubertRoszyk.company.entiti_class;
+package HubertRoszyk.company.entiti_class.ship;
 
+import HubertRoszyk.company.entiti_class.TravelRoute;
+import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -11,13 +13,13 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "Ship")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Ship {
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+abstract public class Ship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //@Setter(AccessLevel.NONE)
@@ -26,12 +28,11 @@ public class Ship {
     @Enumerated
     private ShipType shipType;
 
-    private int speedLevel; //developed by science cards
+    private int speedLevel; //developed by science cards, global
     private int speed;
     private int capacityLevel; //developed by industry
 
     private int shipCapacity;
-    private double shipLoad;
 
     @Enumerated
     private ShipStatus shipStatus;
@@ -50,15 +51,13 @@ public class Ship {
     @JoinColumn(name = "user_user_id")
     private User user;
 
-    public Ship(ShipType shipType, int speedLevel, int capacityLevel, User user) {
+    public Ship(ShipType shipType, int capacityLevel, User user) {
         this.shipType = shipType;
-        this.speedLevel = speedLevel;
+        this.speedLevel = 1; //TODO cards
         this.capacityLevel = capacityLevel;
         this.user = user;
 
         getCapacity();
-
-        shipLoad = 0;
         //shipStatus;
 
         this.speed = speedLevel * shipType.getSpeed();

@@ -1,12 +1,9 @@
 package HubertRoszyk.company.Strategy.timerActionStategy;
 
-import HubertRoszyk.company.entiti_class.Ship;
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.entiti_class.TimerAction;
-import HubertRoszyk.company.entiti_class.TravelRoute;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.service.ShipService;
-import HubertRoszyk.company.service.TravelRouteService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TimerActionTravel implements TimerActionStrategy{
     ShipService shipService;

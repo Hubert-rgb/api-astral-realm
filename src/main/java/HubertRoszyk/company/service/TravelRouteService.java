@@ -1,6 +1,5 @@
 package HubertRoszyk.company.service;
 
-import HubertRoszyk.company.entiti_class.Ship;
 import HubertRoszyk.company.entiti_class.TravelRoute;
 import HubertRoszyk.company.repository.TravelRouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

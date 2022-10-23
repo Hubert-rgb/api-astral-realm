@@ -51,7 +51,7 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
 
     @Override
     public boolean getIsNotOnMaximumLevel(Building building, int planetId) {
-        return building.getBuildingLevel() < building.getBuildingType().getLevelNums();
+        return building.getBuildingLevel() <= building.getBuildingType().getLevelNums();
     }
 
     @Override

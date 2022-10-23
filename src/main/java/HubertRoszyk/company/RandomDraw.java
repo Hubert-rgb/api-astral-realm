@@ -24,7 +24,7 @@ public class RandomDraw {
         return size;
     }
     public static int industryPointsMultiplierDraw(int totalPoints) {
-        int industryPointsMultiplier =  random.nextInt(totalPoints - 1) + 1;
+        int industryPointsMultiplier =  random.nextInt(totalPoints - 2) + 2;
         return industryPointsMultiplier;
     }
     public static double battleMultiplierDraw() {

@@ -117,10 +117,10 @@ public class GalaxyController {
 
             PlanetPoints planetPoints = new PlanetPoints(planet);
 
-            planetPointsService.savePoints(planetPoints);
-            planetService.savePlanet(planet);
 
-            planetPointsController.getTotalIndustryPointsIncome(planet.getId());
+            planetService.savePlanet(planet);
+            planetPointsService.savePoints(planetPoints);
+            //planetPointsController.getTotalIndustryPointsIncome(planet.getId());
 
             //planet.asignGalaxy(galaxy);
             planets.add(planet);

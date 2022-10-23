@@ -1,14 +1,11 @@
 package HubertRoszyk.company.controller.purchaseController;
 
 import HubertRoszyk.company.entiti_class.*;
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
-import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public interface PurchaseInterface<T> {
+public interface PurchaseInterface<T> { //TODO redo also for buying science cards
     PlanetPointsService getPlanetPointsService();
     PlanetService getPlanetService();
 
@@ -20,6 +17,7 @@ public interface PurchaseInterface<T> {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
 
+        //TODO po czasie
         upgradeLevel(object, setLevel, planetId);
         System.out.println(setLevel);
 

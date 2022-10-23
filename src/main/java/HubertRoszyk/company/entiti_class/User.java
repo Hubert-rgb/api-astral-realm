@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

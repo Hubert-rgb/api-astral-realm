@@ -1,8 +1,10 @@
-package HubertRoszyk.company.controller;
+package HubertRoszyk.company.controller.shipController;
 
 import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
+import HubertRoszyk.company.entiti_class.ship.IndustryShip;
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumStatus.ShipLoadStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
@@ -19,7 +21,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 @RestController
-public class ShipController {
+@RequestMapping("/industry-ship-controller")
+public class IndustryShipController implements ShipControllerInterface{
     @Autowired
     ShipService shipService;
 
@@ -50,55 +53,36 @@ public class ShipController {
     @Autowired
     TimerActionService timerActionService;
 
-    @PostMapping("ship-controller/ship")
-    public PurchaseStatus buildShip(@RequestBody JSONObject jsonObject){//Industry points
-        String shipTypeString = (String) jsonObject.get("shipType");
-        int planetId = (int) jsonObject.get("planetId");
-        int userId = (int) jsonObject.get("userId");
-        int level = (int) jsonObject.get("level");
-
-        ShipType shipType = stringToShipTypeConverter.convert(shipTypeString);
-
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-        GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(userId, planetPoints.getPlanet().getGalaxy().getId());
-        User user = userService.getUserById(userId);
-
-        //card leveling TO DISCUSS
-        int speedLevel;
-        if(galaxyPoints.getEconomyCards().contains(EconomyCardType.FASTER_INDUSTRY_CARGO_SHIP)) {
-            speedLevel = 2;
-        } else {
-            speedLevel = 1;
-        }
-
-
-        Ship ship = new Ship(shipType, speedLevel, 0, user);
-        //building by industry points methode
-
-        return shipPurchase.executePurchase(planetId, ship, level);
+    @Override
+    public Object createShip(int level, User user) {
+        return new IndustryShip(ShipType.INDUSTRY_CARGO, level, user);
     }
-    @PutMapping("ship-controller/ship/{shipId}")
-    public PurchaseStatus upgradeShip(@PathVariable int shipId){
-        Ship ship = shipService.getShipById(shipId);
-        TravelRoute lastRoute = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1);
-        Planet planet = lastRoute.getArrivalPlanet();
 
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planet.getId());
-
-        int gotLevel = ship.getCapacityLevel();
-        int shipYardLevel = planetPoints.getShipYardLevel();
-
-
-        Ship shipAfterPurchase = shipService.getShipById(shipId);
-
-        int level = ship.getCapacityLevel();
-
-        shipService.saveShip(shipAfterPurchase);
-        return shipPurchase.executePurchase(planet.getId(), ship, level + 1);
+    @Override
+    public ShipService getShipService() {
+        return shipService;
     }
-    @PutMapping("ship-controller/ship/{shipId}/load/{volume}")
-    public ShipLoadStatus loadShip(@PathVariable int shipId, @PathVariable int volume){
-        Ship ship = shipService.getShipById(shipId);
+
+    @Override
+    public ShipPurchase getShipPurchase() {
+        return shipPurchase;
+    }
+
+    @Override
+    public UserService getUserService() {
+        return userService;
+    }
+
+    @Override
+    public StringToShipTypeConverter getStringToShipTypeConverter() {
+        return stringToShipTypeConverter;
+    }
+
+    @Override
+    public ShipLoadStatus loadShip(int shipId, JSONObject jsonObject){
+        IndustryShip ship = (IndustryShip) shipService.getShipById(shipId);
+        int volume = (int) jsonObject.get("volume");
+
         int planetId = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
@@ -140,9 +124,13 @@ public class ShipController {
             return ShipLoadStatus.NOT_EVERYTHING_LOAD;
         }
     }
-    @PutMapping("ship-controller/ship/{shipId}/unload/{volume}")
-    public ShipLoadStatus unloadShip(@PathVariable int shipId, @PathVariable int volume){
-        Ship ship = shipService.getShipById(shipId);
+
+    @Override
+   @PutMapping("unload/{volume}")
+    public ShipLoadStatus unloadShip(int shipId, JSONObject jsonObject){
+        IndustryShip ship = (IndustryShip) shipService.getShipById(shipId);
+        int volume = (int) jsonObject.get("volume");
+
         int planetId = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
@@ -182,9 +170,10 @@ public class ShipController {
             return ShipLoadStatus.NOT_EVERYTHING_LOAD;
         }
     }
+    /*
     @PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
     public TravelRoute sendShip(@PathVariable int shipId, @PathVariable int destinationPlanetId){
-        Ship ship = shipService.getShipById(shipId);
+        Ship<Double> ship = shipService.getShipById(shipId);
         Planet destinationPlanet = planetService.getPlanetById(destinationPlanetId);
         Planet departurePlanet = ship.getTravelRoute().get(ship.getTravelRoute().size()-1).getArrivalPlanet();
 
@@ -199,7 +188,7 @@ public class ShipController {
             shipService.saveShip(ship);
             travelRouteService.saveTravelRoutes(travelRoute);
 
-            /** timer task*/
+            *//** timer task*//*
             TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(destinationPlanet.getGalaxy().getId());
 
             TimerAction timerAction = new TimerAction(TimerActionType.TRAVEL, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
@@ -218,10 +207,10 @@ public class ShipController {
         List<Enum> shipTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(ShipType.class));
         return shipTypesEnumValues;
     }
-    /*@GetMapping("ship-controller/planet/{planetId}")
+    *//*@GetMapping("ship-controller/planet/{planetId}")
     public List<Ship> getShipsByPlanetId(@PathVariable int planetId){
 
-    }*/
+    }*//*
     @GetMapping("ship-controller/ship")
     public List<Ship> getShips(){
         return shipService.getShipsList();
@@ -240,4 +229,16 @@ public class ShipController {
         destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
         planetPointsService.savePoints(departurePlanetPoints);
     }
+    private void loadIndustryShip(){
+
+    }
+    private void unLoadIndustryShip(){
+
+    }
+    private void loadAttackShip(){
+
+    }
+    private void unLoadAttackShip(){
+
+    }*/
 }

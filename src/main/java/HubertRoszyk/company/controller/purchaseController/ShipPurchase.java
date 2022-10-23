@@ -2,6 +2,7 @@ package HubertRoszyk.company.controller.purchaseController;
 
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.*;
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
@@ -53,7 +54,7 @@ public class ShipPurchase implements PurchaseInterface<Ship>{
 
     @Override
     public boolean getIsNotOnMaximumLevel(Ship ship, int planetId) {
-        return ship.getCapacityLevel() < ship.getShipType().getLevelNums();
+        return ship.getCapacityLevel() <= ship.getShipType().getLevelNums();
     }
 
     @Override
