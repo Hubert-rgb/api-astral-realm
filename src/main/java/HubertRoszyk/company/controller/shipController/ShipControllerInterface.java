@@ -178,7 +178,23 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
     void executeLoad(ShipT ship, LoadType load, PlanetPoints planetPoints);
     void executeUnload(ShipT ship, LoadType shipLoad, LoadType toUnload, PlanetPoints planetPoints);
-    void executeTravel(TravelRoute travelRoute, Ship ship);
+
+    /** orginalnie chciałęm żeby było oddzielnie dla Industry i Attack, ale myśle, że będzie można transportować armię nie atakując
+     * wtedy to działałoby jak transportowanie industry zajmując miejsce w porcie przeznaczenia*/
+    default void executeTravel(TravelRoute travelRoute, Ship ship){
+        TimerActionService timerActionService = getTimerActionService();
+        TimerEntityService timerEntityService = getTimerEntityService();
+
+        changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
+
+        /** timer task*/
+        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(travelRoute.getArrivalPlanet().getGalaxy().getId());
+
+        TimerAction timerAction = new TimerAction(TimerActionType.INDUSTRY_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
+
+        timerEntityService.saveTimerEntity(timerEntity);
+        timerActionService.saveTimerAction(timerAction);
+    }
 
     int getVolume(LoadType load);
 

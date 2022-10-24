@@ -78,11 +78,11 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
         planetPointsService.savePoints(planetPoints);
     }
 
-    @Override
+    /*@Override
     public void executeTravel(TravelRoute travelRoute, Ship ship) {
         changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
 
-        /** timer task*/
+        *//** timer task*//*
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(travelRoute.getArrivalPlanet().getGalaxy().getId());
 
         TimerAction timerAction = new TimerAction(TimerActionType.INDUSTRY_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
@@ -90,7 +90,7 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
         timerEntityService.saveTimerEntity(timerEntity);
         timerActionService.saveTimerAction(timerAction);
     }
-
+*/
     @Override
     public int getVolume(Integer load) {
         return load;

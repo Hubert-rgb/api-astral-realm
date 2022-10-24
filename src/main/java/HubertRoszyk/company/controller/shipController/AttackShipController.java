@@ -79,18 +79,18 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
         planetPointsService.savePoints(planetPoints);
     }
 
-    @Override
+    /*@Override
     public void executeTravel(TravelRoute travelRoute, Ship ship) {
         changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
 
-        /** timer task*/
+        *//** timer task*//*
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(travelRoute.getArrivalPlanet().getGalaxy().getId());
 
         TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
 
         timerEntityService.saveTimerEntity(timerEntity);
         timerActionService.saveTimerAction(timerAction);
-    }
+    }*/
 
     @Override
     public int getVolume(Map<Integer, Integer> armyToLoad) {
