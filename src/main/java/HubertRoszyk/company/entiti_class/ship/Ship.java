@@ -1,9 +1,11 @@
 package HubertRoszyk.company.entiti_class.ship;
 
+import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.entiti_class.TravelRoute;
 import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
+import HubertRoszyk.company.service.PlanetPointsService;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -66,5 +68,6 @@ abstract public class Ship {
     public void getCapacity() {
         shipCapacity = capacityLevel * shipType.getCapacity();
     }
+
 
 }

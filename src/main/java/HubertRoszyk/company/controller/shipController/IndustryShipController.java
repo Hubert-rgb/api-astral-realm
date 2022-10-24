@@ -4,7 +4,9 @@ import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.IndustryShip;
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumTypes.ShipType;
+import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.simple.JSONObject;
@@ -77,6 +79,19 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
     }
 
     @Override
+    public void executeTravel(TravelRoute travelRoute, Ship ship) {
+        changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
+
+        /** timer task*/
+        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(travelRoute.getArrivalPlanet().getGalaxy().getId());
+
+        TimerAction timerAction = new TimerAction(TimerActionType.INDUSTRY_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
+
+        timerEntityService.saveTimerEntity(timerEntity);
+        timerActionService.saveTimerAction(timerAction);
+    }
+
+    @Override
     public int getVolume(Integer load) {
         return load;
     }
@@ -105,77 +120,7 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
     public Integer getShipLoad(IndustryShip ship) {
         return ship.getShipLoad();
     }
-    /*
-    @PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
-    public TravelRoute sendShip(@PathVariable int shipId, @PathVariable int destinationPlanetId){
-        Ship<Double> ship = shipService.getShipById(shipId);
-        Planet destinationPlanet = planetService.getPlanetById(destinationPlanetId);
-        Planet departurePlanet = ship.getTravelRoute().get(ship.getTravelRoute().size()-1).getArrivalPlanet();
 
-        if(ship.getShipStatus().equals(ShipStatus.DOCKED)) {
-            ship.setShipStatus(ShipStatus.TRAVELING);
-
-            TravelRoute travelRoute = new TravelRoute(departurePlanet, destinationPlanet, ship, timerEntityService);
-
-            //TODO if it's army cargo it should be after flight time
-            changeShipHarbour(departurePlanet.getId(), destinationPlanetId);
-
-            shipService.saveShip(ship);
-            travelRouteService.saveTravelRoutes(travelRoute);
-
-            *//** timer task*//*
-            TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(destinationPlanet.getGalaxy().getId());
-
-            TimerAction timerAction = new TimerAction(TimerActionType.TRAVEL, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
-
-            timerEntityService.saveTimerEntity(timerEntity);
-            timerActionService.saveTimerAction(timerAction);
-
-            return travelRoute;
-        } else {
-            //returning status (travelling, in build, done)
-            return null;
-        }
-    }
-    @GetMapping("ship-controller/ship-types")
-    public List<Enum> getShipTypes(){
-        List<Enum> shipTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(ShipType.class));
-        return shipTypesEnumValues;
-    }
-    *//*@GetMapping("ship-controller/planet/{planetId}")
-    public List<Ship> getShipsByPlanetId(@PathVariable int planetId){
-
-    }*//*
-    @GetMapping("ship-controller/ship")
-    public List<Ship> getShips(){
-        return shipService.getShipsList();
-    }
-    private void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
-        PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
-        PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);
-
-        int gotDepartureHarbourLoad = departurePlanetPoints.getTotalHarbourLoad();
-        int setDepartureHarbourLoad = gotDepartureHarbourLoad - 1;
-        departurePlanetPoints.setTotalHarbourLoad(setDepartureHarbourLoad);
-        planetPointsService.savePoints(departurePlanetPoints);
-
-        int gotDestinationHarbourLoad = destinationPlanetPoints.getTotalHarbourLoad();
-        int setDestinationHarbourLoad = gotDestinationHarbourLoad + 1;
-        destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
-        planetPointsService.savePoints(departurePlanetPoints);
-    }
-    private void loadIndustryShip(){
-
-    }
-    private void unLoadIndustryShip(){
-
-    }
-    private void loadAttackShip(){
-
-    }
-    private void unLoadAttackShip(){
-
-    }*/
     @Override
     public ShipService getShipService() {
         return shipService;
@@ -189,6 +134,26 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
     @Override
     public UserService getUserService() {
         return userService;
+    }
+
+    @Override
+    public PlanetService getPlanetService() {
+        return planetService;
+    }
+
+    @Override
+    public TimerEntityService getTimerEntityService() {
+        return timerEntityService;
+    }
+
+    @Override
+    public TimerActionService getTimerActionService() {
+        return timerActionService;
+    }
+
+    @Override
+    public TravelRouteService getTravelRouteService() {
+        return travelRouteService;
     }
 
     @Override

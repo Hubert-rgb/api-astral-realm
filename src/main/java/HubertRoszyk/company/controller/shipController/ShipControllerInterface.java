@@ -2,24 +2,24 @@ package HubertRoszyk.company.controller.shipController;
 
 import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
-import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.entiti_class.PlanetPoints;
-import HubertRoszyk.company.entiti_class.TravelRoute;
+import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.Ship;
-import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumStatus.ShipLoadStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
-import HubertRoszyk.company.service.PlanetPointsService;
-import HubertRoszyk.company.service.ShipService;
-import HubertRoszyk.company.service.UserService;
+import HubertRoszyk.company.enumTypes.TimerActionType;
+import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 @RestController
-//@RequestMapping("/ship-controller")
+@RequestMapping("/ship-controller")
 public interface ShipControllerInterface<ShipT, LoadType> {
     @PostMapping("/ship")
     default PurchaseStatus buildShip(@RequestBody JSONObject jsonObject){
@@ -115,29 +115,90 @@ public interface ShipControllerInterface<ShipT, LoadType> {
             return ShipLoadStatus.NOTHING_LOAD;
         }
     }
+    @PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
+    default TravelRoute sendShip(@PathVariable int shipId, @PathVariable int destinationPlanetId){
+        ShipService shipService = getShipService();
+        PlanetService planetService = getPlanetService();
+        TimerEntityService timerEntityService = getTimerEntityService();
+        TimerActionService timerActionService = getTimerActionService();
+        TravelRouteService travelRouteService = getTravelRouteService();
+
+        Ship ship = shipService.getShipById(shipId);
+        Planet destinationPlanet = planetService.getPlanetById(destinationPlanetId);
+        Planet departurePlanet = ship.getTravelRoute().get(ship.getTravelRoute().size()-1).getArrivalPlanet();
+
+        if(ship.getShipStatus().equals(ShipStatus.DOCKED)) {
+            ship.setShipStatus(ShipStatus.TRAVELING);
+
+            TravelRoute travelRoute = new TravelRoute(departurePlanet, destinationPlanet, ship, timerEntityService);
+
+            //TODO if it's army cargo it should be after flight time
+            executeTravel(travelRoute, ship);
+
+            shipService.saveShip(ship);
+            travelRouteService.saveTravelRoutes(travelRoute);
+
+            return travelRoute;
+        } else {
+            //returning status (travelling, in build, done)
+            return null;
+        }
+    }
+    @GetMapping("/ship-types")
+    default List<Enum> getShipTypes(){
+        List<Enum> shipTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(ShipType.class));
+        return shipTypesEnumValues;
+    }
+   /* @GetMapping("ship-controller/planet/{planetId}")
+    public List<Ship> getShipsByPlanetId(@PathVariable int planetId){
+
+    }*/
+    @GetMapping("/ship")
+    default List<Ship> getShips(){
+        ShipService shipService = getShipService();
+        return shipService.getShipsList();
+    }
+
+    default void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
+        PlanetPointsService planetPointsService = getPlanetPointsService();
+
+        PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
+        PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);
+
+        int gotDepartureHarbourLoad = departurePlanetPoints.getTotalHarbourLoad();
+        int setDepartureHarbourLoad = gotDepartureHarbourLoad - 1;
+        departurePlanetPoints.setTotalHarbourLoad(setDepartureHarbourLoad);
+        planetPointsService.savePoints(departurePlanetPoints);
+
+        int gotDestinationHarbourLoad = destinationPlanetPoints.getTotalHarbourLoad();
+        int setDestinationHarbourLoad = gotDestinationHarbourLoad + 1;
+        destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
+        planetPointsService.savePoints(departurePlanetPoints);
+    }
 
     void executeLoad(ShipT ship, LoadType load, PlanetPoints planetPoints);
-
     void executeUnload(ShipT ship, LoadType shipLoad, LoadType toUnload, PlanetPoints planetPoints);
+    void executeTravel(TravelRoute travelRoute, Ship ship);
 
     int getVolume(LoadType load);
 
     int getPlanetCapacity(PlanetPoints planetPoints);
-
     int getPlanetLoadVolume(PlanetPoints planetPoints);
 
     int getShipLoadVolume(ShipT shipT);
+    LoadType getShipLoad(ShipT ship);
 
     LoadType getToLoad(JSONObject jsonObject) throws JsonProcessingException;
-    LoadType getShipLoad(ShipT ship);
 
     ShipT createShip(int level, User user);
 
     ShipService getShipService();
     ShipPurchase getShipPurchase();
     UserService getUserService();
-
+    PlanetService getPlanetService();
+    TimerEntityService getTimerEntityService();
+    TimerActionService getTimerActionService();
+    TravelRouteService getTravelRouteService();
     StringToShipTypeConverter getStringToShipTypeConverter();
-
     PlanetPointsService getPlanetPointsService();
 }

@@ -5,9 +5,9 @@ import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.service.ShipService;
 
-public class TimerActionTravel implements TimerActionStrategy{
+public class TimerActionIndustryCargo implements TimerActionStrategy{
     ShipService shipService;
-    public TimerActionTravel(ShipService shipService) {
+    public TimerActionIndustryCargo(ShipService shipService) {
         this.shipService = shipService;
     }
     @Override

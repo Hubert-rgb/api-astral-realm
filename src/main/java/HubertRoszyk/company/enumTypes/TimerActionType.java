@@ -2,7 +2,8 @@ package HubertRoszyk.company.enumTypes;
 
 public enum TimerActionType {
     BATTLE,
-    TRAVEL,
+    INDUSTRY_CARGO,
+    ATTACK_CARGO,
     BUILDING,
     SHIP;
 }

@@ -2,14 +2,13 @@ package HubertRoszyk.company.controller.shipController;
 
 import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
-import HubertRoszyk.company.entiti_class.PlanetPoints;
-import HubertRoszyk.company.entiti_class.User;
+import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.ShipLoadStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
-import HubertRoszyk.company.service.PlanetPointsService;
-import HubertRoszyk.company.service.ShipService;
-import HubertRoszyk.company.service.UserService;
+import HubertRoszyk.company.enumTypes.TimerActionType;
+import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +38,18 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
     @Autowired
     PlanetPointsService planetPointsService;
 
+    @Autowired
+    PlanetService planetService;
+
+    @Autowired
+    TimerActionService timerActionService;
+
+    @Autowired
+    TimerEntityService timerEntityService;
+
+    @Autowired
+    TravelRouteService travelRouteService;
+
     @Override
     public void executeLoad(AttackShip ship, Map<Integer, Integer> armyToLoad, PlanetPoints planetPoints) {
         Map<Integer, Integer> setShipLoad = combineLoad(ship.getShipLoad(), armyToLoad);
@@ -66,6 +77,19 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
 
         planetPoints.setArmy(planetSetArmy);
         planetPointsService.savePoints(planetPoints);
+    }
+
+    @Override
+    public void executeTravel(TravelRoute travelRoute, Ship ship) {
+        changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
+
+        /** timer task*/
+        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(travelRoute.getArrivalPlanet().getGalaxy().getId());
+
+        TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
+
+        timerEntityService.saveTimerEntity(timerEntity);
+        timerActionService.saveTimerAction(timerAction);
     }
 
     @Override
@@ -141,6 +165,26 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
     @Override
     public UserService getUserService() {
         return userService;
+    }
+
+    @Override
+    public PlanetService getPlanetService() {
+        return planetService;
+    }
+
+    @Override
+    public TimerEntityService getTimerEntityService() {
+        return timerEntityService;
+    }
+
+    @Override
+    public TimerActionService getTimerActionService() {
+        return timerActionService;
+    }
+
+    @Override
+    public TravelRouteService getTravelRouteService() {
+        return travelRouteService;
     }
 
     @Override
