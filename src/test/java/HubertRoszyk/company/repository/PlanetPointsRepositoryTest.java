@@ -1,3 +1,4 @@
+/*
 package HubertRoszyk.company.repository;
 
 import HubertRoszyk.company.entiti_class.PlanetPoints;
@@ -35,4 +36,4 @@ class PlanetPointsRepositoryTest {
         //then
         assertThat(gotPlanetPoints).isEqualTo(gotPlanetPoints);
     }
-}
+}*/

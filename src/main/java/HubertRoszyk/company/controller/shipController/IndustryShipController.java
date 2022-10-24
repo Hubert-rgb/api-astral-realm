@@ -4,8 +4,6 @@ import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.IndustryShip;
-import HubertRoszyk.company.enumStatus.ShipLoadStatus;
-import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
 import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,49 +49,10 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
         return new IndustryShip(ShipType.INDUSTRY_CARGO, level, user);
     }
 
-    /*@Override
-    public ShipLoadStatus loadShip(int shipId, JSONObject jsonObject){
-        IndustryShip ship = (IndustryShip) shipService.getShipById(shipId);
-        int volume = (int) jsonObject.get("volume");
-
-        int planetId = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-
-        int capacity = ship.getShipCapacity();
-        double gotLoad = ship.getShipLoad();
-
-        //volume <= industry points
-
-        if(capacity >= gotLoad + volume && ship.getShipStatus().equals(ShipStatus.DOCKED)) {
-
-
-            return ShipLoadStatus.EVERYTHING_LOADED;
-        } else if (capacity == gotLoad) {
-            return ShipLoadStatus.NOTHING_LOAD;
-        } else if (ship.getShipStatus().equals(ShipStatus.TRAVELING)) {
-            return ShipLoadStatus.TRAVELLING;
-        } else if (ship.getShipStatus().equals(ShipStatus.IN_BUILD)) {
-            return ShipLoadStatus.IN_BUILD;
-        } else {
-            double notLoaded = gotLoad + volume - capacity;
-            double setLoad = gotLoad + volume - notLoaded;
-
-            ship.setShipLoad(setLoad);
-            shipService.saveShip(ship);
-
-            double gotIndustryPoints = planetPoints.getIndustryPoints();
-            double setIndustryPoints = gotIndustryPoints - volume + notLoaded;
-            planetPoints.setIndustryPoints(setIndustryPoints);
-            planetPointsService.savePoints(planetPoints);
-
-            return ShipLoadStatus.NOT_EVERYTHING_LOAD;
-        }
-    }*/
-
     @Override
     public void executeLoad(IndustryShip ship, Integer load, PlanetPoints planetPoints) {
         double shipLoad = ship.getShipLoad();
-        double setLoad = shipLoad + load;
+        int setLoad = (int) (shipLoad + load);
 
         ship.setShipLoad(setLoad);
         shipService.saveShip(ship);
@@ -105,64 +64,46 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
     }
 
     @Override
+    public void executeUnload(IndustryShip ship, Integer shipLoad, Integer toUnload, PlanetPoints planetPoints) {
+        int setLoad = (int) (shipLoad - toUnload);
+
+        ship.setShipLoad(setLoad);
+        shipService.saveShip(ship);
+
+        double gotIndustryPoints = planetPoints.getIndustryPoints();
+        double setIndustryPoints = gotIndustryPoints + toUnload;
+        planetPoints.setIndustryPoints(setIndustryPoints);
+        planetPointsService.savePoints(planetPoints);
+    }
+
+    @Override
     public int getVolume(Integer load) {
         return load;
     }
 
     @Override
-    public int getLoad(IndustryShip industryShip) {
+    public int getPlanetCapacity(PlanetPoints planetPoints) {
+        return planetPoints.getTotalStorageSize();
+    }
+
+    @Override
+    public int getPlanetLoadVolume(PlanetPoints planetPoints) {
+        return (int) planetPoints.getIndustryPoints();
+    }
+
+    @Override
+    public int getShipLoadVolume(IndustryShip industryShip) {
         return (int) industryShip.getShipLoad();
     }
 
     @Override
-    public Integer getLoad(JSONObject jsonObject) throws JsonProcessingException {
+    public Integer getToLoad(JSONObject jsonObject) throws JsonProcessingException {
         return (int) jsonObject.get("volume");
     }
 
     @Override
-   @PutMapping("unload/{volume}")
-    public ShipLoadStatus unloadShip(int shipId, JSONObject jsonObject){
-        IndustryShip ship = (IndustryShip) shipService.getShipById(shipId);
-        int volume = (int) jsonObject.get("volume");
-
-        int planetId = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-
-        int capacity = planetPoints.getTotalStorageSize();
-        double gotIndustryPoints = planetPoints.getIndustryPoints();
-
-        double gotLoad = ship.getShipLoad();
-
-        if(capacity >= gotIndustryPoints + volume && ship.getShipStatus().equals(ShipStatus.DOCKED)) {
-            double setLoad = gotLoad - volume;
-
-            ship.setShipLoad(setLoad);
-            shipService.saveShip(ship);
-
-            double setIndustryPoints = gotIndustryPoints + volume;
-            planetPoints.setIndustryPoints(setIndustryPoints);
-            planetPointsService.savePoints(planetPoints);
-
-            return ShipLoadStatus.EVERYTHING_LOADED;
-        } else if (capacity == gotLoad) {
-            return ShipLoadStatus.NOTHING_LOAD;
-        } else if (ship.getShipStatus().equals(ShipStatus.TRAVELING)) {
-            return ShipLoadStatus.TRAVELLING;
-        } else if (ship.getShipStatus().equals(ShipStatus.IN_BUILD)) {
-            return ShipLoadStatus.IN_BUILD;
-        } else {
-            double notLoaded = gotIndustryPoints + volume - capacity;
-            double setLoad = gotLoad - volume + notLoaded;
-
-            ship.setShipLoad(setLoad);
-            shipService.saveShip(ship);
-
-            double setIndustryPoints = gotIndustryPoints + volume - notLoaded;
-            planetPoints.setIndustryPoints(setIndustryPoints);
-            planetPointsService.savePoints(planetPoints);
-
-            return ShipLoadStatus.NOT_EVERYTHING_LOAD;
-        }
+    public Integer getShipLoad(IndustryShip ship) {
+        return ship.getShipLoad();
     }
     /*
     @PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")

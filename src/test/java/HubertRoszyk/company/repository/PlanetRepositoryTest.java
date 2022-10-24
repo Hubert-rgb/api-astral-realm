@@ -1,3 +1,4 @@
+/*
 package HubertRoszyk.company.repository;
 
 import HubertRoszyk.company.entiti_class.*;
@@ -88,4 +89,4 @@ class PlanetRepositoryTest {
         //then
         assertThat(gotPlanets).contains(planet);
     }
-}
+}*/
