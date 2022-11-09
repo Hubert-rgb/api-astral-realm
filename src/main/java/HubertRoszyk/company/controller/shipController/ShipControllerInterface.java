@@ -115,7 +115,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
             return ShipLoadStatus.NOTHING_LOAD;
         }
     }
-    @PutMapping("ship-controller/ship/{shipId}/planet/{destinationPlanetId}")
+    @PutMapping("/ship/{shipId}/planet/{destinationPlanetId}")
     default TravelRoute sendShip(@PathVariable int shipId, @PathVariable int destinationPlanetId){
         ShipService shipService = getShipService();
         PlanetService planetService = getPlanetService();

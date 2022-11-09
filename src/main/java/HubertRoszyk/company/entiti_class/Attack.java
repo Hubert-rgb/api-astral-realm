@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enumTypes.AttackType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table
 @NoArgsConstructor
-public class Battle {
+public class Attack {
     @Id
     @Column(name = "battleId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,17 +42,19 @@ public class Battle {
     @JoinColumn(name = "defence_planet_id")
     private Planet defencePlanet;
 
+    private AttackType attackType;
     private long battleTime;
     private String status;
 
-    public Battle(Planet attackPlanet, Planet defencePlanet, User user, long battleTime) {
+    public Attack(Planet attackPlanet, Planet defencePlanet, User user, AttackType attackType) {
         startingTime = LocalDateTime.now();
 
         this.user = user;
         this.attackPlanet = attackPlanet;
         this.defencePlanet = defencePlanet;
+        this.attackType = attackType;
 
-        this.battleTime = battleTime;
+        this.battleTime = 1;
 
         status = "army sent";
     }

@@ -1,7 +1,8 @@
 package HubertRoszyk.company.controller.movingResources;
 
 import HubertRoszyk.company.RandomDraw;
-import HubertRoszyk.company.entiti_class.Battle;
+import HubertRoszyk.company.configuration.GameProperties;
+import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.service.BattleService;
@@ -21,9 +22,12 @@ public class BattleController {
     @Autowired
     PlanetPointsService planetPointsService;
 
-    public String battle(int attackPlanetId, int defensePlanetId, int battleId) {
-        Battle battle = battleService.getBattleById(battleId);
-        System.out.println(battle);
+    @Autowired
+    GameProperties gameProperties;
+
+    public String battle(int attackId) {
+        Attack attack = battleService.getBattleById(battleId);
+        System.out.println(attack);
         System.out.println(battleId);
 
         Planet attackPlanet = planetService.getPlanetById(attackPlanetId);
@@ -34,11 +38,13 @@ public class BattleController {
 
         double attackPoints = attackPlanetPoints.getAttackPoints();
         double defensePoints = defensePlanetPoints.getDefensePoints();
+        double defencePlanetArmy = defensePlanetPoints.getAttackPoints();
 
-        double battleMultiplier = RandomDraw.battleMultiplierDraw();
+        double attackMultiplier = RandomDraw.battleMultiplierDraw();
+        double defenceMultiplier = RandomDraw.battleMultiplierDraw();
 
-        double battleAttackPoints = attackPoints * battleMultiplier;
-        double battleDefensePoints = defensePoints * 2;
+        double battleAttackPoints = attackPoints * gameProperties.getAttackMultiplier() * attackMultiplier;
+        double battleDefensePoints = defensePoints + defencePlanetArmy * gameProperties.getDefenceMultiplier() * defenceMultiplier;
 
         if (battleAttackPoints > battleDefensePoints) {
             defensePlanet.asignUser(attackPlanet.getUser());
@@ -52,8 +58,8 @@ public class BattleController {
             planetPointsService.savePoints(attackPlanetPoints);
             planetPointsService.savePoints(defensePlanetPoints);
 
-            battle.setStatus("attack won");
-            battleService.saveBattle(battle);
+            attack.setStatus("attack won");
+            battleService.saveBattle(attack);
             return "attack won";
         } else {
             double setDefencePoints =  defensePoints - (attackPoints / 2);
@@ -64,8 +70,8 @@ public class BattleController {
             planetPointsService.savePoints(attackPlanetPoints);
             planetPointsService.savePoints(defensePlanetPoints);
 
-            battle.setStatus("attack lost");
-            battleService.saveBattle(battle);
+            attack.setStatus("attack lost");
+            battleService.saveBattle(attack);
             return  "attack lost";
         }
     }

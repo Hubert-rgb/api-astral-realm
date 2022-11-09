@@ -1,9 +1,7 @@
 package HubertRoszyk.company.service;
 
-import HubertRoszyk.company.entiti_class.Battle;
-import HubertRoszyk.company.entiti_class.Building;
+import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.repository.BattleRepository;
-import HubertRoszyk.company.repository.BuildingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +12,19 @@ public class BattleService {
     @Autowired
     BattleRepository repository;
 
-    public Battle saveBattle(Battle battle) {
-        return repository.save(battle);
+    public Attack saveBattle(Attack attack) {
+        return repository.save(attack);
     }
 
-    public List<Battle> saveBattlesList(List<Battle> battles) {
-        return repository.saveAll(battles);
+    public List<Attack> saveBattlesList(List<Attack> attacks) {
+        return repository.saveAll(attacks);
     }
 
-    public List<Battle> getBattlesList() {
+    public List<Attack> getBattlesList() {
         return repository.findAll();
     }
 
-    public Battle getBattleById(int id) {
+    public Attack getBattleById(int id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -35,7 +33,11 @@ public class BattleService {
         System.out.println("All Battles deleted");
     }
 
-    public List<Battle> getBattleByUserId(int userId) {
+    public List<Attack> getBattleByUserId(int userId) {
         return repository.findBattleByUserId(userId);
+    }
+
+    public List<Attack> getAttackByDefencePlanetId(int planetId){
+        return repository.findAttackByDefencePlanetId(planetId);
     }
 }

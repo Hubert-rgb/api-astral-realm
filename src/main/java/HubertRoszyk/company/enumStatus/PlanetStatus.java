@@ -3,5 +3,6 @@ package HubertRoszyk.company.enumStatus;
 public enum PlanetStatus {
     CLAIMED,
     UNCLAIMED,
-    UNDER_ATTACK
+    UNDER_ATTACK,
+    AFTER_ATTACK
 }

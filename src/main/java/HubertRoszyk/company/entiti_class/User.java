@@ -38,7 +38,7 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private Set<Battle> battles = new HashSet<>();
+    private Set<Attack> attacks = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

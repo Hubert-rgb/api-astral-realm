@@ -1,6 +1,7 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.Strategy.timerActionStategy.*;
+import HubertRoszyk.company.controller.movingResources.MovementController;
 import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
 import HubertRoszyk.company.controller.shipController.ShipControllerInterface;
 import HubertRoszyk.company.entiti_class.TimerAction;
@@ -22,7 +23,8 @@ public class TimerActionController {
     BuildingPurchase buildingPurchase;
 
     @Autowired
-    ShipControllerInterface shipControllerInterface;
+    MovementController movementController;
+
 
     public void execute(TimerAction timerAction) {
         TimerActionType timerActionType = timerAction.getTimerActionType();
@@ -31,7 +33,7 @@ public class TimerActionController {
         switch (timerActionType) {
             case BATTLE -> context.setStrategy(new TimerActionBattle());
             case INDUSTRY_CARGO -> context.setStrategy(new TimerActionIndustryCargo(shipService));
-            case ATTACK_CARGO -> context.setStrategy(new TimerActionAttackCargo(shipService));
+            case ATTACK_CARGO -> context.setStrategy(new TimerActionAttackCargo(shipService, movementController));
             case BUILDING -> context.setStrategy(new TimerActionBuild(buildingPurchase, buildingService));
             case SHIP -> context.setStrategy(new TimerActionShip(shipService));
         }
