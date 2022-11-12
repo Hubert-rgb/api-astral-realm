@@ -28,12 +28,6 @@ public class Main {
     // building management
     // battle management strategy
 
-    // TODO Building redo:
-    //ABANDONED  building class abstract or interface
-    //ABANDONED  every building separate class with own variables
-    //DONE TODO building in time
-    //DONE TODO returning building and ship Types values
-
     /** planet generation update */
     //TODO radial positioning
 
@@ -43,15 +37,19 @@ public class Main {
     //DONE TODO making army in barrack as ships. Max army level is barrack level
     //DONE TODO selecting army and ships level while creating them
     //DONE TODO saving army as hashMap on planet
-    //TODO loading army on ship while attack
+    //DONE TODO loading army on ship while attack
+    //DONE TODO subtracting army after battle
+    //TODO pillage
+    //TODO colonisation
+    //TODO loading army after won attack
+
 
     /** code review update*/
     //TODO JACSON - every json to entity
 
     /** code debuging*/
-    //TODO Ships only travels between users planets and only there can load points except battle situation
-    //DONE TODO while updating storage level, all points disappear
-    //TODO changing user num in galaxy
+    //ON FRONTEND TODO Ships only travels between users planets and only there can load points except battle situation
+    //DONE TODO changing user num in galaxy
     public static void main(String[] args) throws SQLException, IOException, ParseException {
 
         GameProperties configOperator = new GameProperties();

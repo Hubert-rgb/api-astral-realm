@@ -25,8 +25,7 @@ public class PlanetPoints {
     @Column(name = "planetPointsId")
     private int id;
 
-    private double defensePoints;
-    private double attackPoints;
+    private int defensePoints;
     private double industryPoints;
 
     private double industryPointsIncome;
@@ -53,7 +52,6 @@ public class PlanetPoints {
         this.planet = planet;
 
         defensePoints = planet.getPlanetType().getDefaultDefencePoints();
-        attackPoints = 0;
         industryPoints = 0;
 
         industryPointsIncome = planet.getIndustryPointsMultiplier() * planet.getIndustryPointsProduce();
@@ -64,9 +62,14 @@ public class PlanetPoints {
         shipYardLevel = 1;
         totalAttackBuildingSize = planet.getPlanetType().getDefaultArmyBuildingSize();
 
+        this.army = getEmptyArmy();
+    }
+    public Map<Integer, Integer> getEmptyArmy(){
+        Map<Integer, Integer> army = new HashMap<>();
         for (int i = 1; i <= BuildingType.ATTACK.getLevelNums(); i++){
             army.put(i, 0);
         }
+        return army;
     }
 
 }

@@ -4,28 +4,28 @@ import HubertRoszyk.company.controller.shipController.ShipControllerInterface;
 import HubertRoszyk.company.converters.StringToAttackTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.configuration.GameProperties;
+import HubertRoszyk.company.entiti_class.ship.AttackShip;
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumTypes.AttackType;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class MovementController {
     @Autowired
     PlanetService planetService;
 
-    @Autowired
-    PlanetPointsService planetPointsService;
-
-    @Autowired
-    GameProperties gameProperties;
 
     @Autowired
     UserService userService;
@@ -52,10 +52,10 @@ public class MovementController {
     TimerActionService timerActionService;
 
     @Autowired
-    ShipControllerInterface shipControllerInterface;
+    StringToAttackTypeConverter stringToAttackTypeConverter;
 
     @Autowired
-    StringToAttackTypeConverter stringToAttackTypeConverter;
+    TravelRouteService travelRouteService;
 
     @PostMapping("/battle-controller/battles")
     public String armyMovement(@RequestBody JSONObject jsonInput) {
@@ -70,27 +70,37 @@ public class MovementController {
         Planet attackPlanet = planetService.getPlanetById(attackPlanetId);
         Planet defensePlanet = planetService.getPlanetById(defensePlanetId);
         User user = userService.getUserById(userId);
-        List<Ship> ships = shipService.getShipsListByIdList(shipsIdList);
+        List<AttackShip> ships = new ArrayList<>();
+        Set<AttackShip> shipsSet = new HashSet<>();
+        for (int i : shipsIdList){
+            AttackShip ship = (AttackShip) shipService.getShipById(i);
+            shipsSet.add(ship);
+        }
 
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(defensePlanet.getGalaxy().getId());
 
-        Attack attack = new Attack(attackPlanet, defensePlanet, user, attackType);
+        Attack attack = new Attack(shipsSet, defensePlanet, user, attackType);
         battleService.saveBattle(attack);
 
-        for (Ship ship : ships) {
+        for (Ship ship : shipsSet) {
             TravelRoute travelRoute = new TravelRoute(attackPlanet, defensePlanet, ship, timerEntityService);
+            travelRouteService.saveTravelRoutes(travelRoute);
 
             /** timer task*/
             TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
+            timerActionService.saveTimerAction(timerAction);
         }
 
         return "nie ten";
     }
-    public void attackExecution(Ship ship){
+    public void attackExecution(AttackShip ship){
+        System.out.println(ship);
+        System.out.println(ship.getTravelRoute());
         Planet defencePlanet = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet();
         int userId = ship.getUser().getId();
+        System.out.println(defencePlanet.getId());
         List<Attack> attacks = battleService.getAttackByDefencePlanetId(defencePlanet.getId());
-        Attack attack =  attacks.get(attacks.size()-1);
+        Attack attack =  attacks.get(attacks.size() - 1);
         AttackType attackType = attack.getAttackType();
 
         switch (attackType){

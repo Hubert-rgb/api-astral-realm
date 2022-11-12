@@ -1,7 +1,7 @@
 package HubertRoszyk.company.service;
 
 import HubertRoszyk.company.entiti_class.Attack;
-import HubertRoszyk.company.repository.BattleRepository;
+import HubertRoszyk.company.repository.AttackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class BattleService {
     @Autowired
-    BattleRepository repository;
+    AttackRepository repository;
 
     public Attack saveBattle(Attack attack) {
         return repository.save(attack);
@@ -34,10 +34,10 @@ public class BattleService {
     }
 
     public List<Attack> getBattleByUserId(int userId) {
-        return repository.findBattleByUserId(userId);
+        return repository.findByUserId(userId);
     }
 
     public List<Attack> getAttackByDefencePlanetId(int planetId){
-        return repository.findAttackByDefencePlanetId(planetId);
+        return repository.findByDefencePlanet_Id(planetId);
     }
 }

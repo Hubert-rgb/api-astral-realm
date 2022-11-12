@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class.ship;
 
+import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.enumTypes.ShipType;
@@ -9,9 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
 @Table(name = "Ship")
@@ -25,9 +26,12 @@ public class AttackShip extends Ship {
     //@Setter(AccessLevel.NONE)
     private int id;
 
+    @ManyToMany(mappedBy = "attackShips")
+    private Set<Attack> attackSet;
+
     @ElementCollection
     @MapKeyColumn(name = "level_number")
-    Map<Integer, Integer> shipLoad = new HashMap<>();
+    private Map<Integer, Integer> shipLoad = new HashMap<>();
     public AttackShip(ShipType shipType, int capacityLevel, User user){
         super(shipType, capacityLevel, user);
         for (int i = 1; i <= BuildingType.ATTACK.getLevelNums(); i++){

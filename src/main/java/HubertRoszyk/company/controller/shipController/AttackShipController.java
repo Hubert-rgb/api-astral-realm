@@ -60,7 +60,7 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
         Map<Integer, Integer> planetArmy = planetPoints.getArmy();
         Map<Integer, Integer> planetArmySubtract = subtractLoad(planetArmy, armyToLoad);
 
-        planetPoints.setArmy(planetArmy);
+        planetPoints.setArmy(planetArmySubtract);
         planetPointsService.savePoints(planetPoints);
     }
 
