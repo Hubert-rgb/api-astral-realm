@@ -5,5 +5,6 @@ public enum TimerActionType {
     INDUSTRY_CARGO,
     ATTACK_CARGO,
     BUILDING,
-    SHIP;
+    SHIP,
+    PLANET_STATUS_AFTER_ATTACK
 }

@@ -24,16 +24,22 @@ public class Main {
     //TODO tests
     //TODO comments
 
-    //TODO code refreshment
-    // building management
-    // battle management strategy
+    /** code refreshment */
+    //TODO building management
+    //TODO battle management strategy
+    //TODO static classes with multipurpose methods
+    //TODO DAO pattern
+
+    /** get requests */
+    //TODO time to build
+    //Jakieś pobieranie timer actions i przedstawianie ich w frontendzie???
 
     /** planet generation update */
     //TODO radial positioning
 
     /** battle update*/
-    //TODO changing planet status after getting it
-    //TODO battle time in cycles
+    //DONE TODO changing planet status after getting it
+    //DONE TODO battle time in cycles
     //DONE TODO making army in barrack as ships. Max army level is barrack level
     //DONE TODO selecting army and ships level while creating them
     //DONE TODO saving army as hashMap on planet

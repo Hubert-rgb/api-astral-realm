@@ -4,5 +4,6 @@ public enum ShipStatus {
     TRAVELING,
     DOCKED,
     IN_BUILD,
-    IN_BATTLE
+    IN_BATTLE,
+    ATTACKING
 }

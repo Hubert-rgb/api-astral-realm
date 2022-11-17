@@ -6,15 +6,14 @@ import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
 import HubertRoszyk.company.controller.shipController.ShipControllerInterface;
 import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.enumTypes.TimerActionType;
-import HubertRoszyk.company.service.BuildingService;
-import HubertRoszyk.company.service.ShipService;
+import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class TimerActionController {
     @Autowired
-    private ShipService shipService;
+    ShipService shipService;
 
     @Autowired
     BuildingService buildingService;
@@ -25,17 +24,27 @@ public class TimerActionController {
     @Autowired
     MovementController movementController;
 
+    @Autowired
+    PlanetService planetService;
+
+    @Autowired
+    TimerEntityService timerEntityService;
+
+    @Autowired
+    TimerActionService timerActionService;
+
 
     public void execute(TimerAction timerAction) {
         TimerActionType timerActionType = timerAction.getTimerActionType();
         TimerActionContext context = new TimerActionContext();
 
         switch (timerActionType) {
-            case BATTLE -> context.setStrategy(new TimerActionBattle());
+            case BATTLE -> context.setStrategy(new TimerActionBattle(movementController, shipService));
             case INDUSTRY_CARGO -> context.setStrategy(new TimerActionIndustryCargo(shipService));
-            case ATTACK_CARGO -> context.setStrategy(new TimerActionAttackCargo(shipService, movementController));
+            case ATTACK_CARGO -> context.setStrategy(new TimerActionAttackCargo(shipService, timerEntityService, timerActionService));
             case BUILDING -> context.setStrategy(new TimerActionBuild(buildingPurchase, buildingService));
             case SHIP -> context.setStrategy(new TimerActionShip(shipService));
+            case PLANET_STATUS_AFTER_ATTACK -> context.setStrategy(new TimerActionPlanetStatusAfterAttack(planetService));
         }
         context.executeStrategy(timerAction);
     }

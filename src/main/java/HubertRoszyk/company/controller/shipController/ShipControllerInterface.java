@@ -46,8 +46,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
         ShipPurchase shipPurchase = getShipPurchase();
 
         Ship ship = shipService.getShipById(shipId);
-        TravelRoute lastRoute = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1);
-        Planet planet = lastRoute.getArrivalPlanet();
+        Planet planet = ship.getCurrentPlanet();
 
         int level = ship.getCapacityLevel();
 
@@ -63,7 +62,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
         Ship ship = (Ship) gotShip;
 
-        int planetId =  ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
+        int planetId =  ship.getCurrentPlanet().getId();
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
         int capacity = ship.getShipCapacity();
@@ -96,7 +95,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
         int volume = getVolume(load);
 
-        int planetId = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet().getId();
+        int planetId = ship.getCurrentPlanet().getId();
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
         int capacity = getPlanetCapacity(planetPoints);
@@ -125,7 +124,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
         Ship ship = shipService.getShipById(shipId);
         Planet destinationPlanet = planetService.getPlanetById(destinationPlanetId);
-        Planet departurePlanet = ship.getTravelRoute().get(ship.getTravelRoute().size()-1).getArrivalPlanet();
+        Planet departurePlanet = ship.getCurrentPlanet();
 
         if(ship.getShipStatus().equals(ShipStatus.DOCKED)) {
             ship.setShipStatus(ShipStatus.TRAVELING);

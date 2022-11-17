@@ -1,13 +1,11 @@
 package HubertRoszyk.company.controller.shipController;
 
+import HubertRoszyk.company.controller.ArmyController;
 import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
-import HubertRoszyk.company.entiti_class.ship.Ship;
-import HubertRoszyk.company.enumStatus.ShipLoadStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
-import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -52,13 +49,13 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
 
     @Override
     public void executeLoad(AttackShip ship, Map<Integer, Integer> armyToLoad, PlanetPoints planetPoints) {
-        Map<Integer, Integer> setShipLoad = combineLoad(ship.getShipLoad(), armyToLoad);
+        Map<Integer, Integer> setShipLoad = ArmyController.combineArmy(ship.getShipLoad(), armyToLoad);
 
         ship.setShipLoad(setShipLoad);
         shipService.saveShip(ship);
 
         Map<Integer, Integer> planetArmy = planetPoints.getArmy();
-        Map<Integer, Integer> planetArmySubtract = subtractLoad(planetArmy, armyToLoad);
+        Map<Integer, Integer> planetArmySubtract = ArmyController.subtractLoad(planetArmy, armyToLoad);
 
         planetPoints.setArmy(planetArmySubtract);
         planetPointsService.savePoints(planetPoints);
@@ -67,13 +64,13 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
     @Override
     public void executeUnload(AttackShip ship, Map<Integer, Integer> shipLoad, Map<Integer, Integer> toUnload, PlanetPoints planetPoints) {
         System.out.println("e");
-        Map<Integer, Integer> setShipLoad = subtractLoad(ship.getShipLoad(), toUnload);
+        Map<Integer, Integer> setShipLoad = ArmyController.subtractLoad(ship.getShipLoad(), toUnload);
 
         ship.setShipLoad(setShipLoad);
         shipService.saveShip(ship);
 
         Map<Integer, Integer> planetArmy = planetPoints.getArmy();
-        Map<Integer, Integer> planetSetArmy = combineLoad(planetArmy, toUnload);
+        Map<Integer, Integer> planetSetArmy = ArmyController.combineArmy(planetArmy, toUnload);
 
         planetPoints.setArmy(planetSetArmy);
         planetPointsService.savePoints(planetPoints);
@@ -94,7 +91,7 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
 
     @Override
     public int getVolume(Map<Integer, Integer> armyToLoad) {
-        return getShipLoadVolume(armyToLoad);
+        return ArmyController.getArmySize(armyToLoad);
     }
 
     @Override
@@ -109,7 +106,7 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
 
     @Override
     public int getShipLoadVolume(AttackShip attackShip) {
-        return getShipLoadVolume(attackShip.getShipLoad());
+        return ArmyController.getArmySize(attackShip.getShipLoad());
     }
 
     @Override
@@ -122,30 +119,7 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
         return ship.getShipLoad();
     }
 
-    public int getShipLoadVolume(Map<Integer, Integer> shipLoad){
-        int armyLoad = 0;
-        for(int i = 1; i <= shipLoad.size(); i++) {
-            armyLoad += shipLoad.get(i);
-        }
-        return armyLoad;
-    }
-    private Map<Integer, Integer> combineLoad(Map<Integer, Integer> shipLoad, Map<Integer, Integer> addedLoad){
-        Map<Integer, Integer> combinedLoad = new HashMap<>();
 
-        for (int i = 1; i <= shipLoad.size(); i++){
-            combinedLoad.put(i, shipLoad.get(i) + addedLoad.get(i));
-        }
-
-        return combinedLoad;
-    }
-    private Map<Integer, Integer> subtractLoad(Map<Integer, Integer> army, Map<Integer, Integer> armyToSubtract){
-        for (int i = 1; i <= armyToSubtract.size(); i++){
-            int gotDivisions = army.get(i);
-            int setDivisions = gotDivisions - armyToSubtract.get(i);
-            army.put(i, setDivisions);
-        }
-        return army;
-    }
 
     @Override
     public AttackShip createShip(int level, User user) {

@@ -6,6 +6,8 @@ import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
 import HubertRoszyk.company.entiti_class.ship.Ship;
+import HubertRoszyk.company.enumStatus.PlanetStatus;
+import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.AttackType;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
@@ -58,7 +60,7 @@ public class MovementController {
     TravelRouteService travelRouteService;
 
     @PostMapping("/battle-controller/battles")
-    public String armyMovement(@RequestBody JSONObject jsonInput) {
+    public void armyMovement(@RequestBody JSONObject jsonInput) {
         int userId = (int) jsonInput.get("userId");
         int attackPlanetId = (int) jsonInput.get("attackPlanetId");
         int defensePlanetId = (int) jsonInput.get("defensePlanetId");
@@ -70,7 +72,7 @@ public class MovementController {
         Planet attackPlanet = planetService.getPlanetById(attackPlanetId);
         Planet defensePlanet = planetService.getPlanetById(defensePlanetId);
         User user = userService.getUserById(userId);
-        List<AttackShip> ships = new ArrayList<>();
+
         Set<AttackShip> shipsSet = new HashSet<>();
         for (int i : shipsIdList){
             AttackShip ship = (AttackShip) shipService.getShipById(i);
@@ -80,9 +82,12 @@ public class MovementController {
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(defensePlanet.getGalaxy().getId());
 
         Attack attack = new Attack(shipsSet, defensePlanet, user, attackType);
+        defensePlanet.setPlanetStatus(PlanetStatus.BEFORE_ATTACK);
         battleService.saveBattle(attack);
+        planetService.savePlanet(defensePlanet);
 
         for (Ship ship : shipsSet) {
+            ship.setShipStatus(ShipStatus.ATTACKING);
             TravelRoute travelRoute = new TravelRoute(attackPlanet, defensePlanet, ship, timerEntityService);
             travelRouteService.saveTravelRoutes(travelRoute);
 
@@ -90,13 +95,9 @@ public class MovementController {
             TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
             timerActionService.saveTimerAction(timerAction);
         }
-
-        return "nie ten";
     }
     public void attackExecution(AttackShip ship){
-        System.out.println(ship);
-        System.out.println(ship.getTravelRoute());
-        Planet defencePlanet = ship.getTravelRoute().get(ship.getTravelRoute().size() - 1).getArrivalPlanet();
+        Planet defencePlanet = ship.getCurrentPlanet();
         int userId = ship.getUser().getId();
         System.out.println(defencePlanet.getId());
         List<Attack> attacks = battleService.getAttackByDefencePlanetId(defencePlanet.getId());
@@ -110,8 +111,6 @@ public class MovementController {
         }
 
     }
-
-
 
     /** geting battle status */
     @GetMapping("/battle-controller/battles/{battleId}/status")

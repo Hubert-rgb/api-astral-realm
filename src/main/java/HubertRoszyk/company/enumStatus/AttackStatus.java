@@ -1,8 +1,6 @@
 package HubertRoszyk.company.enumStatus;
 
-public enum PlanetStatus {
-    CLAIMED,
-    UNCLAIMED,
+public enum AttackStatus {
     BEFORE_ATTACK,
     UNDER_ATTACK,
     AFTER_ATTACK

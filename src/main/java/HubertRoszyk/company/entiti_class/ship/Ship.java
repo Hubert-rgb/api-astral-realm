@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class.ship;
 
+import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.entiti_class.TravelRoute;
 import HubertRoszyk.company.entiti_class.User;
@@ -15,6 +16,16 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "ship",
+        attributeNodes = {
+                @NamedAttributeNode(value = "travelRoute", subgraph = "ship.travelRoute")
+        },
+        subgraphs = {@NamedSubgraph(
+                name = "ship.travelRoute",
+                attributeNodes = {@NamedAttributeNode("arrivalPlanet")}
+        )}
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -69,5 +80,8 @@ abstract public class Ship {
         shipCapacity = capacityLevel * shipType.getCapacity();
     }
 
+    public Planet getCurrentPlanet(){
+        return travelRoute.get(travelRoute.size() - 1).getArrivalPlanet();
+    }
 
 }

@@ -2,6 +2,7 @@ package HubertRoszyk.company.controller.movingResources;
 
 import HubertRoszyk.company.RandomDraw;
 import HubertRoszyk.company.configuration.GameProperties;
+import HubertRoszyk.company.controller.ArmyController;
 import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.PlanetPoints;
@@ -31,11 +32,12 @@ public class BattleController {
 
 
     /** mniej więcej działą */
-    //TODO zmieniać statusy
-    //TODO wykonywać to w czasie
+    //DONE TODO zmieniać statusy
+    //DONE TODO wykonywać to w czasie
     //TODO ustawiać armię też na statku
     //TODO statek powinien albo wpływać do portu jak jest miejsce albo wracać
     //TO DISCUSS TODO jak armia jest pakowana z powrotem na statek / do baraków na planecie po wygranej
+    //TODO najlepsze dewizje zostają w barakach na planecie, gorsze są pakowane na statki które nie musza wracać, a najgorsze na te co wracają
     public String battle(int attackId) {
         Attack attack = battleService.getBattleById(attackId);
 
@@ -47,7 +49,7 @@ public class BattleController {
 
         int attackPoints = attack.getAttackArmyValue();
         int defencePoints = defencePlanetPoints.getDefensePoints();
-        int defencePlanetArmyValue = attack.getArmyValue(defencePlanetPoints.getArmy());
+        int defencePlanetArmyValue = ArmyController.getArmyValue(defencePlanetPoints.getArmy());
 
         double attackMultiplier = RandomDraw.battleMultiplierDraw();
         double defenceMultiplier = RandomDraw.battleMultiplierDraw();
@@ -56,7 +58,7 @@ public class BattleController {
         double battleDefencePoints = defencePoints + defencePlanetArmyValue * gameProperties.getDefenceMultiplier() * defenceMultiplier;
 
         double attackArmySize = attack.getAttackArmySize();
-        double defenceArmySize = attack.getArmySize(defencePlanetPoints.getArmy());
+        double defenceArmySize = ArmyController.getArmySize(defencePlanetPoints.getArmy());
 
         double pointsRatio = (attackArmySize / (attackArmySize + defenceArmySize)) * 100;
 
@@ -107,7 +109,7 @@ public class BattleController {
             battleService.saveBattle(attack);
             return "attack won";
         } else {
-            attack.setArmy(attack.getEmptyArmy());
+            attack.setArmy(ArmyController.getEmptyArmy());
 
             Map<Integer, Integer> gotDefenceArmy = defencePlanetPoints.getArmy();
             Map<Integer, Integer> setDefenceArmy;
