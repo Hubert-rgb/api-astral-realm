@@ -55,24 +55,12 @@ public class Binder {
             int setPlanetSize = gotPlanetSize + 3;
             planet.setSize(setPlanetSize);
 
-            /*Building industry = new Building(BuildingType.INDUSTRY, planet);
-            Building storage = new Building(BuildingType.STORAGE, planet);
-            Building shipYard = new Building(BuildingType.SHIP_YARD, planet);
-            //buildingsController.updatePointsIncome(shipYard);
-
-            buildingService.saveBuilding(industry);
-            buildingService.saveBuilding(storage);
-            buildingService.saveBuilding(shipYard);
-
-            buildingsController.updatePointsIncome(industry);
-            buildingsController.updatePointsIncome(storage);*/
         }
 
         planet.asignUser(user);
         planet.setPlanetStatus(PlanetStatus.CLAIMED);
 
-        planetService.savePlanet(planet); //najpierw trzeba zapisać planetę usera a potem szukać jej punkty
-        //planetPointsController.getTotalIndustryPointsIncome(planet.getId());
+        planetService.savePlanet(planet);
 
         return planet;
     }

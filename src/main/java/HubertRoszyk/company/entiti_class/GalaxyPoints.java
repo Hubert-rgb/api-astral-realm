@@ -70,11 +70,4 @@ public class GalaxyPoints {
 
         sciencePoints = 0;
     }
-
-    /*public void assignUser(User user) {
-        this.user = user;
-    }
-    public void assignGalaxy(Galaxy galaxy) {
-        this.galaxy = galaxy;
-    }*/
 }

@@ -50,13 +50,7 @@ public class TravelRoute {
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(this.arrivalPlanet.getGalaxy().getId());
         routeStartingCycle = timerEntity.getCyclesNum();
 
-        double distance = Math.sqrt(
-                Math.pow ((
-                        arrivalPlanet.getPlanetLocationX() - departurePlanet.getPlanetLocationX()
-                ), 2)  + Math.pow ((
-                        arrivalPlanet.getPlanetLocationY() - departurePlanet.getPlanetLocationY()
-                ), 2)
-        );
+        double distance = getDistance();
 
         System.out.println("dist");
         System.out.println(distance);
@@ -78,5 +72,15 @@ public class TravelRoute {
 
         this.routeCyclesDuration = routeCyclesDuration;
         this.routeEndingCycle = routeCyclesDuration + routeStartingCycle;
+    }
+    private double getDistance(){
+        double distance = Math.sqrt(
+                Math.pow ((
+                        arrivalPlanet.getPlanetLocationX() - departurePlanet.getPlanetLocationX()
+                ), 2)  + Math.pow ((
+                        arrivalPlanet.getPlanetLocationY() - departurePlanet.getPlanetLocationY()
+                ), 2)
+        );
+        return distance;
     }
 }

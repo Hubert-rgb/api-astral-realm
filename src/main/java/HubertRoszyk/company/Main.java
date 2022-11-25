@@ -25,9 +25,6 @@ public class Main {
     //TODO comments
 
     /** code refreshment */
-    //TODO building management
-    //TODO battle management strategy
-    //TODO static classes with multipurpose methods
     //TODO DAO pattern
 
     /** get requests */
@@ -38,26 +35,15 @@ public class Main {
     //TODO radial positioning
 
     /** battle update*/
-    //DONE TODO changing planet status after getting it
-    //DONE TODO battle time in cycles
-    //DONE TODO making army in barrack as ships. Max army level is barrack level
-    //DONE TODO selecting army and ships level while creating them
-    //DONE TODO saving army as hashMap on planet
-    //DONE TODO loading army on ship while attack
-    //DONE TODO subtracting army after battle
-    //DONE TODO loading army after won attack
-    //TODO sending ships back or adding them to harbour
-    // TODO pillage
+    //TODO pillage
     //TODO colonisation
-
+    //TODO upgrading army divisions
 
     /** code review update*/
     //TODO JACSON - every json to entity
 
     /** code debuging*/
     //ON FRONTEND TODO Ships only travels between users planets and only there can load points except battle situation
-    //DONE TODO first created ship isn't added to total load
-    //DONE TODO harbour load is subtracted but not added
     //TODO army subtracting and adding
     //TODO user assignment
     public static void main(String[] args) throws SQLException, IOException, ParseException {

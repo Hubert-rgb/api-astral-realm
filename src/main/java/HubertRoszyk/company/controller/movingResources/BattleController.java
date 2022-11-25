@@ -40,21 +40,16 @@ public class BattleController {
     @Autowired
     TimerActionService timerActionService;
 
-
-    /** mniej więcej działą */
-    //DONE TODO ustawiać armię też na statku
-    //TODO statek powinien albo wpływać do portu jak jest miejsce albo wracać
-    //TO DISCUSS TODO jak armia jest pakowana z powrotem na statek / do baraków na planecie po wygranej
-    //DONE TODO najlepsze dewizje zostają w barakach na planecie, gorsze są pakowane na statki które nie musza wracać, a najgorsze na te co wracają (najgorsze statki)
+    /** method executed while army movement is battle */
     public String battle(int attackId) {
         Attack attack = battleService.getBattleById(attackId);
-
-        //attack - ships and their load
-        //defence - from planet points
 
         Planet defencePlanet = attack.getDefencePlanet();
         PlanetPoints defencePlanetPoints = planetPointsService.getPointsByPlanetId(defencePlanet.getId());
         PlanetPoints attackPlanetPoints = planetPointsService.getPointsByPlanetId(attack.getAttackPlanetId());
+
+        //attack - army (Map)
+        //defence - army from defence planet (Map) and defence as planet points (int) variable
 
         int attackPoints = attack.getAttackArmyValue();
         int defencePoints = defencePlanetPoints.getDefensePoints();
@@ -69,11 +64,15 @@ public class BattleController {
         double attackArmySize = attack.getAttackArmySize();
         double defenceArmySize = ArmyController.getArmySize(defencePlanetPoints.getArmy());
 
+        //army ratio is defined by number of army division (not their power)
+
         double armyRatio = (attackArmySize / (attackArmySize + defenceArmySize)) * 100;
 
         Set<AttackShip> attackShips = attack.getAttackShips();
 
         if (battleAttackPoints > battleDefencePoints) {
+            /** battle won */
+
             defencePlanet.asignUser(attack.getUser());
             defencePlanetPoints.setArmy(defencePlanetPoints.getEmptyArmy());
             defencePlanet.setPlanetStatus(PlanetStatus.AFTER_ATTACK);
@@ -86,34 +85,34 @@ public class BattleController {
                 double percentage = 0.9;
                 setAttackArmy = subtractArmy(gotAttackArmy, attackArmySize, percentage);
                 System.out.println("10:90");
-                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints, attackPlanetPoints);
+                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints);
 
             } else if (armyRatio >= 30 && armyRatio < 50) {
                 double percentage = 0.7;
                 setAttackArmy = subtractArmy(gotAttackArmy, attackArmySize, percentage);
                 System.out.println("30:70");
-                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints, attackPlanetPoints);
+                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints);
 
             } else if (armyRatio >= 50 && armyRatio < 70){
                 double percentage = 0.4;
                 setAttackArmy = subtractArmy(gotAttackArmy, attackArmySize, percentage);
                 System.out.println(attack.getArmy());
                 System.out.println("50:50");
-                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints, attackPlanetPoints);
+                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints);
 
             } else if (armyRatio >= 70 && armyRatio < 90){
                 double percentage = 0.2;
                 setAttackArmy = subtractArmy(gotAttackArmy, attackArmySize, percentage);
                 System.out.println(attack.getArmy());
                 System.out.println("70:30");
-                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints, attackPlanetPoints);
+                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints);
 
             } else if (armyRatio >= 90 && armyRatio <= 100) {
                 double percentage = 0.1;
                 setAttackArmy = subtractArmy(gotAttackArmy, attackArmySize, percentage);
                 System.out.println(attack.getArmy());
                 System.out.println("90:10");
-                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints, attackPlanetPoints);
+                loadArmyAndSendShips(setAttackArmy, attackShips, defencePlanetPoints);
 
             } else if (armyRatio > 100){
                 setAttackArmy = new HashMap<>();
@@ -128,6 +127,7 @@ public class BattleController {
             battleService.saveBattle(attack);
             return "attack won";
         } else {
+            /** battle lost */
             attack.setArmy(ArmyController.getEmptyArmy());
 
             Map<Integer, Integer> gotDefenceArmy = defencePlanetPoints.getArmy();
@@ -167,6 +167,8 @@ public class BattleController {
             return  "attack lost";
         }
     }
+
+    /** subtracting appropriately to the army ratio; the worst divisions die */
     private Map<Integer, Integer> subtractArmy(Map<Integer, Integer> army, double attackArmySize, double percentage){
         int deadArmySize = (int) Math.ceil(attackArmySize * percentage);
         int i = 1;
@@ -187,46 +189,29 @@ public class BattleController {
         }
         return army;
     }
-    //TODO albo zrobię stack i będę dodawał tam gdzie bedzie miał iść,
-    // albo będę musiał mieć więcej warunków żeby dodawać część dywizji do jednego miejsca a resztę gdzieś indziej
-    private void loadArmyAndSendShips(Map<Integer, Integer> army, Set<AttackShip> shipsSet, PlanetPoints defencePlanetPoints, PlanetPoints attackPlanetPoints){
-        int leftSpaceInArmyBuilding = defencePlanetPoints.getTotalAttackBuildingSize();
-        Map<Integer, Integer> barrackArmy = ArmyController.getEmptyArmy();
+    //the best division goes to barracks on planet,
+    //worse to ships which stays on this planet,
+    //the worst are going back to original planet
+    //best stays, worse leaves the planet
+    private void loadArmyAndSendShips(Map<Integer, Integer> army, Set<AttackShip> shipsSet, PlanetPoints defencePlanetPoints){
+        //creating empty army in every ship
         List<AttackShip> ships = new ArrayList<>(shipsSet);
 
         for (AttackShip ship: ships){
             ship.setShipLoad(ArmyController.getEmptyArmy());
         }
-
+        //sorting by the capacity
         ships.sort(Comparator.comparing(Ship::getShipCapacity).reversed());
 
+        addingArmyToBarracks(defencePlanetPoints, army, ships);
+        shipManagement(defencePlanetPoints, ships);
+    }
 
-
-        /** rekurencyjnie */
-        /*for (int i = army.size() - 1; i >= 0; i--){
-            if (leftSpaceInArmyBuilding - army.get(i) >= 0){
-                Map<Integer, Integer> singleMap = new HashMap<>();
-                singleMap.put(i, army.get(i));
-                ArmyController.combineArmy(barrackArmy, singleMap);
-                leftSpaceInArmyBuilding -= army.get(i);
-            } else if (leftSpaceInArmyBuilding == 0){
-                for (AttackShip ship: ships){
-
-                    if (ship.getShipCapacity() - ship.getShipLoad() >= army.get(i)){
-
-                    } else {
-
-                    }
-                }
-            } else {
-
-            }
-        }*/
-
-        /** dość dużo operacji żeby stworzyć stack a potem jest łatwo */
-
-        Stack<Integer> armyStack = armyMapToStack(army);
+    private void addingArmyToBarracks(PlanetPoints defencePlanetPoints, Map<Integer, Integer> army, List<AttackShip> ships){
+        Map<Integer, Integer> barrackArmy = ArmyController.getEmptyArmy();
+        Stack<Integer> armyStack = ArmyController.armyMapToStack(army);
         int shipNum = 0;
+        int leftSpaceInArmyBuilding = defencePlanetPoints.getTotalAttackBuildingSize();
         while(armyStack.size() > 0){
             int armyDev = armyStack.pop();
             Map<Integer, Integer> singleMap = ArmyController.getEmptyArmy();
@@ -244,24 +229,22 @@ public class BattleController {
                     currentShip.setShipLoad(shipArmy);
                 }
             }
-            System.out.println(leftSpaceInArmyBuilding);
-            System.out.println(singleMap);
-            System.out.println("s" + armyStack.size());
         }
-
         defencePlanetPoints.setArmy(barrackArmy);
 
         planetPointsService.savePoints(defencePlanetPoints);
-
-        int leftSpaceInHarbour = defencePlanetPoints.getTotalHarbourSize() - defencePlanetPoints.getTotalHarbourLoad();
+    }
+    private void shipManagement(PlanetPoints defencePlanetPoints, List<AttackShip> ships){
+        Planet departurePlanet = ships.get(0).getTravelRoute().get(ships.get(0).getTravelRoute().size() - 2).getArrivalPlanet();
         for (AttackShip ship: ships){
-            if (leftSpaceInHarbour > 0) {
-                changeShipHarbour(ship.getTravelRoute().get(ship.getTravelRoute().size() - 2).getArrivalPlanet().getId(), defencePlanetPoints.getPlanet().getId());
-                leftSpaceInHarbour -= 1;
+            if (defencePlanetPoints.getTotalHarbourLoad() > 0) {
+                //if there is room for ship in harbour it changes harbour but doesn't leave planet
+                changeShipHarbour(departurePlanet.getId(), defencePlanetPoints.getPlanet().getId());
             } else {
+                //if not, they are not changing harbours, but goes back on origin planet
                 TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(ship.getCurrentPlanet().getGalaxy().getId());
 
-                TravelRoute travelRoute = new TravelRoute(defencePlanetPoints.getPlanet(), attackPlanetPoints.getPlanet(), ship, timerEntityService);
+                TravelRoute travelRoute = new TravelRoute(defencePlanetPoints.getPlanet(), departurePlanet, ship, timerEntityService);
                 TimerAction timerAction = new TimerAction(TimerActionType.INDUSTRY_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
 
                 travelRouteService.saveTravelRoutes(travelRoute);
@@ -270,16 +253,8 @@ public class BattleController {
             shipService.saveShip(ship);
         }
     }
-    private Stack<Integer> armyMapToStack(Map<Integer, Integer> army){
-        Stack<Integer> stack = new Stack<>();
-        for (int i = 1; i < army.size(); i++){
-            for (int j = 0; j < army.get(i); j++){
-                int armyDev = army.get(i);
-                stack.add(armyDev);
-            }
-        }
-        return stack;
-    }
+    /** changing harbour load */
+    //TODO it's implemented twice, should be once. I don't know where to put it
     public void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
         PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
         PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);

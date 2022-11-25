@@ -78,5 +78,4 @@ public class PlanetPoints {
         }
         return army;
     }
-
 }

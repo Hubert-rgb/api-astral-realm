@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//TODO would be redone after implementing firebase authentication
 @RestController
 public class UserController {
 
@@ -16,7 +17,6 @@ public class UserController {
     public User loginUser(@RequestBody JSONObject jsonInput) {
         String name = (String) jsonInput.get("name");
         String password = (String) jsonInput.get("password");
-
 
         User currentUser;
 

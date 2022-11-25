@@ -1,7 +1,6 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.controller.purchaseController.ArmyPurchase;
-import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.PlanetPointsService;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 @RestController
 public class ArmyController {
@@ -26,29 +26,23 @@ public class ArmyController {
     ArmyPurchase armyPurchase;
 
     @PostMapping("/army-controller/army")
-    public PurchaseStatus addBuilding(@RequestBody JSONObject jsonInput) { //exception not string
+    public PurchaseStatus addArmy(@RequestBody JSONObject jsonInput) {
         int planetId = (int) jsonInput.get("planetId");
-        int userId = (int) jsonInput.get("userId");
         int level = (int) jsonInput.get("level");
         int amount = (int) jsonInput.get("amount");
 
-        Planet planet = planetService.getPlanetById(planetId);
-
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-        Map<Integer, Integer> army = planetPoints.getArmy();
         Map<Integer, Integer> armyDivision = Collections.singletonMap(level, amount);
-
 
         return armyPurchase.executePurchase(planetId, armyDivision, level);
     }
     public static Map<Integer, Integer> combineArmy(Map<Integer, Integer> armyA, Map<Integer, Integer> armyB){
-        Map<Integer, Integer> combinedLoad = new HashMap<>();
+        Map<Integer, Integer> combinedArmy = new HashMap<>();
 
         for (int i = 1; i <= armyA.size(); i++){
-            combinedLoad.put(i, armyA.get(i) + armyB.get(i));
+            combinedArmy.put(i, armyA.get(i) + armyB.get(i));
         }
 
-        return combinedLoad;
+        return combinedArmy;
     }
     public static Map<Integer, Integer> subtractLoad(Map<Integer, Integer> army, Map<Integer, Integer> armyToSubtract){
         for (int i = 1; i <= armyToSubtract.size(); i++){
@@ -81,6 +75,16 @@ public class ArmyController {
             value += armyLevelValue;
         }
         return value;
+    }
+    public static Stack<Integer> armyMapToStack(Map<Integer, Integer> army){
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 1; i < army.size(); i++){
+            for (int j = 0; j < army.get(i); j++){
+                int armyDev = army.get(i);
+                stack.add(armyDev);
+            }
+        }
+        return stack;
     }
     //TODO upgrading army
    /* @PutMapping("/army-controller/army")

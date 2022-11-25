@@ -36,11 +36,6 @@ public class GalaxyController {
     @Autowired
     Binder binder;
 
-    @Autowired
-    PlanetPointsController planetPointsController;
-
-    //@CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
-
     @PostMapping("/galaxy-controller/users/{userId}/galaxies/{galaxyId}")
     public Set<Planet> connectToGalaxy(@PathVariable("userId") int userId, @PathVariable("galaxyId") int galaxyId) {
 
@@ -65,9 +60,9 @@ public class GalaxyController {
     @CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
     @PostMapping("/galaxy-controller/galaxies")
     public List<Planet> galaxyInit(@RequestBody JSONObject jsonInput){ //do przeanalizowania bo nie wygląda za ładnie
-        //json to galaxy with jackson
         int maximalUserNumber = (int) jsonInput.get("maximalUserNumber");
         String galaxyName = (String) jsonInput.get("galaxyName");
+        //TODO other galaxy settings
 
         Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName);
         galaxyService.saveGalaxy(galaxy);
@@ -78,17 +73,17 @@ public class GalaxyController {
 
         List<Planet> planets = new ArrayList<>();
 
-        //później można tworzyć galaktyki nie posiadające każdego typu planet
+        //crating galaxy with every type of planet
         for (PlanetType planetType : PlanetType.values()) {
             planets.addAll(createPlanet(planetType, galaxy));
         }
 
-        //List<Planet> validatedPlanets = validator.validatePlanetPositionInGalaxy(planets);
         planetService.savePlanetsList(planets);
 
         return planets;
     }
-    public List<Planet> createPlanet(PlanetType planetType, Galaxy galaxy) {
+    /** creating planets */
+    private List<Planet> createPlanet(PlanetType planetType, Galaxy galaxy) {
         List<Planet> planets = new ArrayList<>();
 
         int planetsNum = galaxy.getMaximalUserNumber() + 1;
@@ -97,13 +92,17 @@ public class GalaxyController {
         for(int i = 0; i < planetsNum; i++){
             int size = RandomDraw.sizeDraw(planetType);
 
+            //Draw a size, industry multiplier and science multiplier
+
             int localRandomVariablesSum = randomVariablesSum - size / 2;
 
-            int industryPointsMultiplier = RandomDraw.industryPointsMultiplierDraw(localRandomVariablesSum); //te dwie linijki coś bym zmienił
+            int industryPointsMultiplier = RandomDraw.industryPointsMultiplierDraw(localRandomVariablesSum);
             int sciencePointsMultiplier = localRandomVariablesSum - industryPointsMultiplier;
 
+            //TODO to recreate (radial positioning)
             PlanetLocation planetLocation = RandomDraw.locationDraw();
-            //validator
+
+            //Creating planet
 
             Planet planet = new Planet(
                     planetType,
@@ -114,38 +113,23 @@ public class GalaxyController {
                     planetLocation.getYLocation(),
                     galaxy
             );
-
             PlanetPoints planetPoints = new PlanetPoints(planet);
-
 
             planetService.savePlanet(planet);
             planetPointsService.savePoints(planetPoints);
-            //planetPointsController.getTotalIndustryPointsIncome(planet.getId());
 
-            //planet.asignGalaxy(galaxy);
             planets.add(planet);
-
-            //industryPointsController.updatePointsIncome(BuildingType.INDUSTRY, planet.getId());
         }
 
         return planets;
     }
-
-    /*@GetMapping("/getPlanets")
-    public List<Planet> getPlanets() {
-        List<Planet> planets = planetService.getPlanetsList();
-
-
-        return planets;
-    }*/
     @GetMapping("/galaxy-controller/galaxies")
     public List<Galaxy> getGalaxies() {
         List<Galaxy> galaxies = galaxyService.getAllGalaxies();
         return galaxies;
     }
     @GetMapping("/galaxy-controller/galaxies/{galaxyId}")
-    Set<Planet> getGalaxyById(/*@RequestBody JSONObject galaxyId*/ @PathVariable int galaxyId) {
-        //int galaxyIdInt = (int) galaxyId.get("galaxyId");
+    Set<Planet> getGalaxyById(@PathVariable int galaxyId) {
         Galaxy galaxy = galaxyService.getGalaxyById(galaxyId);
         Set<Planet> planets = null;
         try {

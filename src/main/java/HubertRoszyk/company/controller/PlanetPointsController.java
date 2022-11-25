@@ -31,29 +31,6 @@ public class PlanetPointsController {
 
         return planetPoints;
     }
-
-    /*public void getTotalDefenceIncome(int planetId) {
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-
-        Planet planet = planetService.getPlanetById(planetId);
-
-        int planetDefenseIncome = planet.getDefensePointsProduce() * planet.getDefencePointsMultiplier();
-
-        planetPoints.setDefensePointsIncome(planetDefenseIncome);
-
-        planetPointsService.savePoints(planetPoints);
-    }*/
-    /*public void getTotalAttackIncome(int planetId) {
-        PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-
-        Planet planet = planetService.getPlanetById(planetId);
-
-        int planetAttackPointsIncome = planet.getAttackPointsProduce() * planet.getAttackPointsMultiplier();
-
-        planetPoints.setAttackPointsIncome(planetAttackPointsIncome);
-
-        planetPointsService.savePoints(planetPoints);
-    }*/
     public void getTotalIndustryPointsIncome(int planetId) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
@@ -64,6 +41,8 @@ public class PlanetPointsController {
 
         planetPointsService.savePoints(planetPoints);
     }
+
+    //It's possible that it should be in use
     public void getTotalHarbourSize(int planetId) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         List<Building> buildingList = buildingService.getBuildingsByPlanetId(planetId);

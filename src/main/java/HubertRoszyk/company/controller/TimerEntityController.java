@@ -81,7 +81,7 @@ public class TimerEntityController {
                 /** method checking changes between cycles (battles, ships making etc.)*/
             }
         };
-        timer.schedule(timerTask, 0, gameProperties.getPeriod() * 1000 / 2);
+        timer.schedule(timerTask, 0, gameProperties.getPeriod() * 1000);
     }
 }
 

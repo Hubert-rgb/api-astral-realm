@@ -41,26 +41,17 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
         int planetId = (int) jsonInput.get("planetId");
         int userId = (int) jsonInput.get("userId");
         String buildingsTypeString = (String) jsonInput.get("buildingType");
-
-        System.out.println(buildingsTypeString);
-
         BuildingType buildingType = converter.convert(buildingsTypeString);
 
-        System.out.println(buildingType);
-
         Planet planet = planetService.getPlanetById(planetId);
-        //Set<Planet> usersPlanets = planetService.getPlanetsByUserId(userId);
-
         Building building = new Building(buildingType, planet);
 
         return buildingPurchase.executePurchase(building.getPlanet().getId(), building, 1);
     }
     @PutMapping("/building-controller/buildings/{buildingId}")
     public PurchaseStatus upgradeBuilding(@PathVariable int buildingId) {
-
         Building building = buildingService.getBuildingById(buildingId);
         int level = building.getBuildingLevel();
-       // Set<Planet> planets = planetService.getPlanetsByUserId(userId);
 
         return buildingPurchase.executePurchase(building.getPlanet().getId(), building, level + 1);
     }
