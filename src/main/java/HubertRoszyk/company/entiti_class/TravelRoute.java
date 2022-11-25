@@ -47,7 +47,7 @@ public class TravelRoute {
         this.arrivalPlanet = arrivalPlanet;
         this.ship = ship;
 
-        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(this.departurePlanet.getGalaxy().getId());
+        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(this.arrivalPlanet.getGalaxy().getId());
         routeStartingCycle = timerEntity.getCyclesNum();
 
         double distance = Math.sqrt(

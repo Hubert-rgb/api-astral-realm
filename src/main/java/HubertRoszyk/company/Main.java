@@ -45,9 +45,10 @@ public class Main {
     //DONE TODO saving army as hashMap on planet
     //DONE TODO loading army on ship while attack
     //DONE TODO subtracting army after battle
-    //TODO pillage
+    //DONE TODO loading army after won attack
+    //TODO sending ships back or adding them to harbour
+    // TODO pillage
     //TODO colonisation
-    //TODO loading army after won attack
 
 
     /** code review update*/
@@ -55,7 +56,10 @@ public class Main {
 
     /** code debuging*/
     //ON FRONTEND TODO Ships only travels between users planets and only there can load points except battle situation
-    //DONE TODO changing user num in galaxy
+    //DONE TODO first created ship isn't added to total load
+    //DONE TODO harbour load is subtracted but not added
+    //TODO army subtracting and adding
+    //TODO user assignment
     public static void main(String[] args) throws SQLException, IOException, ParseException {
 
         GameProperties configOperator = new GameProperties();

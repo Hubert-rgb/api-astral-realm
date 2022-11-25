@@ -21,10 +21,11 @@ import java.util.List;
         attributeNodes = {
                 @NamedAttributeNode(value = "travelRoute", subgraph = "ship.travelRoute")
         },
-        subgraphs = {@NamedSubgraph(
+        subgraphs = {
+                @NamedSubgraph(
                 name = "ship.travelRoute",
-                attributeNodes = {@NamedAttributeNode("arrivalPlanet")}
-        )}
+                attributeNodes = {@NamedAttributeNode("arrivalPlanet")})
+        }
 )
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,10 +33,9 @@ import java.util.List;
 @Setter
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-abstract public class Ship {
+abstract public class Ship{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Setter(AccessLevel.NONE)
     private int id;
 
     @Enumerated
@@ -49,10 +49,6 @@ abstract public class Ship {
 
     @Enumerated
     private ShipStatus shipStatus;
-
-    /*@ManyToOne
-    @JoinColumn(name = "planet_id")
-    private Planet currentPlanet;*/
 
     @JsonIgnore
     @OneToMany(mappedBy = "ship")
@@ -71,7 +67,6 @@ abstract public class Ship {
         this.user = user;
 
         getCapacity();
-        //shipStatus;
 
         this.speed = speedLevel * shipType.getSpeed();
     }

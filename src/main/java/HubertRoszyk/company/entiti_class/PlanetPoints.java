@@ -14,6 +14,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@NamedEntityGraph(
+        name = "planetPoints",
+        attributeNodes = {
+                @NamedAttributeNode(value = "army"),
+                @NamedAttributeNode(value = "planet")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor

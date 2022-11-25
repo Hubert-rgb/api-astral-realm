@@ -1,9 +1,7 @@
 package HubertRoszyk.company.controller.movingResources;
 
-import HubertRoszyk.company.controller.shipController.ShipControllerInterface;
 import HubertRoszyk.company.converters.StringToAttackTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
-import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
@@ -13,15 +11,11 @@ import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class MovementController {
@@ -73,35 +67,31 @@ public class MovementController {
         Planet defensePlanet = planetService.getPlanetById(defensePlanetId);
         User user = userService.getUserById(userId);
 
-        Set<AttackShip> shipsSet = new HashSet<>();
+        Set<AttackShip> shipsList = new HashSet<>();
         for (int i : shipsIdList){
             AttackShip ship = (AttackShip) shipService.getShipById(i);
-            shipsSet.add(ship);
+            shipsList.add(ship);
         }
 
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(defensePlanet.getGalaxy().getId());
 
-        Attack attack = new Attack(shipsSet, defensePlanet, user, attackType);
+        Attack attack = new Attack(shipsList, attackPlanetId, defensePlanet, user, attackType);
         defensePlanet.setPlanetStatus(PlanetStatus.BEFORE_ATTACK);
         battleService.saveBattle(attack);
         planetService.savePlanet(defensePlanet);
 
-        for (Ship ship : shipsSet) {
-            ship.setShipStatus(ShipStatus.ATTACKING);
+        /** timer task*/
+        Iterator<AttackShip> attackShipIterator = shipsList.iterator();
+        TravelRoute travelRouteToTimerAction = new TravelRoute(attackPlanet, defensePlanet, attackShipIterator.next(), timerEntityService);
+        TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRouteToTimerAction.getRouteEndingCycle(), attack.getId(), timerEntity);
+        timerActionService.saveTimerAction(timerAction);
+        for (Ship ship : shipsList) {
             TravelRoute travelRoute = new TravelRoute(attackPlanet, defensePlanet, ship, timerEntityService);
+            ship.setShipStatus(ShipStatus.ATTACKING);
             travelRouteService.saveTravelRoutes(travelRoute);
-
-            /** timer task*/
-            TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);
-            timerActionService.saveTimerAction(timerAction);
         }
     }
-    public void attackExecution(AttackShip ship){
-        Planet defencePlanet = ship.getCurrentPlanet();
-        int userId = ship.getUser().getId();
-        System.out.println(defencePlanet.getId());
-        List<Attack> attacks = battleService.getAttackByDefencePlanetId(defencePlanet.getId());
-        Attack attack =  attacks.get(attacks.size() - 1);
+    public void attackExecution(Attack attack){
         AttackType attackType = attack.getAttackType();
 
         switch (attackType){

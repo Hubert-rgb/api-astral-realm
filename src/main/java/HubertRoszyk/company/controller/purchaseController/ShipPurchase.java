@@ -84,6 +84,7 @@ public class ShipPurchase implements PurchaseInterface<Ship>{
 
         TimerAction timerAction = new TimerAction(TimerActionType.SHIP, buildingEndCycle, ((Ship) object).getId(), timerEntity);
 
+        planetPointsService.savePoints(planetPoints);
         timerEntityService.saveTimerEntity(timerEntity);
         timerActionService.saveTimerAction(timerAction);
     }

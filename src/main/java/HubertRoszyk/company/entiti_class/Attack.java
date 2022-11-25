@@ -10,14 +10,43 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@NamedEntityGraph(
+        name = "attack",
+        attributeNodes = {
+                @NamedAttributeNode(value = "army"),
+                @NamedAttributeNode(value = "defencePlanet"),
+                @NamedAttributeNode(value = "attackShips", subgraph = "attackShip"),
+                @NamedAttributeNode(value = "attackType")
 
+        }, subgraphs = {
+        @NamedSubgraph(
+                name = "attackShip",
+                attributeNodes = {@NamedAttributeNode(value = "travelRoute", subgraph = "travelRoute")}
+
+        ),
+        @NamedSubgraph(
+                name = "travelRoute",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "arrivalPlanet", subgraph = "planet"),
+                        @NamedAttributeNode(value = "departurePlanet", subgraph = "planet")
+                }
+        ),
+        @NamedSubgraph(
+                name = "planet",
+                attributeNodes = {
+                        @NamedAttributeNode("galaxy")
+                }
+        )
+})
 @Getter
 @Setter
 @Entity
@@ -49,6 +78,7 @@ public class Attack {
     private Map<Integer, Integer> army = new HashMap<>();
 
     private int attackArmyValue;
+    private int attackPlanetId;
 
     private int attackArmySize;
 
@@ -62,13 +92,14 @@ public class Attack {
     private long battleTime;
     private String status;
 
-    public Attack(Set<AttackShip> attackShips, Planet defencePlanet, User user, AttackType attackType) {
+    public Attack(Set<AttackShip> attackShips, int attackPlanetId, Planet defencePlanet, User user, AttackType attackType) {
         startingTime = LocalDateTime.now();
 
         this.user = user;
         this.attackShips = attackShips;
         this.defencePlanet = defencePlanet;
         this.attackType = attackType;
+        this.attackPlanetId = attackPlanetId;
 
         this.battleTime = 1;
 

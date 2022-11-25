@@ -1,31 +1,32 @@
 package HubertRoszyk.company.Strategy.timerActionStategy;
 
+import HubertRoszyk.company.controller.movingResources.BattleController;
 import HubertRoszyk.company.controller.movingResources.MovementController;
 import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
+import HubertRoszyk.company.service.BattleService;
 import HubertRoszyk.company.service.ShipService;
 
 public class TimerActionBattle implements TimerActionStrategy{
     private final MovementController movementController;
-    private final ShipService shipService;
 
-    public TimerActionBattle(MovementController movementController, ShipService shipService){
+    private final BattleService battleService;
+
+    public TimerActionBattle(MovementController movementController, BattleService battleService){
         this.movementController = movementController;
-        this.shipService = shipService;
+        this.battleService = battleService;
     }
     @Override
     public void executeAction(TimerAction timerAction) {
-        int shipId = timerAction.getExecutionId();
-        AttackShip ship = (AttackShip) shipService.getShipById(shipId);
+        int attackId = timerAction.getExecutionId();
+        Attack attack = battleService.getBattleById(attackId);
 
-        movementController.attackExecution(ship);
+        movementController.attackExecution(attack);
 
-        Planet planet = ship.getCurrentPlanet();
+        Planet planet = attack.getDefencePlanet();
         planet.setPlanetStatus(PlanetStatus.AFTER_ATTACK);
-
-        shipService.saveShip(ship);
     }
 }

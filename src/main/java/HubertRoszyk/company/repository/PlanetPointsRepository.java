@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlanetPointsRepository extends JpaRepository<PlanetPoints, Integer> {
-    @EntityGraph(attributePaths = {"army"})
+    @EntityGraph(value = "planetPoints")
     public PlanetPoints findPlanetPointsByPlanetId(int planetId);
 }

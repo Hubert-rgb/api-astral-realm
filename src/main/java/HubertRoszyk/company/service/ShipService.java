@@ -1,6 +1,7 @@
 package HubertRoszyk.company.service;
 
 import HubertRoszyk.company.entiti_class.ship.Ship;
+import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,10 @@ public class ShipService {
     public Ship saveShip(Ship ship) {
         return repository.save(ship);
     }
+
+    public List<Ship> saveShipList(List<Ship> ships) {
+        return repository.saveAll(ships);
+    } //nie wiem dlaczego to nie chce działać z childami
     public List<Ship> getShipsList() {
         return repository.findAll();
     }
@@ -28,6 +33,14 @@ public class ShipService {
     public void deleteShips() {
         repository.deleteAll();
         System.out.println("All Ships deleted");
+    }
+
+    public List<Ship> getShipsByPlanetId(int planetId){
+        return repository.findByShipStatusAndTravelRoute_ArrivalPlanet_Id(ShipStatus.DOCKED, planetId);
+    }
+
+    public void removeShipsList(List<Ship> shipList){
+        repository.deleteAllInBatch(shipList);
     }
     /*public Ship getShipByIdWithRoutes(int id){
         return repository.findShipById(id);

@@ -21,10 +21,6 @@ public interface AttackRepository extends JpaRepository<Attack, Integer> {
 
 
     @Override
-    @EntityGraph(attributePaths = {
-            "user",
-            "army",
-            "defencePlanet"
-    })
+    @EntityGraph(value = "attack")
     Optional<Attack> findById(Integer integer);
 }
