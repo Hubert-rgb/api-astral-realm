@@ -31,7 +31,7 @@ public class MovementController{
     BattleService battleService;
 
     @Autowired
-    AttackController attackController;
+    BattleController battleController;
 
     @Autowired
     PillageController pillageController;
@@ -95,11 +95,10 @@ public class MovementController{
         AttackType attackType = attack.getAttackType();
 
         switch (attackType){
-            case BATTLE -> attackController.attack(attack.getId());
+            case BATTLE -> battleController.attack(attack.getId());
             case PILLAGE -> pillageController.pillage();
-            case COLONISATION -> colonisationController.colonize();
+            case COLONISATION -> colonisationController.attack(attack.getId());
         }
-
     }
 
     /** geting attack status */

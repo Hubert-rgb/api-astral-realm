@@ -1,19 +1,10 @@
 package HubertRoszyk.company;
 
 import HubertRoszyk.company.configuration.GameProperties;
-import HubertRoszyk.company.configuration.WebConfigure;
-import org.json.simple.parser.ParseException;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 //management
 @SpringBootApplication
@@ -30,8 +21,9 @@ public class Main {
     //TODO time to build
     //Jakieś pobieranie timer actions i przedstawianie ich w frontendzie???
 
-    /** planet generation update */
+    /** general changes */
     //TODO radial positioning
+    //TODO galaxy settings (time in cycle)
 
     /** attack update*/
     //TODO pillage
@@ -44,9 +36,9 @@ public class Main {
     /** code debuging*/
     //ON FRONTEND TODO Ships only travels between users planets and only there can load points except attack situation
     //TODO army subtracting and adding
-    //TODO user assignment
-    public static void main(String[] args) throws SQLException, IOException, ParseException {
-
+    //POSTMAN ISSUE TODO user assignment, user is deAssigning
+    //TODO wrong army value
+    public static void main(String[] args) {
         GameProperties configOperator = new GameProperties();
 
         SpringApplication.run(Main.class, args);

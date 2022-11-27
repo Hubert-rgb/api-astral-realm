@@ -31,4 +31,5 @@ public interface ShipRepository extends JpaRepository<Ship, Integer> {
 
     @EntityGraph(value = "ship")
     Optional<Ship> findById(@Param("id") int id);
+
 }

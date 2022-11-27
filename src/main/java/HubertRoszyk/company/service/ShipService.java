@@ -17,9 +17,10 @@ public class ShipService {
         return repository.save(ship);
     }
 
+    //nie wiem dlaczego to nie chce działać z childami
     public List<Ship> saveShipList(List<Ship> ships) {
         return repository.saveAll(ships);
-    } //nie wiem dlaczego to nie chce działać z childami
+    }
     public List<Ship> getShipsList() {
         return repository.findAll();
     }
@@ -33,6 +34,10 @@ public class ShipService {
     public void deleteShips() {
         repository.deleteAll();
         System.out.println("All Ships deleted");
+    }
+
+    public void deleteShipById(int id) {
+        repository.deleteById(id);
     }
 
     public List<Ship> getShipsByPlanetId(int planetId){

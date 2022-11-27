@@ -32,4 +32,8 @@ public class RandomDraw {
         double battleMultiplier = battleMultiplierInt / 10;
         return battleMultiplier;
     }
+    public static int armyDivisionNumberDraw(){
+        int armyDivisions = random.nextInt(3) + 1;
+        return armyDivisions;
+    }
 }

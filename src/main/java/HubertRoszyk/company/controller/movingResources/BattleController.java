@@ -11,9 +11,11 @@ import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.util.*;
 
+@Controller
 public class BattleController implements AttackController{
     @Autowired
     GameProperties gameProperties;
@@ -129,8 +131,8 @@ public class BattleController implements AttackController{
         double attackMultiplier = RandomDraw.battleMultiplierDraw();
         double defenceMultiplier = RandomDraw.battleMultiplierDraw();
 
-        double battleAttackPoints = attackPoints * gameProperties.getAttackMultiplier() * attackMultiplier;
-        double battleDefencePoints = defencePoints + defencePlanetArmyValue * gameProperties.getDefenceMultiplier() * defenceMultiplier;
+        double battleAttackPoints = attackPoints * gameProperties.getAttackBattleMultiplier() * attackMultiplier;
+        double battleDefencePoints = defencePoints + defencePlanetArmyValue * gameProperties.getDefenceBattleMultiplier() * defenceMultiplier;
 
         return battleAttackPoints > battleDefencePoints;
     }
@@ -159,36 +161,36 @@ public class BattleController implements AttackController{
 
     @Override
     public BattleService getBattleService() {
-        return null;
+        return battleService;
     }
 
     @Override
     public PlanetService getPlanetService() {
-        return null;
+        return planetService;
     }
 
     @Override
     public PlanetPointsService getPlanetPointsService() {
-        return null;
+        return planetPointsService;
     }
 
     @Override
     public ShipService getShipService() {
-        return null;
+        return shipService;
     }
 
     @Override
     public TravelRouteService getTravelRouteService() {
-        return null;
+        return travelRouteService;
     }
 
     @Override
     public TimerEntityService getTimerEntityService() {
-        return null;
+        return timerEntityService;
     }
 
     @Override
     public TimerActionService getTimerActionService() {
-        return null;
+        return timerActionService;
     }
 }

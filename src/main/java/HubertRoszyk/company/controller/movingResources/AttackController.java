@@ -17,6 +17,7 @@ public interface AttackController {
     default String attack(int attackId) {
         BattleService battleService = getBattleService();
         PlanetPointsService planetPointsService = getPlanetPointsService();
+        PlanetService planetService = getPlanetService();
         ShipService shipService = getShipService();
 
         Attack attack = battleService.getBattleById(attackId);
@@ -48,6 +49,8 @@ public interface AttackController {
             defencePlanet.setPlanetStatus(PlanetStatus.AFTER_ATTACK);
             List<Ship> defencePlanetShip = shipService.getShipsByPlanetId(defencePlanet.getId());
             shipService.removeShipsList(defencePlanetShip);
+
+            planetService.savePlanet(defencePlanet);
 
             Map<Integer, Integer> gotAttackArmy = attack.getArmy();
             Map<Integer, Integer> setAttackArmy;
@@ -102,6 +105,18 @@ public interface AttackController {
 
             Map<Integer, Integer> gotDefenceArmy = defencePlanetPoints.getArmy();
             Map<Integer, Integer> setDefenceArmy;
+
+            //deleting ships after lost battle
+            //I can't cast it into Ship, so it's cause a problem while deleting list
+            attack.setAttackShips(null);
+            attack.setIndustryShips(null);
+            for (AttackShip attackShip : attackShips) {
+                shipService.deleteShipById(attackShip.getId());
+            }
+            for (IndustryShip industryShip : industryShips) {
+                shipService.deleteShipById(industryShip.getId());
+            }
+
             if (armyRatio <= 100 && armyRatio > 70){
                 double percentage = 0.45;
                 setDefenceArmy = subtractArmy(gotDefenceArmy, defenceArmySize, percentage);

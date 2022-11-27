@@ -27,21 +27,6 @@ public class PointGenerator {
     @Autowired
     PlanetPointsService planetPointsService;
 
-    @Autowired
-    GameProperties gameProperties;
-
-    @Autowired
-    PlanetPointsController planetPointsController;
-
-
-    /*private static PointGenerator instance;
-    public static PointGenerator getInstance(){
-        if (instance == null){
-            instance = new PointGenerator();
-        }
-        return instance;
-    }*/
-    //@EventListener(ApplicationReadyEvent.class)
     public void generatePoints() {
 
         List<GalaxyPoints> galaxyPointsList = galaxyPointsService.getPointsList(); //both by galaxy

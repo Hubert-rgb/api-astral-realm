@@ -25,12 +25,13 @@ import java.util.Set;
         attributeNodes = {
                 @NamedAttributeNode(value = "army"),
                 @NamedAttributeNode(value = "defencePlanet"),
-                @NamedAttributeNode(value = "attackShips", subgraph = "attackShip"),
+                @NamedAttributeNode(value = "attackShips", subgraph = "ship"),
+                @NamedAttributeNode(value = "industryShips", subgraph = "ship"),
                 @NamedAttributeNode(value = "attackType")
 
         }, subgraphs = {
         @NamedSubgraph(
-                name = "attackShip",
+                name = "ship",
                 attributeNodes = {@NamedAttributeNode(value = "travelRoute", subgraph = "travelRoute")}
 
         ),

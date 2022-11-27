@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -115,6 +116,11 @@ public class GalaxyController {
             );
             PlanetPoints planetPoints = new PlanetPoints(planet);
 
+            Map<Integer, Integer> army = ArmyController.getEmptyArmy();
+            int armySizeMultiplier = RandomDraw.armyDivisionNumberDraw();
+            army.put(1, armySizeMultiplier * planetType.getDefaultArmySize());
+
+            planetPoints.setArmy(army);
             planetService.savePlanet(planet);
             planetPointsService.savePoints(planetPoints);
 

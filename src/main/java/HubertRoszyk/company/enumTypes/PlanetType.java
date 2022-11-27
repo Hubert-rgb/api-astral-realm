@@ -4,13 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum PlanetType {
-    SMALL(3, 5, 10, 1, 0.5, 3, 25, 3),
-    MEDIUM(4, 7, 15, 1.5, 0.75, 4, 30, 4),
-    BIG(6, 9, 20, 2, 1, 5, 35, 5);
+    SMALL(3, 5, 10, 3,1, 0.5, 3, 25, 3),
+    MEDIUM(4, 7, 15, 5, 1.5, 0.75, 4, 30, 4),
+    BIG(6, 9, 20, 7, 2, 1, 5, 35, 5);
 
     private final int maximalSize;
     private final int randomVariablesSum;
     private final int defaultDefencePoints;
+    private final int defaultArmySize;
     private final double defaultIndustryProduce;
     private final double defaultScienceProduce;
     private final int defaultHarbourSize;
@@ -21,6 +22,7 @@ public enum PlanetType {
     PlanetType(int maximalSize,
                int randomVariablesSum,
                int defaultDefencePoints,
+               int defaultArmySize,
                double defaultIndustryProduce,
                double defaultScienceProduce,
                int defaultHarbourSize,
@@ -35,5 +37,6 @@ public enum PlanetType {
         this.defaultHarbourSize = defaultHarbourSize;
         this.defaultStorageSize = defaultStorageSize;
         this.defaultArmyBuildingSize = defaultArmyBuildingSize;
+        this.defaultArmySize = defaultArmySize;
     }
 }
