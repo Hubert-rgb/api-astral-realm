@@ -22,7 +22,6 @@ import java.sql.SQLException;
 
 public class Main {
     //TODO tests
-    //TODO comments
 
     /** code refreshment */
     //TODO DAO pattern
@@ -34,7 +33,7 @@ public class Main {
     /** planet generation update */
     //TODO radial positioning
 
-    /** battle update*/
+    /** attack update*/
     //TODO pillage
     //TODO colonisation
     //TODO upgrading army divisions
@@ -43,7 +42,7 @@ public class Main {
     //TODO JACSON - every json to entity
 
     /** code debuging*/
-    //ON FRONTEND TODO Ships only travels between users planets and only there can load points except battle situation
+    //ON FRONTEND TODO Ships only travels between users planets and only there can load points except attack situation
     //TODO army subtracting and adding
     //TODO user assignment
     public static void main(String[] args) throws SQLException, IOException, ParseException {

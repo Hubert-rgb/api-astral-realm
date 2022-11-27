@@ -2,6 +2,7 @@ package HubertRoszyk.company.entiti_class;
 
 import HubertRoszyk.company.controller.ArmyController;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
+import HubertRoszyk.company.entiti_class.ship.IndustryShip;
 import HubertRoszyk.company.enumTypes.AttackType;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -73,6 +74,13 @@ public class Attack {
     )
     private Set<AttackShip> attackShips;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "attack_id"),
+            inverseJoinColumns = @JoinColumn(name = "industry_ship_id")
+    )
+    private Set<IndustryShip> industryShips;
+
     @ElementCollection
     @MapKeyColumn(name = "level_number")
     private Map<Integer, Integer> army = new HashMap<>();
@@ -92,11 +100,12 @@ public class Attack {
     private long battleTime;
     private String status;
 
-    public Attack(Set<AttackShip> attackShips, int attackPlanetId, Planet defencePlanet, User user, AttackType attackType) {
+    public Attack(Set<AttackShip> attackShips, Set<IndustryShip> industryShip, int attackPlanetId, Planet defencePlanet, User user, AttackType attackType) {
         startingTime = LocalDateTime.now();
 
         this.user = user;
         this.attackShips = attackShips;
+        this.industryShips = industryShip;
         this.defencePlanet = defencePlanet;
         this.attackType = attackType;
         this.attackPlanetId = attackPlanetId;

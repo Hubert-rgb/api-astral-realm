@@ -1,14 +1,11 @@
 package HubertRoszyk.company.Strategy.timerActionStategy;
 
-import HubertRoszyk.company.controller.movingResources.BattleController;
 import HubertRoszyk.company.controller.movingResources.MovementController;
 import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.TimerAction;
-import HubertRoszyk.company.entiti_class.ship.AttackShip;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
 import HubertRoszyk.company.service.BattleService;
-import HubertRoszyk.company.service.ShipService;
 
 public class TimerActionBattle implements TimerActionStrategy{
     private final MovementController movementController;

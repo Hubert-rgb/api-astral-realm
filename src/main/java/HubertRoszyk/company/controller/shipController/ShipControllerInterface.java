@@ -1,5 +1,6 @@
 package HubertRoszyk.company.controller.shipController;
 
+import HubertRoszyk.company.controller.BuildingsController;
 import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
@@ -158,23 +159,6 @@ public interface ShipControllerInterface<ShipT, LoadType> {
         return shipService.getShipsList();
     }
 
-    default void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
-        PlanetPointsService planetPointsService = getPlanetPointsService();
-
-        PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
-        PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);
-
-        int gotDepartureHarbourLoad = departurePlanetPoints.getTotalHarbourLoad();
-        int setDepartureHarbourLoad = gotDepartureHarbourLoad - 1;
-        departurePlanetPoints.setTotalHarbourLoad(setDepartureHarbourLoad);
-        planetPointsService.savePoints(departurePlanetPoints);
-
-        int gotDestinationHarbourLoad = destinationPlanetPoints.getTotalHarbourLoad();
-        int setDestinationHarbourLoad = gotDestinationHarbourLoad + 1;
-        destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
-        planetPointsService.savePoints(departurePlanetPoints);
-    }
-
     void executeLoad(ShipT ship, LoadType load, PlanetPoints planetPoints);
     void executeUnload(ShipT ship, LoadType shipLoad, LoadType toUnload, PlanetPoints planetPoints);
 
@@ -184,7 +168,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
         TimerActionService timerActionService = getTimerActionService();
         TimerEntityService timerEntityService = getTimerEntityService();
 
-        changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
+        BuildingsController.changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
 
         /** timer task*/
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(travelRoute.getArrivalPlanet().getGalaxy().getId());

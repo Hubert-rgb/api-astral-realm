@@ -30,12 +30,6 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
     @Autowired
     BuildingPurchase buildingPurchase;
 
-    @Autowired
-    TimerEntityService timerEntityService;
-
-    @Autowired
-    TimerActionService timerActionService;
-
     @PostMapping("/building-controller/buildings")
     public PurchaseStatus addBuilding(@RequestBody JSONObject jsonInput) { //exception not string
         int planetId = (int) jsonInput.get("planetId");
@@ -65,5 +59,25 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
     public List<Enum> getAllBuildingTypes(){
         List<Enum> buildingTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(BuildingType.class));
         return buildingTypesEnumValues;
+    }
+
+    @Autowired
+    private static PlanetPointsService planetPointsService;
+    static public void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
+
+        PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
+        PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);
+
+        int gotDepartureHarbourLoad = departurePlanetPoints.getTotalHarbourLoad();
+        int setDepartureHarbourLoad = gotDepartureHarbourLoad - 1;
+        departurePlanetPoints.setTotalHarbourLoad(setDepartureHarbourLoad);
+        planetPointsService.savePoints(departurePlanetPoints);
+
+        int gotDestinationHarbourLoad = destinationPlanetPoints.getTotalHarbourLoad();
+        int setDestinationHarbourLoad = gotDestinationHarbourLoad + 1;
+        destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
+
+        planetPointsService.savePoints(departurePlanetPoints);
+        planetPointsService.savePoints(destinationPlanetPoints);
     }
 }

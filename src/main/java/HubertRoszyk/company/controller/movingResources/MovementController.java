@@ -3,6 +3,7 @@ package HubertRoszyk.company.controller.movingResources;
 import HubertRoszyk.company.converters.StringToAttackTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
+import HubertRoszyk.company.entiti_class.ship.IndustryShip;
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
-public class MovementController {
+public class MovementController{
     @Autowired
     PlanetService planetService;
 
@@ -30,7 +31,7 @@ public class MovementController {
     BattleService battleService;
 
     @Autowired
-    BattleController battleController;
+    AttackController attackController;
 
     @Autowired
     PillageController pillageController;
@@ -53,12 +54,13 @@ public class MovementController {
     @Autowired
     TravelRouteService travelRouteService;
 
-    @PostMapping("/battle-controller/battles")
+    @PostMapping("/attack-controller/battles")
     public void armyMovement(@RequestBody JSONObject jsonInput) {
         int userId = (int) jsonInput.get("userId");
         int attackPlanetId = (int) jsonInput.get("attackPlanetId");
         int defensePlanetId = (int) jsonInput.get("defensePlanetId");
-        List<Integer> shipsIdList = (List<Integer>) jsonInput.get("shipsIdList");
+        List<Integer> attackShipsIdList = (List<Integer>) jsonInput.get("attackShipsIdList");
+        List<Integer> industryShipsIdList = (List<Integer>) jsonInput.get("industryShipsIdList");
         String attackTypeString = (String) jsonInput.get("attackType");
 
         AttackType attackType = stringToAttackTypeConverter.convert(attackTypeString);
@@ -67,50 +69,48 @@ public class MovementController {
         Planet defensePlanet = planetService.getPlanetById(defensePlanetId);
         User user = userService.getUserById(userId);
 
-        Set<AttackShip> shipsList = new HashSet<>();
-        for (int i : shipsIdList){
-            AttackShip ship = (AttackShip) shipService.getShipById(i);
-            shipsList.add(ship);
-        }
+        Set<AttackShip> attackShipSet = getShipsFromDatabase(attackShipsIdList);
+        Set<IndustryShip> industryShipSet = getShipsFromDatabase(industryShipsIdList);
 
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(defensePlanet.getGalaxy().getId());
 
-        Attack attack = new Attack(shipsList, attackPlanetId, defensePlanet, user, attackType);
+        Attack attack = new Attack(attackShipSet, industryShipSet, attackPlanetId, defensePlanet, user, attackType);
         defensePlanet.setPlanetStatus(PlanetStatus.BEFORE_ATTACK);
         battleService.saveBattle(attack);
         planetService.savePlanet(defensePlanet);
 
         /** timer task*/
-        Iterator<AttackShip> attackShipIterator = shipsList.iterator();
+        Iterator<AttackShip> attackShipIterator = attackShipSet.iterator();
         TravelRoute travelRouteToTimerAction = new TravelRoute(attackPlanet, defensePlanet, attackShipIterator.next(), timerEntityService);
         TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRouteToTimerAction.getRouteEndingCycle(), attack.getId(), timerEntity);
         timerActionService.saveTimerAction(timerAction);
-        for (Ship ship : shipsList) {
-            TravelRoute travelRoute = new TravelRoute(attackPlanet, defensePlanet, ship, timerEntityService);
-            ship.setShipStatus(ShipStatus.ATTACKING);
-            travelRouteService.saveTravelRoutes(travelRoute);
-        }
+
+        Set<Ship> attackShipShipSet = getShipsFromDatabase(attackShipsIdList);
+        Set<Ship> industryShipShipSet = getShipsFromDatabase(industryShipsIdList);
+
+        createTravelRoutes(attackShipShipSet, attackPlanet, defensePlanet);
+        createTravelRoutes(industryShipShipSet, attackPlanet, defensePlanet);
     }
     public void attackExecution(Attack attack){
         AttackType attackType = attack.getAttackType();
 
         switch (attackType){
-            case BATTLE -> battleController.battle(attack.getId());
+            case BATTLE -> attackController.attack(attack.getId());
             case PILLAGE -> pillageController.pillage();
             case COLONISATION -> colonisationController.colonize();
         }
 
     }
 
-    /** geting battle status */
-    @GetMapping("/battle-controller/battles/{battleId}/status")
+    /** geting attack status */
+    @GetMapping("/attack-controller/battles/{battleId}/status")
     public String getBattleStatus(@PathVariable int battleId) {
         Attack attack = battleService.getBattleById(battleId);
         return attack.getStatus();
     }
 
-    /** getting time left on battle*/
-    @GetMapping("/battle-controller/battles/{battleId}/timeLeft")
+    /** getting time left on attack*/
+    @GetMapping("/attack-controller/battles/{battleId}/timeLeft")
     public long getBattleTimeLeft(@PathVariable int battleId) {
         LocalDateTime currentTime = LocalDateTime.now();
 
@@ -119,11 +119,28 @@ public class MovementController {
 
         Duration battleDuration = Duration.between(battleStartingTime, currentTime);
 
-        //battle time in nanoseconds
+        //attack time in nanoseconds
         long battleTimeLeft = attack.getBattleTime() - (battleDuration.getSeconds() * 1000);
         System.out.println(attack.getBattleTime());
         System.out.println(battleDuration.getNano());
 
         return battleTimeLeft;
+    }
+    //TODO check cast
+    private <S> Set<S> getShipsFromDatabase(List<Integer> shipsIdList){
+        Set<S> shipsSet = new HashSet<>();
+        for (int i : shipsIdList){
+            S ship = (S) shipService.getShipById(i);
+            shipsSet.add(ship);
+        }
+        return shipsSet;
+    }
+
+    private void createTravelRoutes(Set<Ship> shipSet, Planet attackPlanet, Planet defensePlanet){
+        for (Ship ship : shipSet) {
+            TravelRoute travelRoute = new TravelRoute(attackPlanet, defensePlanet, ship, timerEntityService);
+            ship.setShipStatus(ShipStatus.ATTACKING);
+            travelRouteService.saveTravelRoutes(travelRoute);
+        }
     }
 }
