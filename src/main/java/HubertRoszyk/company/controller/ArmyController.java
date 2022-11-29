@@ -69,7 +69,7 @@ public class ArmyController {
     public static int getArmyValue(Map<Integer, Integer> army){
         System.out.println(army);
         int value = 0;
-        for (int armyLevel = 1; armyLevel < army.size(); armyLevel++){
+        for (int armyLevel = 1; armyLevel <= army.size(); armyLevel++){
             int armyDivisionNumber = army.get(armyLevel);
             int armyLevelValue = armyLevel * armyDivisionNumber;
             value += armyLevelValue;
@@ -78,10 +78,9 @@ public class ArmyController {
     }
     public static Stack<Integer> armyMapToStack(Map<Integer, Integer> army){
         Stack<Integer> stack = new Stack<>();
-        for (int i = 1; i < army.size(); i++){
+        for (int i = 1; i <= army.size(); i++){
             for (int j = 0; j < army.get(i); j++){
-                int armyDev = army.get(i);
-                stack.add(armyDev);
+                stack.add(i);
             }
         }
         return stack;

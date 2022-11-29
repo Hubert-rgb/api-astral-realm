@@ -23,10 +23,10 @@ public class User {
     private int id;
     @NonNull
     @Column(name = "userName")
-    private String name;
+    private String displayName;
     @NonNull
     @Column(name = "userPassword")
-    private String password;
+    private String firebaseUId;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")

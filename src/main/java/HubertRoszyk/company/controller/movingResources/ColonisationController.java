@@ -40,7 +40,10 @@ public class ColonisationController implements AttackController{
         }
         return army;
     }
-
+    //the best division goes to barracks on planet,
+    //worse to ships which stays on this planet,
+    //the worst are going back to original planet
+    //best stays, worse leaves the planet
     @Override
     public void loadAndSendShips(Map<Integer, Integer> army, Set<AttackShip> attackShipSet, Set<IndustryShip> industryShipsSet, PlanetPoints defencePlanetPoints) {
         //creating empty army in every ship
@@ -53,13 +56,15 @@ public class ColonisationController implements AttackController{
         //sorting by the capacity
         ships.sort(Comparator.comparing(Ship::getShipCapacity).reversed());
 
-        addingArmyToBarracksAndShips(defencePlanetPoints, army, ships); // would be different
+        List<AttackShip> loadedShips = addingArmyToBarracksAndShips(defencePlanetPoints, army, ships); // would be different
 
-        shipManagement(defencePlanetPoints, ships, industryShips);
+        shipManagement(defencePlanetPoints, loadedShips, industryShips);
     }
 
+
+
     @Override
-    public void addingArmyToBarracksAndShips(PlanetPoints defencePlanetPoints, Map<Integer, Integer> army, List<AttackShip> ships) {
+    public List<AttackShip> addingArmyToBarracksAndShips(PlanetPoints defencePlanetPoints, Map<Integer, Integer> army, List<AttackShip> ships) {
         PlanetPointsService planetPointsService = getPlanetPointsService();
 
         Map<Integer, Integer> barrackArmy = ArmyController.getEmptyArmy();
@@ -85,12 +90,14 @@ public class ColonisationController implements AttackController{
             }
         }
         defencePlanetPoints.setArmy(barrackArmy);
-
         planetPointsService.savePoints(defencePlanetPoints);
+
+        return ships;
     }
 
     @Override
-    public void shipManagement(PlanetPoints defencePlanetPoints, List<AttackShip> ships, List<IndustryShip> industryShips) {TimerEntityService timerEntityService = getTimerEntityService();
+    public void shipManagement(PlanetPoints defencePlanetPoints, List<AttackShip> ships, List<IndustryShip> industryShips) {
+        TimerEntityService timerEntityService = getTimerEntityService();
         TravelRouteService travelRouteService = getTravelRouteService();
         TimerActionService timerActionService = getTimerActionService();
         ShipService shipService = getShipService();

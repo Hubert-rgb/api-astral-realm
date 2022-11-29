@@ -9,29 +9,28 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//TODO would be redone after implementing firebase authentication
 @RestController
 public class UserController {
 
     @PostMapping("/user-controller/users")
     public User loginUser(@RequestBody JSONObject jsonInput) {
-        String name = (String) jsonInput.get("name");
-        String password = (String) jsonInput.get("password");
+        String displayName = (String) jsonInput.get("displayName");
+        String firebaseUId = (String) jsonInput.get("firebaseUId");
 
         User currentUser;
 
         List<User> users = userService.getUsersList();
 
         for (User user : users) {
-            if(user.getName().equals(name) && user.getPassword().equals(password)) {
+            if(user.getDisplayName().equals(displayName) && user.getFirebaseUId().equals(firebaseUId)) {
                 currentUser = user;
                 return currentUser;
-            } else if (user.getName().equals(name)) {
+            } else if (user.getDisplayName().equals(displayName)) {
                 throw new wrongDataException();
             }
         }
 
-        currentUser = createUser(name, password);
+        currentUser = createUser(displayName, firebaseUId);
         return currentUser;
     }
     @Autowired

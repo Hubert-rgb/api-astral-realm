@@ -158,7 +158,7 @@ public interface AttackController {
 
     void loadAndSendShips(Map<Integer, Integer> army, Set<AttackShip> attackShipSet, Set<IndustryShip> industryShipsSet, PlanetPoints defencePlanetPoints);
 
-    void addingArmyToBarracksAndShips(PlanetPoints defencePlanetPoints, Map<Integer, Integer> army, List<AttackShip> ships);
+    List<AttackShip> addingArmyToBarracksAndShips(PlanetPoints defencePlanetPoints, Map<Integer, Integer> army, List<AttackShip> ships);
 
     void shipManagement(PlanetPoints defencePlanetPoints, List<AttackShip> attackShips, List<IndustryShip> industryShips);
 

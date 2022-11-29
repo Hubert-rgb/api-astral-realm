@@ -27,7 +27,7 @@ public class Main {
 
     /** attack update*/
     //TODO pillage
-    //TODO colonisation
+    //DONE TODO colonisation
     //TODO upgrading army divisions
 
     /** code review update*/
@@ -35,7 +35,7 @@ public class Main {
 
     /** code debuging*/
     //ON FRONTEND TODO Ships only travels between users planets and only there can load points except attack situation
-    //TODO army subtracting and adding
+    //DONE TODO army subtracting and adding
     //POSTMAN ISSUE TODO user assignment, user is deAssigning
     //TODO wrong army value
     public static void main(String[] args) {

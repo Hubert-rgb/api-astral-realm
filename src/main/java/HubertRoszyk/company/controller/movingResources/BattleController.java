@@ -12,10 +12,14 @@ import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
 @Controller
+@RestController
+@RequestMapping("/battle-controller")
 public class BattleController implements AttackController{
     @Autowired
     GameProperties gameProperties;
@@ -57,15 +61,15 @@ public class BattleController implements AttackController{
         //sorting by the capacity
         ships.sort(Comparator.comparing(Ship::getShipCapacity).reversed());
 
-        addingArmyToBarracksAndShips(defencePlanetPoints, army, ships); // would be different
+        List<AttackShip> loadedShips = addingArmyToBarracksAndShips(defencePlanetPoints, army, ships); // would be different
 
-        shipManagement(defencePlanetPoints, ships, industryShips);
+        shipManagement(defencePlanetPoints, loadedShips, industryShips);
     }
 
 
 
     @Override
-    public void addingArmyToBarracksAndShips(PlanetPoints defencePlanetPoints, Map<Integer, Integer> army, List<AttackShip> ships) {
+    public List<AttackShip> addingArmyToBarracksAndShips(PlanetPoints defencePlanetPoints, Map<Integer, Integer> army, List<AttackShip> ships) {
         PlanetPointsService planetPointsService = getPlanetPointsService();
 
         Map<Integer, Integer> barrackArmy = ArmyController.getEmptyArmy();
@@ -91,8 +95,9 @@ public class BattleController implements AttackController{
             }
         }
         defencePlanetPoints.setArmy(barrackArmy);
-
         planetPointsService.savePoints(defencePlanetPoints);
+
+        return ships;
     }
 
     @Override
