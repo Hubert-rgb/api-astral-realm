@@ -1,4 +1,4 @@
-# online-game
+# Astral Realms
 The online strategy game, like Stellaris but better
 
 # config:

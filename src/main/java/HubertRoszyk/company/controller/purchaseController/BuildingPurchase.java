@@ -40,7 +40,7 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
     }
 
     @Override
-    public void upgradeLevel(Building building, int setLevel, int planetId) {
+    public void upgradeLevel(Building building, int setLevel, int planetId, int...amount) {
         /*int gotBuildingLevel = building.getBuildingLevel();
         int setBuildingLevel = gotBuildingLevel + 1;*/
 
@@ -55,7 +55,7 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
     }
 
     @Override
-    public double getPrice(Building building) {
+    public double getPrice(Building building, int...amount) {
         int buildingTypePrice = building.getBuildingType().getBuildingPrice();
         double costMultiplier = gameProperties.getLevelCostMultiplier() * building.getBuildingLevel();
         return buildingTypePrice * costMultiplier;

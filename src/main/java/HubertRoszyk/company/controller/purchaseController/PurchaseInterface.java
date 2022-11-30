@@ -4,24 +4,21 @@ import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.service.*;
+import org.springframework.lang.Nullable;
 
 public interface PurchaseInterface<T> { //TODO redo also for buying science cards
     PlanetPointsService getPlanetPointsService();
     PlanetService getPlanetService();
 
 
-    default PurchaseStatus executePurchase(int planetId, T object, int setLevel) {
+    default PurchaseStatus executePurchase(int planetId, T object, int setLevel, int...amount) {
         PlanetPointsService planetPointsService = getPlanetPointsService();
         PlanetService planetService = getPlanetService();
 
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
 
-        //TODO po czasie
-        upgradeLevel(object, setLevel, planetId);
-        System.out.println(setLevel);
-
-        double price = getPrice(object);
+        double price = getPrice(object, amount);
         double gotIndustryPoints = planetPoints.getIndustryPoints();
 
         System.out.println("cena: " + price);
@@ -46,7 +43,7 @@ public interface PurchaseInterface<T> { //TODO redo also for buying science card
 
         //TODO maybe strategy not if
         if (isEnoughPoints && isNotOnMaximumLevel  && isEnoughSpaceOnPlanet && isShipYardEnoughLevel) {  //strategy
-            purchaseOk(object, planetPoints, setLevel, planetPointsService, gotIndustryPoints, price);
+            purchaseOk(object, planetPoints, setLevel, planetPointsService, gotIndustryPoints, price, amount);
             return PurchaseStatus.OK;
         } else if (!isNotOnMaximumLevel) {
             return PurchaseStatus.MAX_LEVEL;
@@ -58,14 +55,17 @@ public interface PurchaseInterface<T> { //TODO redo also for buying science card
             return PurchaseStatus.NOT_ENOUGH_POINTS;
         }
     }
-    default void purchaseOk(T object, PlanetPoints planetPoints, int setLevel, PlanetPointsService planetPointsService, double gotIndustryPoints, double price) {
+    default void purchaseOk(T object, PlanetPoints planetPoints, int setLevel, PlanetPointsService planetPointsService, double gotIndustryPoints, double price, int...amount) {
         double setIndustryPoints = gotIndustryPoints - price;
         planetPoints.setIndustryPoints(setIndustryPoints);
 
         saveObject(object, planetPoints.getPlanet().getId());
 
         executeTimerAction(object, planetPoints.getPlanet().getId(), setLevel);
-        //TODO method not if
+
+        upgradeLevel(object, setLevel, planetPoints.getPlanet().getId(), amount);
+        System.out.println(setLevel);
+
         planetPointsService.savePoints(planetPoints);
     }
 
@@ -73,9 +73,9 @@ public interface PurchaseInterface<T> { //TODO redo also for buying science card
 
     void saveObject(T object, int planetId);
 
-    void upgradeLevel(T object, int setLevel, int planetId);
+    void upgradeLevel(T object, int setLevel, int planetId, int...amount);
     boolean getIsNotOnMaximumLevel(T object, int planetId);
-    double getPrice(T object);
+    double getPrice(T object, int...amount);
 
     void executeTimerAction(T object, int planetId, int setLevel);
 

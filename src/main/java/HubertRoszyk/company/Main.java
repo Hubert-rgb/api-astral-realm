@@ -12,11 +12,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan()
 
 public class Main {
-    //TODO tests
-
-    /** code refreshment */
-    //TODO DAO pattern
-
     /** get requests */
     //TODO time to build
     //Jakieś pobieranie timer actions i przedstawianie ich w frontendzie???
@@ -27,17 +22,17 @@ public class Main {
 
     /** attack update*/
     //TODO pillage
-    //DONE TODO colonisation
-    //TODO upgrading army divisions
+    //TODO upgrading army divisions - selecting level, select number of divisions and upgrade them by one level
+    //TODO planet protection period after battle
 
-    /** code review update*/
+    /** code refreshment*/
     //TODO JACSON - every json to entity
+    //TODO DAO pattern
+    //TODO tests
 
     /** code debuging*/
-    //ON FRONTEND TODO Ships only travels between users planets and only there can load points except attack situation
-    //DONE TODO army subtracting and adding
-    //POSTMAN ISSUE TODO user assignment, user is deAssigning
-    //TODO wrong army value
+    //DONE TODO before upgrading army is added to its level and then subtracted so its stays unchanged or even higher
+    //TO WATCH TODO switched place where level is upgraded while purchase
     public static void main(String[] args) {
         GameProperties configOperator = new GameProperties();
 

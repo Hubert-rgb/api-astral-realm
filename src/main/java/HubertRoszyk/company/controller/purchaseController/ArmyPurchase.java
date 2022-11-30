@@ -49,29 +49,29 @@ public class ArmyPurchase implements PurchaseInterface<Map<Integer, Integer>> {
 
     @Override
     public void saveObject(Map<Integer, Integer> object, int planetId) {
-        int level = object.keySet().iterator().next();
+        /*int level = object.keySet().iterator().next();
         int amount = object.get(level);
 
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Map<Integer, Integer> army = planetPoints.getArmy();
         army.put(level, army.get(level) + amount);
 
-        planetPoints.setArmy(army);
+        planetPoints.setArmy(army);*/
         //planetPointsService.savePoints(planetPoints);
     }
 
     @Override
-    public void upgradeLevel(Map<Integer, Integer> object, int setLevel, int planetId) {
+    public void upgradeLevel(Map<Integer, Integer> object, int setLevel, int planetId, int...amount) {
         int level = object.keySet().iterator().next();
 
         if(setLevel != level) {
-            int amount = object.get(level);
+
             PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
             Map<Integer, Integer> army = planetPoints.getArmy();
 
-            army.put(level, army.get(level) - amount);
-            army.put(setLevel, army.get(setLevel) + amount);
+            army.put(setLevel - 1, army.get(setLevel - 1) - amount[0]);
+            army.put(setLevel, army.get(setLevel) + amount[0]);
             planetPoints.setArmy(army);
 
            //planetPointsService.savePoints(planetPoints);
@@ -87,11 +87,10 @@ public class ArmyPurchase implements PurchaseInterface<Map<Integer, Integer>> {
     }
 
     @Override
-    public double getPrice(Map<Integer, Integer> object) {
+    public double getPrice(Map<Integer, Integer> object, int...amount) {
         int level = object.keySet().iterator().next();
-        int amount = object.get(level);
 
-        return level * amount * gameProperties.getLevelCostMultiplier() * gameProperties.getArmyCost();
+        return level * amount[0] * gameProperties.getLevelCostMultiplier() * gameProperties.getArmyCost();
     }
 
     @Override

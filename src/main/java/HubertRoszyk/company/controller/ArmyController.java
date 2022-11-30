@@ -1,6 +1,7 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.controller.purchaseController.ArmyPurchase;
+import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.PlanetPointsService;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+@RequestMapping("/army-controller")
 @RestController
 public class ArmyController {
     @Autowired
@@ -25,7 +27,7 @@ public class ArmyController {
     @Autowired
     ArmyPurchase armyPurchase;
 
-    @PostMapping("/army-controller/army")
+    @PostMapping("/army")
     public PurchaseStatus addArmy(@RequestBody JSONObject jsonInput) {
         int planetId = (int) jsonInput.get("planetId");
         int level = (int) jsonInput.get("level");
@@ -33,7 +35,20 @@ public class ArmyController {
 
         Map<Integer, Integer> armyDivision = Collections.singletonMap(level, amount);
 
-        return armyPurchase.executePurchase(planetId, armyDivision, level);
+        return armyPurchase.executePurchase(planetId, armyDivision, level, amount);
+    }
+    //TODO upgrading army
+    @PutMapping("/army")
+    public PurchaseStatus upgradeArmy(@RequestBody JSONObject jsonInput) {
+        int planetId = (int) jsonInput.get("planetId");
+        int level = (int) jsonInput.get("level");
+        int amount = (int) jsonInput.get("amount");
+
+        //PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
+        //Map<Integer, Integer> army = planetPoints.getArmy();
+        Map<Integer, Integer> armyDivision = Collections.singletonMap(level, amount);
+
+        return armyPurchase.executePurchase(planetId, armyDivision, level + 1, amount);
     }
     public static Map<Integer, Integer> combineArmy(Map<Integer, Integer> armyA, Map<Integer, Integer> armyB){
         Map<Integer, Integer> combinedArmy = new HashMap<>();
@@ -85,15 +100,5 @@ public class ArmyController {
         }
         return stack;
     }
-    //TODO upgrading army
-   /* @PutMapping("/army-controller/army")
-    public PurchaseStatus upgradeBuilding(@RequestBody JSONObject jsonInput) {
 
-
-        Building building = buildingService.getBuildingById(buildingId);
-        int level = building.getBuildingLevel();
-        // Set<Planet> planets = planetService.getPlanetsByUserId(userId);
-
-        return buildingPurchase.executePurchase(building.getPlanet().getId(), building, level + 1);
-    }*/
 }

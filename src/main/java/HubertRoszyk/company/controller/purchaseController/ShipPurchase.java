@@ -43,7 +43,7 @@ public class ShipPurchase implements PurchaseInterface<Ship>{
     }
 
     @Override
-    public void upgradeLevel(Ship ship, int setLevel, int planetId) {
+    public void upgradeLevel(Ship ship, int setLevel, int planetId, int...amount) {
         /*int gotShipLevel = ship.getCapacityLevel();
         int setShipLevel = gotShipLevel + 1;*/
 
@@ -58,7 +58,7 @@ public class ShipPurchase implements PurchaseInterface<Ship>{
     }
 
     @Override
-    public double getPrice(Ship ship) {
+    public double getPrice(Ship ship, int...amount) {
         int shipTypePrice = ship.getShipType().getShipPrice();
         double costMultiplier = gameProperties.getLevelCostMultiplier() * ship.getCapacityLevel();
         return shipTypePrice * costMultiplier;
