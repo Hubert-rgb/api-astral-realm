@@ -21,6 +21,10 @@ public class TimerActionService {
     public List<TimerAction> getAllTimerActionsByTimerEntityId(int timerEntityId){
         return repository.findTimerActionByTimerEntityId(timerEntityId);
     }
+
+    public List<TimerAction> getAllTimerActionsByGalaxyId(int galaxyId){
+        return repository.findByTimerEntity_Galaxy_Id(galaxyId);
+    }
     public void removeTimerActionById(int timerActionId) {
         repository.deleteById(timerActionId);
     }

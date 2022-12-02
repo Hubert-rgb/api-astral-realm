@@ -8,9 +8,18 @@ import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Controller
+@RestController
+@RequestMapping("/timer-action-controller")
 public class TimerActionController {
     @Autowired
     ShipService shipService;
@@ -50,5 +59,9 @@ public class TimerActionController {
             case PLANET_STATUS_AFTER_ATTACK -> context.setStrategy(new TimerActionPlanetStatusAfterAttack(planetService));
         }
         context.executeStrategy(timerAction);
+    }
+    @GetMapping("/timer-action/galaxy/{galaxyId}")
+    public List<TimerAction> getTimerActions(@PathVariable int galaxyId){
+        return timerActionService.getAllTimerActionsByGalaxyId(galaxyId);
     }
 }

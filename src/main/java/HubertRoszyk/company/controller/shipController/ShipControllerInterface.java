@@ -168,7 +168,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
         TimerActionService timerActionService = getTimerActionService();
         TimerEntityService timerEntityService = getTimerEntityService();
 
-        BuildingsController.changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
+        changeShipHarbour(travelRoute.getDeparturePlanet().getId(), travelRoute.getArrivalPlanet().getId());
 
         /** timer task*/
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(travelRoute.getArrivalPlanet().getGalaxy().getId());
@@ -200,4 +200,23 @@ public interface ShipControllerInterface<ShipT, LoadType> {
     TravelRouteService getTravelRouteService();
     StringToShipTypeConverter getStringToShipTypeConverter();
     PlanetPointsService getPlanetPointsService();
+
+    private void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
+        PlanetPointsService planetPointsService = getPlanetPointsService();
+
+        PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
+        PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);
+
+        int gotDepartureHarbourLoad = departurePlanetPoints.getTotalHarbourLoad();
+        int setDepartureHarbourLoad = gotDepartureHarbourLoad - 1;
+        departurePlanetPoints.setTotalHarbourLoad(setDepartureHarbourLoad);
+        planetPointsService.savePoints(departurePlanetPoints);
+
+        int gotDestinationHarbourLoad = destinationPlanetPoints.getTotalHarbourLoad();
+        int setDestinationHarbourLoad = gotDestinationHarbourLoad + 1;
+        destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
+
+        planetPointsService.savePoints(departurePlanetPoints);
+        planetPointsService.savePoints(destinationPlanetPoints);
+    }
 }

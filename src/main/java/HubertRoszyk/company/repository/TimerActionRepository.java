@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface TimerActionRepository extends JpaRepository<TimerAction, Integer> {
-    public List<TimerAction> findTimerActionByTimerEntityId(int timerEntityId);
+    List<TimerAction> findTimerActionByTimerEntityId(int timerEntityId);
+
+    List<TimerAction> findByTimerEntity_Galaxy_Id(int id);
 }

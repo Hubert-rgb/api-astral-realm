@@ -111,7 +111,7 @@ public class BattleController implements AttackController{
         for (AttackShip ship: ships){
             if (defencePlanetPoints.getTotalHarbourLoad() > 0) {
                 //if there is room for ship in harbour it changes harbour but doesn't leave planet
-                BuildingsController.changeShipHarbour(departurePlanet.getId(), defencePlanetPoints.getPlanet().getId());
+               changeShipHarbour(departurePlanet.getId(), defencePlanetPoints.getPlanet().getId());
             } else {
                 //if not, they are not changing harbours, but goes back on origin planet
                 TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(ship.getCurrentPlanet().getGalaxy().getId());

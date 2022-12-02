@@ -171,4 +171,23 @@ public interface AttackController {
     TravelRouteService getTravelRouteService();
     TimerEntityService getTimerEntityService();
     TimerActionService getTimerActionService();
+
+    default void changeShipHarbour(int departurePlanetId, int destinationPlanetId) {
+        PlanetPointsService planetPointsService = getPlanetPointsService();
+
+        PlanetPoints destinationPlanetPoints = planetPointsService.getPointsByPlanetId(destinationPlanetId);
+        PlanetPoints departurePlanetPoints = planetPointsService.getPointsByPlanetId(departurePlanetId);
+
+        int gotDepartureHarbourLoad = departurePlanetPoints.getTotalHarbourLoad();
+        int setDepartureHarbourLoad = gotDepartureHarbourLoad - 1;
+        departurePlanetPoints.setTotalHarbourLoad(setDepartureHarbourLoad);
+        planetPointsService.savePoints(departurePlanetPoints);
+
+        int gotDestinationHarbourLoad = destinationPlanetPoints.getTotalHarbourLoad();
+        int setDestinationHarbourLoad = gotDestinationHarbourLoad + 1;
+        destinationPlanetPoints.setTotalHarbourLoad(setDestinationHarbourLoad);
+
+        planetPointsService.savePoints(departurePlanetPoints);
+        planetPointsService.savePoints(destinationPlanetPoints);
+    }
 }

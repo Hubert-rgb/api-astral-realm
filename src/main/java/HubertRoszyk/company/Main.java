@@ -22,8 +22,7 @@ public class Main {
 
     /** attack update*/
     //TODO pillage
-    //TODO upgrading army divisions - selecting level, select number of divisions and upgrade them by one level
-    //TODO planet protection period after battle
+    //TODO planet protection period after battle (maby it can be checked in fronted?)
 
     /** code refreshment*/
     //TODO JACSON - every json to entity
