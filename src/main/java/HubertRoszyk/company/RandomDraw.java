@@ -24,16 +24,20 @@ public class RandomDraw {
         return size;
     }
     public static int industryPointsMultiplierDraw(int totalPoints) {
-        int industryPointsMultiplier =  random.nextInt(totalPoints - 2) + 2;
-        return industryPointsMultiplier;
+        return random.nextInt(totalPoints - 2) + 2;
     }
-    public static double battleMultiplierDraw() {
-        double battleMultiplierInt = random.nextInt(4) + 8; //range 8 - 11
-        double battleMultiplier = battleMultiplierInt / 10;
-        return battleMultiplier;
+    public static double attackBattleMultiplierDraw() {
+        double battleMultiplierInt = random.nextInt(5) + 8; //range 8 - 12
+        return battleMultiplierInt / 10;
     }
-    public static int armyDivisionNumberDraw(){
-        int armyDivisions = random.nextInt(3) + 1;
-        return armyDivisions;
+    public static double defenceBattleMultiplierDraw() {
+        double battleMultiplierInt = random.nextInt(3) + 1; //range 1 - 3
+        double battleMultiplierDecimal = battleMultiplierInt / 10;
+        return battleMultiplierDecimal + 1;
+    }
+    public static double armyDivisionNumberDraw(){
+        double armyDivisions = random.nextInt(3) + 1; //range 1 - 3
+        double armyDivisionsPercentage = armyDivisions / 10;
+        return (1 + armyDivisionsPercentage);
     }
 }

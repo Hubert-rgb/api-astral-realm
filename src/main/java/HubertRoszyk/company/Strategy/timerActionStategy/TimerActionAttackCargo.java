@@ -10,10 +10,7 @@ import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.TimerActionType;
-import HubertRoszyk.company.service.BattleService;
-import HubertRoszyk.company.service.ShipService;
-import HubertRoszyk.company.service.TimerActionService;
-import HubertRoszyk.company.service.TimerEntityService;
+import HubertRoszyk.company.service.*;
 
 import java.util.List;
 import java.util.Set;
@@ -26,11 +23,14 @@ public class TimerActionAttackCargo implements TimerActionStrategy{
 
     private final BattleService battleService;
 
-    public TimerActionAttackCargo(ShipService shipService, TimerEntityService timerEntityService, TimerActionService timerActionService, BattleService battleService) {
+    private final PlanetService planetService;
+
+    public TimerActionAttackCargo(ShipService shipService, BattleService battleService, TimerEntityService timerEntityService, TimerActionService timerActionService, PlanetService planetService) {
         this.shipService = shipService;
         this.timerEntityService = timerEntityService;
         this.timerActionService = timerActionService;
         this.battleService = battleService;
+        this.planetService = planetService;
     }
     @Override
     public void executeAction(TimerAction timerAction) {
@@ -47,6 +47,7 @@ public class TimerActionAttackCargo implements TimerActionStrategy{
 
         Planet planet = attack.getDefencePlanet();
         planet.setPlanetStatus(PlanetStatus.UNDER_ATTACK);
+        planetService.savePlanet(planet);
 
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(planet.getGalaxy().getId());
         TimerAction battleTimerAction = new TimerAction(TimerActionType.BATTLE, timerEntity.getCyclesNum() + 1, attackId, timerEntity);

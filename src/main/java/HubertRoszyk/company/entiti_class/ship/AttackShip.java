@@ -34,8 +34,17 @@ public class AttackShip extends Ship {
     @ElementCollection
     @MapKeyColumn(name = "level_number")
     private Map<Integer, Integer> shipLoad = new HashMap<>();
+    int industryPointsShipLoad = 0;
     public AttackShip(ShipType shipType, int capacityLevel, User user){
         super(shipType, capacityLevel, user);
         shipLoad = ArmyController.getEmptyArmy();
+    }
+    public int getShipLoadSize(){
+        int shipLoadSize = industryPointsShipLoad;
+        for (int i = 1; i <= shipLoad.size(); i++){
+            int divisionNumber = shipLoad.get(i);
+            shipLoadSize += divisionNumber;
+        }
+        return shipLoadSize;
     }
 }

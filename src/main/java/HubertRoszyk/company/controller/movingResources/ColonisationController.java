@@ -127,8 +127,8 @@ public class ColonisationController implements AttackController{
         int defencePoints = defencePlanetPoints.getDefensePoints();
         int defencePlanetArmyValue = ArmyController.getArmyValue(defencePlanetPoints.getArmy());
 
-        double attackMultiplier = RandomDraw.battleMultiplierDraw();
-        double defenceMultiplier = RandomDraw.battleMultiplierDraw();
+        double attackMultiplier = RandomDraw.attackBattleMultiplierDraw();
+        double defenceMultiplier = RandomDraw.defenceBattleMultiplierDraw();
 
         double battleAttackPoints = attackPoints * gameProperties.getAttackColonisationMultiplier() * attackMultiplier;
         double battleDefencePoints = defencePoints + defencePlanetArmyValue * gameProperties.getDefenceColonisationMultiplier() * defenceMultiplier;

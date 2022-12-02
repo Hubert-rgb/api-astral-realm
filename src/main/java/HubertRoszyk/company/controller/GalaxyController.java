@@ -117,7 +117,7 @@ public class GalaxyController {
             PlanetPoints planetPoints = new PlanetPoints(planet);
 
             Map<Integer, Integer> army = ArmyController.getEmptyArmy();
-            int armySizeMultiplier = RandomDraw.armyDivisionNumberDraw();
+            int armySizeMultiplier =(int) Math.ceil(RandomDraw.armyDivisionNumberDraw());
             army.put(1, armySizeMultiplier * planetType.getDefaultArmySize());
 
             planetPoints.setArmy(army);

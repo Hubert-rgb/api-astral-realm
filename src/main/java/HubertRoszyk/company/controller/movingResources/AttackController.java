@@ -14,13 +14,13 @@ import java.util.*;
 @Controller
 public interface AttackController {
     /** method executed while army movement is attack */
-    default String attack(int attackId) {
+    default String attack(Attack attack) {
         BattleService battleService = getBattleService();
         PlanetPointsService planetPointsService = getPlanetPointsService();
         PlanetService planetService = getPlanetService();
         ShipService shipService = getShipService();
 
-        Attack attack = battleService.getBattleById(attackId);
+        //Attack attack = battleService.getBattleById(attackId);
 
         Planet defencePlanet = attack.getDefencePlanet();
         PlanetPoints defencePlanetPoints = planetPointsService.getPointsByPlanetId(defencePlanet.getId());

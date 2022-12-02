@@ -13,16 +13,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 public class Main {
     /** get requests */
-    //TODO time to build
-    //Jakieś pobieranie timer actions i przedstawianie ich w frontendzie???
 
     /** general changes */
     //TODO radial positioning
     //TODO galaxy settings (time in cycle)
 
     /** attack update*/
-    //TODO pillage
-    //TODO planet protection period after battle (maby it can be checked in fronted?)
+    //DONE TODO pillage
+    //On FRONTEND TODO planet protection period after battle (maby it can be checked in fronted?)
+    //DONE TODO lower planet income after attack
+    //TODO random multipliers on attack
 
     /** code refreshment*/
     //TODO JACSON - every json to entity

@@ -133,8 +133,8 @@ public class BattleController implements AttackController{
         int defencePoints = defencePlanetPoints.getDefensePoints();
         int defencePlanetArmyValue = ArmyController.getArmyValue(defencePlanetPoints.getArmy());
 
-        double attackMultiplier = RandomDraw.battleMultiplierDraw();
-        double defenceMultiplier = RandomDraw.battleMultiplierDraw();
+        double attackMultiplier = RandomDraw.attackBattleMultiplierDraw();
+        double defenceMultiplier = RandomDraw.defenceBattleMultiplierDraw();
 
         double battleAttackPoints = attackPoints * gameProperties.getAttackBattleMultiplier() * attackMultiplier;
         double battleDefencePoints = defencePoints + defencePlanetArmyValue * gameProperties.getDefenceBattleMultiplier() * defenceMultiplier;

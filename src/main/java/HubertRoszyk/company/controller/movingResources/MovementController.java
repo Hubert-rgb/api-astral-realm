@@ -95,9 +95,9 @@ public class MovementController{
         AttackType attackType = attack.getAttackType();
 
         switch (attackType){
-            case BATTLE -> battleController.attack(attack.getId());
-            case PILLAGE -> pillageController.pillage();
-            case COLONISATION -> colonisationController.attack(attack.getId());
+            case BATTLE -> battleController.attack(attack);
+            case PILLAGE -> pillageController.attack(attack);
+            case COLONISATION -> colonisationController.attack(attack);
         }
     }
 

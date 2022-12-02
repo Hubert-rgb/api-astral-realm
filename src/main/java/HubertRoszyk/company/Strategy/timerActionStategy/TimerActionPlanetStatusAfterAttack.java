@@ -16,6 +16,16 @@ public class TimerActionPlanetStatusAfterAttack implements TimerActionStrategy{
         int planetId = timerAction.getExecutionId();
         Planet planet = planetService.getPlanetById(planetId);
         planet.setPlanetStatus(PlanetStatus.CLAIMED);
+
+        double gotIndustryPointsProduced = planet.getIndustryPointsProduce();
+        double gotSciencePointsProduced = planet.getSciencePointsProduce();
+
+        double setIndustryPointsProduced = gotIndustryPointsProduced * 2;
+        double setSciencePointsProduced = gotSciencePointsProduced * 2;
+
+        planet.setIndustryPointsProduce(setIndustryPointsProduced);
+        planet.setSciencePointsProduce(setSciencePointsProduced);
+
         planetService.savePlanet(planet);
     }
 }

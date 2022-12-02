@@ -46,14 +46,15 @@ public class TimerActionController {
     BattleService battleService;
 
 
+
     public void execute(TimerAction timerAction) {
         TimerActionType timerActionType = timerAction.getTimerActionType();
         TimerActionContext context = new TimerActionContext();
 
         switch (timerActionType) {
-            case BATTLE -> context.setStrategy(new TimerActionBattle(movementController, battleService));
+            case BATTLE -> context.setStrategy(new TimerActionBattle(movementController, battleService, timerEntityService, timerActionService, planetService));
             case INDUSTRY_CARGO -> context.setStrategy(new TimerActionIndustryCargo(shipService));
-            case ATTACK_CARGO -> context.setStrategy(new TimerActionAttackCargo(shipService, timerEntityService, timerActionService, battleService));
+            case ATTACK_CARGO -> context.setStrategy(new TimerActionAttackCargo(shipService, battleService,timerEntityService, timerActionService, planetService));
             case BUILDING -> context.setStrategy(new TimerActionBuild(buildingPurchase, buildingService));
             case SHIP -> context.setStrategy(new TimerActionShip(shipService));
             case PLANET_STATUS_AFTER_ATTACK -> context.setStrategy(new TimerActionPlanetStatusAfterAttack(planetService));
