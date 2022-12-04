@@ -21,12 +21,14 @@ import java.util.Optional;
 @Repository
 public interface ShipRepository extends JpaRepository<Ship, Integer> {
 
-    //@EntityGraph(value = "ship")
-   /* @Query(value = "SELECT * FROM ship INNER JOIN travel_route on ship.id = travel_route.ship_id WHERE ship.ship_status = 1 AND travel_route.arrival_planet_planet_id = ?1", nativeQuery = true)
+   /* //@EntityGraph(value = "ship")
+   *//* @Query(value = "SELECT * FROM ship INNER JOIN travel_route on ship.id = travel_route.ship_id WHERE ship.ship_status = 1 AND travel_route.arrival_planet_planet_id = ?1", nativeQuery = true)
     List<Ship> findByPlanetId(int id);*/
 
     @EntityGraph(value = "ship")
     List<Ship> findByShipStatusAndTravelRoute_ArrivalPlanet_Id(ShipStatus shipStatus, int id);
+
+    List<Ship> findByTravelRoute_ArrivalPlanet_IdAndShipStatusAndShipType(int id, ShipStatus shipStatus, ShipType shipType);
 
 
     @EntityGraph(value = "ship")

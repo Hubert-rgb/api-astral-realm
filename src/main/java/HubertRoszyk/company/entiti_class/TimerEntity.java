@@ -15,6 +15,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
+@NamedEntityGraph(
+        name = "timerEntity",
+        attributeNodes = {
+                @NamedAttributeNode("galaxy")
+        }
+)
 public class TimerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

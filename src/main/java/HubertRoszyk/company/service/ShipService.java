@@ -2,6 +2,7 @@ package HubertRoszyk.company.service;
 
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.ShipStatus;
+import HubertRoszyk.company.enumTypes.ShipType;
 import HubertRoszyk.company.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,10 @@ public class ShipService {
     public List<Ship> getShipsByPlanetId(int planetId){
         return repository.findByShipStatusAndTravelRoute_ArrivalPlanet_Id(ShipStatus.DOCKED, planetId);
     }
+    public List<Ship> getShipsByPlanetIdAndType(int planetId, ShipType shipType){
+        return repository.findByTravelRoute_ArrivalPlanet_IdAndShipStatusAndShipType(planetId,ShipStatus.DOCKED, shipType);
+    }
+
 
     public void removeShipsList(List<Ship> shipList){
         repository.deleteAllInBatch(shipList);
@@ -50,7 +55,7 @@ public class ShipService {
     /*public Ship getShipByIdWithRoutes(int id){
         return repository.findShipById(id);
     }*/
-   /* public List<Ship> getShipsByPlanetId(int planetId) {
+    /*public List<Ship> getShipsByPlanetId(int planetId) {
         return repository.findByTravelRoute_DeparturePlanet_Id(planetId);
     }*/
 }

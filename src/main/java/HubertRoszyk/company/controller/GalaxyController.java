@@ -63,9 +63,10 @@ public class GalaxyController {
     public List<Planet> galaxyInit(@RequestBody JSONObject jsonInput){ //do przeanalizowania bo nie wygląda za ładnie
         int maximalUserNumber = (int) jsonInput.get("maximalUserNumber");
         String galaxyName = (String) jsonInput.get("galaxyName");
-        //TODO other galaxy settings
+        int periodSeconds = (int) jsonInput.get("periodSeconds");
+        //TODO period as Enum
 
-        Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName);
+        Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName, periodSeconds);
         galaxyService.saveGalaxy(galaxy);
 
         TimerEntity timerEntity = new TimerEntity(0, LocalDateTime.now(), galaxy);

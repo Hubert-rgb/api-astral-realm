@@ -1,8 +1,11 @@
+/*
 package HubertRoszyk.company.repository;
 
 import HubertRoszyk.company.entiti_class.Galaxy;
 import HubertRoszyk.company.entiti_class.GalaxyPoints;
 import HubertRoszyk.company.entiti_class.User;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -15,6 +18,12 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 class FactoryGalaxyPointsRepositoryTest {
     @Autowired
     GalaxyPointsRepository galaxyPointsRepository;
+
+    private static PodamFactory podamFactory;
+    @BeforeAll
+    public static void setUp(){
+        podamFactory = new PodamFactoryImpl();
+    }
 
     @Test
     void itShouldFindPointsByUserId() {
@@ -34,8 +43,9 @@ class FactoryGalaxyPointsRepositoryTest {
     @Test
     void itShouldFindPointsByUserIdAndGalaxyId() {
         //given
-        User user = new User();
-        Galaxy galaxy = new Galaxy();
+
+        User user = podamFactory.manufacturePojo(User.class);
+        Galaxy galaxy = podamFactory.manufacturePojo(Galaxy.class);
 
         GalaxyPoints galaxyPoints = new GalaxyPoints(user, galaxy);
 
@@ -47,4 +57,4 @@ class FactoryGalaxyPointsRepositoryTest {
         //then
         assertThat(gotGalaxyPoints).isEqualTo(galaxyPoints);
     }
-}
+}*/

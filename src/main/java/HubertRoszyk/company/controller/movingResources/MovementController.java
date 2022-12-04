@@ -126,12 +126,14 @@ public class MovementController{
         return battleTimeLeft;
     }
     //TODO check cast
-    private <S> Set<S> getShipsFromDatabase(List<Integer> shipsIdList){
-        Set<S> shipsSet = new HashSet<>();
-        for (int i : shipsIdList){
+    private <S extends Ship> Set<S> getShipsFromDatabase(List<Integer> shipsIdList){
+        List<S> shipsList;
+        shipsList = (List<S>) shipService.getShipsListByIdList(shipsIdList);
+        Set<S> shipsSet = new HashSet<>(shipsList);
+        /*for (int i : shipsIdList){
             S ship = (S) shipService.getShipById(i);
             shipsSet.add(ship);
-        }
+        }*/
         return shipsSet;
     }
 

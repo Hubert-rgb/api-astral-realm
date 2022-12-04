@@ -42,15 +42,16 @@ public class TimerEntityController {
         LocalDateTime timerStartTime = timerEntity.getTimerStartTime();
 
         long cyclesNum = timerEntity.getCyclesNum() - 1;
-        LocalDateTime cycleStartTime = timerStartTime.plusSeconds((gameProperties.getPeriod() * cyclesNum));
+        LocalDateTime cycleStartTime = timerStartTime.plusSeconds((timerEntity.getGalaxy().getPeriod() * cyclesNum));
 
         Duration cycleDuration = Duration.between(cycleStartTime, currentTime);
-        System.out.println(gameProperties.getPeriod());
-        long timeLeft = gameProperties.getPeriod() - (cycleDuration.getSeconds());
+        System.out.println(timerEntity.getGalaxy().getPeriod());
+        long timeLeft = timerEntity.getGalaxy().getPeriod() - (cycleDuration.getSeconds());
 
         return timeLeft;
     }
     public void timerExecution(int galaxyId) {
+        TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(galaxyId);
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -81,7 +82,7 @@ public class TimerEntityController {
                 /** method checking changes between cycles (battles, ships making etc.)*/
             }
         };
-        timer.schedule(timerTask, 0, gameProperties.getPeriod() * 1000 / 2);
+        timer.schedule(timerTask, 0, timerEntity.getGalaxy().getPeriod() * 1000L / 2);
     }
 }
 

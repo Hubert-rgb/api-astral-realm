@@ -2,7 +2,6 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.service.UserService;
-import HubertRoszyk.company.wrongDataException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +24,6 @@ public class UserController {
             if(user.getDisplayName().equals(displayName) && user.getFirebaseUId().equals(firebaseUId)) {
                 currentUser = user;
                 return currentUser;
-            } else if (user.getDisplayName().equals(displayName)) {
-                throw new wrongDataException();
             }
         }
 

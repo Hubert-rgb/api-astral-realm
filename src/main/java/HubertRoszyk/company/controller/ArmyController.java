@@ -37,15 +37,12 @@ public class ArmyController {
 
         return armyPurchase.executePurchase(planetId, armyDivision, level, amount);
     }
-    //TODO upgrading army
     @PutMapping("/army")
     public PurchaseStatus upgradeArmy(@RequestBody JSONObject jsonInput) {
         int planetId = (int) jsonInput.get("planetId");
         int level = (int) jsonInput.get("level");
         int amount = (int) jsonInput.get("amount");
 
-        //PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
-        //Map<Integer, Integer> army = planetPoints.getArmy();
         Map<Integer, Integer> armyDivision = Collections.singletonMap(level, amount);
 
         return armyPurchase.executePurchase(planetId, armyDivision, level + 1, amount);

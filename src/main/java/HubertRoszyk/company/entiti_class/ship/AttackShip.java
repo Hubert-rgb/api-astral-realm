@@ -5,6 +5,9 @@ import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.enumTypes.ShipType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +31,8 @@ public class AttackShip extends Ship {
     //@Setter(AccessLevel.NONE)
     private int id;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToMany(mappedBy = "attackShips")
     private Set<Attack> attackSet = new HashSet<>();
 

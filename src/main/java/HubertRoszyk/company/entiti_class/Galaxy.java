@@ -10,7 +10,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table
 public class Galaxy {
@@ -24,6 +23,8 @@ public class Galaxy {
     private int maximalUserNumber;
     @NonNull
     private String galaxyName;
+
+    private int period;
 
     /*@JsonIgnore
     //@ManyToMany(mappedBy = "galaxies")
@@ -46,6 +47,12 @@ public class Galaxy {
     @JsonIgnore
     @OneToOne(mappedBy = "galaxy")
     private TimerEntity timerEntity;
+
+    public Galaxy(int maximalUserNumber, String galaxyName, int period) {
+        this.maximalUserNumber = maximalUserNumber;
+        this.galaxyName = galaxyName;
+        this.period = period;
+    }
 
     public void addUser() {
         //users.add(user);

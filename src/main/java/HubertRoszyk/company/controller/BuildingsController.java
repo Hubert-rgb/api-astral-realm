@@ -56,7 +56,7 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
         return buildingService.getBuildingsByPlanetId(planetId);
     }
 
-    @GetMapping("building-controller/building-types")
+    @GetMapping("/building-controller/building-types")
     public List<Enum> getAllBuildingTypes(){
         List<Enum> buildingTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(BuildingType.class));
         return buildingTypesEnumValues;

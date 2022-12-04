@@ -162,7 +162,7 @@ public class PillageController implements AttackController{
     }
     private <S extends Ship> void sendShipsBack(Planet defencePlanet, Planet departurePlanet, List<S> ships) {
         for (Ship ship: ships){
-            TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(ship.getCurrentPlanet().getGalaxy().getId());
+            TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(ship.findCurrentPlanet().getGalaxy().getId());
 
             TravelRoute travelRoute = new TravelRoute(defencePlanet, departurePlanet, ship, timerEntityService);
             TimerAction timerAction = new TimerAction(TimerActionType.INDUSTRY_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);

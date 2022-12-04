@@ -23,8 +23,6 @@ public class GameProperties {
     private int randomVariablesSum;
     @Value("${planetsSizes}")
     private int planetsSizes;
-    @Value("${period}")
-    private int period;
     @Value("${minDistanceBetweenPlanets}")
     private int minDistanceBetweenPlanets;
     @Value("${speed}")

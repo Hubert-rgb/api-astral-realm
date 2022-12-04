@@ -3,7 +3,6 @@ package HubertRoszyk.company.controller.movingResources;
 import HubertRoszyk.company.RandomDraw;
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.controller.ArmyController;
-import HubertRoszyk.company.controller.BuildingsController;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
 import HubertRoszyk.company.entiti_class.ship.IndustryShip;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import java.util.*;
 
 
-//TO ASK TODO to różni się tylko multiplierami przy porównywaniu?
 @Controller
 public class ColonisationController implements AttackController{
     @Override
@@ -109,7 +107,7 @@ public class ColonisationController implements AttackController{
                 changeShipHarbour(departurePlanet.getId(), defencePlanetPoints.getPlanet().getId());
             } else {
                 //if not, they are not changing harbours, but goes back on origin planet
-                TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(ship.getCurrentPlanet().getGalaxy().getId());
+                TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(ship.findCurrentPlanet().getGalaxy().getId());
 
                 TravelRoute travelRoute = new TravelRoute(defencePlanetPoints.getPlanet(), departurePlanet, ship, timerEntityService);
                 TimerAction timerAction = new TimerAction(TimerActionType.INDUSTRY_CARGO, travelRoute.getRouteEndingCycle(), ship.getId(), timerEntity);

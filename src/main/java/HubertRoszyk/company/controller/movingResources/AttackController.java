@@ -33,7 +33,6 @@ public interface AttackController {
         double defenceArmySize = ArmyController.getArmySize(defencePlanetPoints.getArmy());
 
         //army ratio is defined by number of army division (not their power)
-        //TO ASK TODO army ratio at defence???
         double armyRatio = (attackArmySize / (attackArmySize + defenceArmySize)) * 100;
 
         Set<AttackShip> attackShips = attack.getAttackShips();

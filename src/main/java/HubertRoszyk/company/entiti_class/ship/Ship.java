@@ -1,12 +1,10 @@
 package HubertRoszyk.company.entiti_class.ship;
 
 import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.entiti_class.TravelRoute;
 import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
-import HubertRoszyk.company.service.PlanetPointsService;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,6 +36,7 @@ abstract public class Ship{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+
     @Enumerated
     private ShipType shipType;
 
@@ -47,9 +46,11 @@ abstract public class Ship{
 
     private int shipCapacity;
 
+
     @Enumerated
     private ShipStatus shipStatus;
-
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @JsonIgnore
     @OneToMany(mappedBy = "ship")
     private List<TravelRoute> travelRoute;
@@ -75,7 +76,7 @@ abstract public class Ship{
         shipCapacity = capacityLevel * shipType.getCapacity();
     }
 
-    public Planet getCurrentPlanet(){
+    public Planet findCurrentPlanet(){
         return travelRoute.get(travelRoute.size() - 1).getArrivalPlanet();
     }
 

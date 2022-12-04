@@ -5,12 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 //management
 @SpringBootApplication
 @EnableJpaRepositories
 @EntityScan()
-
 public class Main {
     /** get requests */
 
@@ -19,10 +21,7 @@ public class Main {
     //TODO galaxy settings (time in cycle)
 
     /** attack update*/
-    //DONE TODO pillage
     //On FRONTEND TODO planet protection period after battle (maby it can be checked in fronted?)
-    //DONE TODO lower planet income after attack
-    //TODO random multipliers on attack
 
     /** code refreshment*/
     //TODO JACSON - every json to entity
@@ -30,7 +29,6 @@ public class Main {
     //TODO tests
 
     /** code debuging*/
-    //DONE TODO before upgrading army is added to its level and then subtracted so its stays unchanged or even higher
     //TO WATCH TODO switched place where level is upgraded while purchase
     public static void main(String[] args) {
         GameProperties configOperator = new GameProperties();

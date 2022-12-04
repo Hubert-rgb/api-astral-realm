@@ -1,8 +1,8 @@
 package HubertRoszyk.company.controller.shipController;
 
-import HubertRoszyk.company.controller.BuildingsController;
 import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
+import HubertRoszyk.company.converters.serialize.ShipTypeSerialize;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PurchaseStatus;
@@ -12,6 +12,7 @@ import HubertRoszyk.company.enumTypes.ShipType;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
         ShipPurchase shipPurchase = getShipPurchase();
 
         Ship ship = shipService.getShipById(shipId);
-        Planet planet = ship.getCurrentPlanet();
+        Planet planet = ship.findCurrentPlanet();
 
         int level = ship.getCapacityLevel();
 
@@ -63,7 +64,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
         Ship ship = (Ship) gotShip;
 
-        int planetId =  ship.getCurrentPlanet().getId();
+        int planetId =  ship.findCurrentPlanet().getId();
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
         int capacity = ship.getShipCapacity();
@@ -96,7 +97,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
         int volume = getVolume(load);
 
-        int planetId = ship.getCurrentPlanet().getId();
+        int planetId = ship.findCurrentPlanet().getId();
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
         int capacity = getPlanetCapacity(planetPoints);
@@ -125,14 +126,13 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
         Ship ship = shipService.getShipById(shipId);
         Planet destinationPlanet = planetService.getPlanetById(destinationPlanetId);
-        Planet departurePlanet = ship.getCurrentPlanet();
+        Planet departurePlanet = ship.findCurrentPlanet();
 
         if(ship.getShipStatus().equals(ShipStatus.DOCKED)) {
             ship.setShipStatus(ShipStatus.TRAVELING);
 
             TravelRoute travelRoute = new TravelRoute(departurePlanet, destinationPlanet, ship, timerEntityService);
 
-            //TODO if it's army cargo it should be after flight time
             executeTravel(travelRoute, ship);
 
             shipService.saveShip(ship);
@@ -146,13 +146,16 @@ public interface ShipControllerInterface<ShipT, LoadType> {
     }
     @GetMapping("/ship-types")
     default List<Enum> getShipTypes(){
+
         List<Enum> shipTypesEnumValues = new ArrayList<Enum>(EnumSet.allOf(ShipType.class));
         return shipTypesEnumValues;
     }
-   /* @GetMapping("ship-controller/planet/{planetId}")
-    public List<Ship> getShipsByPlanetId(@PathVariable int planetId){
-
-    }*/
+    @GetMapping("{shipType}/planet/{planetId}")
+    default List<Ship> getShipsByPlanetId(@PathVariable int planetId, @PathVariable String shipType){
+        ShipType shipTypeEnum = ShipType.valueOf(shipType.toUpperCase());
+        ShipService shipService = getShipService();
+        return shipService.getShipsByPlanetIdAndType(planetId, shipTypeEnum);
+    }
     @GetMapping("/ship")
     default List<Ship> getShips(){
         ShipService shipService = getShipService();
