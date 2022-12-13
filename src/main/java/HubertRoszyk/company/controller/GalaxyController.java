@@ -2,6 +2,7 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.RandomDraw;
+import HubertRoszyk.company.enumTypes.PeriodType;
 import HubertRoszyk.company.enumTypes.PlanetType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
@@ -63,10 +64,12 @@ public class GalaxyController {
     public List<Planet> galaxyInit(@RequestBody JSONObject jsonInput){ //do przeanalizowania bo nie wygląda za ładnie
         int maximalUserNumber = (int) jsonInput.get("maximalUserNumber");
         String galaxyName = (String) jsonInput.get("galaxyName");
-        int periodSeconds = (int) jsonInput.get("periodSeconds");
+        String periodTypeString = (String) jsonInput.get("periodType");
+
+        PeriodType periodType = PeriodType.valueOf(periodTypeString);
         //TODO period as Enum
 
-        Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName, periodSeconds);
+        Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName, periodType);
         galaxyService.saveGalaxy(galaxy);
 
         TimerEntity timerEntity = new TimerEntity(0, LocalDateTime.now(), galaxy);

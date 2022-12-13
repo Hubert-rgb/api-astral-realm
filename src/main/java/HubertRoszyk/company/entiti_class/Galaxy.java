@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enumTypes.PeriodType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -24,7 +25,8 @@ public class Galaxy {
     @NonNull
     private String galaxyName;
 
-    private int period;
+    @Enumerated
+    private PeriodType periodType;
 
     /*@JsonIgnore
     //@ManyToMany(mappedBy = "galaxies")
@@ -48,10 +50,10 @@ public class Galaxy {
     @OneToOne(mappedBy = "galaxy")
     private TimerEntity timerEntity;
 
-    public Galaxy(int maximalUserNumber, String galaxyName, int period) {
+    public Galaxy(int maximalUserNumber, String galaxyName, PeriodType periodType) {
         this.maximalUserNumber = maximalUserNumber;
         this.galaxyName = galaxyName;
-        this.period = period;
+        this.periodType = periodType;
     }
 
     public void addUser() {
