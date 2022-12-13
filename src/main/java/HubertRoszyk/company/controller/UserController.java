@@ -2,7 +2,6 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.User;
 import HubertRoszyk.company.service.UserService;
-import HubertRoszyk.company.wrongDataException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,24 +13,21 @@ public class UserController {
 
     @PostMapping("/user-controller/users")
     public User loginUser(@RequestBody JSONObject jsonInput) {
-        String name = (String) jsonInput.get("name");
-        String password = (String) jsonInput.get("password");
-
+        String displayName = (String) jsonInput.get("displayName");
+        String firebaseUId = (String) jsonInput.get("firebaseUId");
 
         User currentUser;
 
         List<User> users = userService.getUsersList();
 
         for (User user : users) {
-            if(user.getName().equals(name) && user.getPassword().equals(password)) {
+            if(user.getDisplayName().equals(displayName) && user.getFirebaseUId().equals(firebaseUId)) {
                 currentUser = user;
                 return currentUser;
-            } else if (user.getName().equals(name)) {
-                throw new wrongDataException();
             }
         }
 
-        currentUser = createUser(name, password);
+        currentUser = createUser(displayName, firebaseUId);
         return currentUser;
     }
     @Autowired

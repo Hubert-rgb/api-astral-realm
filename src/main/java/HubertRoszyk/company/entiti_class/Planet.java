@@ -1,9 +1,16 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enumStatus.PlanetStatus;
+import HubertRoszyk.company.enumStatus.ShipStatus;
+import HubertRoszyk.company.enumTypes.PlanetType;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,33 +26,38 @@ public class Planet {
     @Column(name = "planetId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Enumerated
     private PlanetType planetType;
+    @Enumerated
+    private PlanetStatus planetStatus;
+
     private int industryPointsMultiplier;
     private int sciencePointsMultiplier;
-    private int defencePointsMultiplier = 1;
-    private int attackPointsMultiplier = 1;
 
     private int size;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
-    private Galaxy galaxy; //przydałoby się coś rzeby nie dało się tego zmienić, może buildier pattern
-
-    private int industryPointsProduce = 1;
-    private int sciencePointsProduce = 0;
-    private int defensePointsProduce = 0;
-    private int attackPointsProduce = 0;
+    private double industryPointsProduce;
+    private double sciencePointsProduce;
 
     private int planetLocationX;
     private int planetLocationY;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
+    @Setter(AccessLevel.NONE)
+    private Galaxy galaxy;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
     @Transient
+    @JsonIgnore
     private PlanetLocation planetLocation;
 
     @JsonIgnore
@@ -54,25 +66,39 @@ public class Planet {
 
     @JsonIgnore
     @OneToOne(mappedBy = "planet")
-    private ArmyPoints armyPoints;
+    private PlanetPoints planetPoints;
 
-    public Planet(PlanetType planetType, int industryPointsMultiplier, int sciencePointsMultiplier, int size, int xLocation, int yLocation) {
+    /*@JsonIgnore
+    @OneToMany(mappedBy = "planet")
+    private Set<Ship> ships;*/
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "arrivalPlanet")
+    private Set<TravelRoute> arrivalTravelRoutes;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "departurePlanet")
+    private Set<TravelRoute> departureTravelRoutes;
+
+    public Planet(PlanetType planetType, int industryPointsMultiplier, int sciencePointsMultiplier, int size, int xLocation, int yLocation, Galaxy galaxy) {
         this.industryPointsMultiplier = industryPointsMultiplier;
         this.sciencePointsMultiplier = sciencePointsMultiplier;
         this.planetLocationX = xLocation;
         this.planetLocationY = yLocation;
         this.size = size;
         this.planetType = planetType;
+        this.galaxy = galaxy;
+
+        this.industryPointsProduce = planetType.getDefaultIndustryProduce();
+        this.sciencePointsProduce = planetType.getDefaultScienceProduce();
 
         PlanetLocation location = new PlanetLocation(xLocation, yLocation);
         planetLocation = location;
+
+        planetStatus = PlanetStatus.UNCLAIMED;
     }
 
     public void asignUser(User user) {
         this.user = user;
-    }
-
-    public void asignGalaxy(Galaxy galaxy) {
-        this.galaxy = galaxy;
     }
 }

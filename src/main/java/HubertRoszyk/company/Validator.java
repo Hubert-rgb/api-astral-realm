@@ -1,3 +1,4 @@
+/*
 package HubertRoszyk.company;
 
 import HubertRoszyk.company.entiti_class.Planet;
@@ -49,7 +50,8 @@ public class Validator {
             return currentPlanetLocation;
         }
     }
-    /*public Boolean enoughPointsCheck(Building building, Points points){
+    */
+/*public Boolean enoughPointsCheck(Building building, Points points){
         double buildingPrice = building.getBuildingPrice();
         double gotIndustryPoints = points.getIndustryPoints();
 
@@ -65,5 +67,7 @@ public class Validator {
         } else {
             return false;
         }
-    }*/
+    }*//*
+
 }
+*/

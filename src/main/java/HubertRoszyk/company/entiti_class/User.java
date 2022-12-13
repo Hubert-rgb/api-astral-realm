@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.entiti_class.ship.Ship;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -22,10 +23,10 @@ public class User {
     private int id;
     @NonNull
     @Column(name = "userName")
-    private String name;
+    private String displayName;
     @NonNull
     @Column(name = "userPassword")
-    private String password;
+    private String firebaseUId;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
@@ -33,9 +34,13 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private Set<FactoryPoints> points = new HashSet<>();
+    private Set<GalaxyPoints> points = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private Set<Battle> battles = new HashSet<>();
+    private Set<Attack> attacks = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Ship> ships = new HashSet<>();
 }

@@ -1,31 +1,34 @@
+/*
 package HubertRoszyk.company.Strategy.update_points_produce_strategy;
 
 import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.controller.ArmyPointsController;
+import HubertRoszyk.company.controller.PlanetPointsController;
+import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.PlanetService;
 
 public class UpdateDefensePointsProduce implements UpdatePointsProduceStrategy {
     PlanetService planetService;
-    ArmyPointsController armyPointsController;
+    PlanetPointsController planetPointsController;
 
-    public UpdateDefensePointsProduce(PlanetService planetService, ArmyPointsController armyPointsController) {
+    public UpdateDefensePointsProduce(PlanetService planetService, PlanetPointsController planetPointsController) {
         this.planetService = planetService;
-        this.armyPointsController = armyPointsController;
+        this.planetPointsController = planetPointsController;
     }
 
     @Override
-    public void update(Building building) {
-        Planet planet = planetService.getPlanetById(building.getPlanet().getId());
+    public void update(BuildingType buildingType, int planetId) {
+        Planet planet = planetService.getPlanetById(planetId);
 
         int gotDefensePoints = planet.getDefensePointsProduce();
-        int producesPoints = building.getBuildingType().getPointsProduces();
+        int producesPoints = buildingType.getVolume();
 
         int setDefensePoints = gotDefensePoints + producesPoints;
         planet.setDefensePointsProduce(setDefensePoints);
 
         planetService.savePlanet(planet);
 
-        armyPointsController.getTotalDefenceIncome(building.getPlanet().getId());
+        planetPointsController.getTotalDefenceIncome(planetId);
     }
 }
+*/

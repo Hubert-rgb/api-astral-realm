@@ -1,8 +1,10 @@
 package HubertRoszyk.company.entiti_class;
 
+import lombok.Getter;
 
+@Getter
 final public class PlanetLocation {
-    public int xLocation,
+    private final int xLocation,
     yLocation;
     public PlanetLocation(int xLocation, int yLocation) {
         this.xLocation = xLocation;

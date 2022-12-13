@@ -1,6 +1,10 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enumTypes.BuildingType;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
+import org.springframework.web.servlet.View;
 
 import javax.persistence.*;
 
@@ -21,6 +25,8 @@ public class Building { // dane budynku, są zależmne od typu i poziomu
     private int buildingLevel = 0;
     //private int buildingPrice;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @NonNull
     @JoinColumn(name = "planetId", referencedColumnName = "planetId")

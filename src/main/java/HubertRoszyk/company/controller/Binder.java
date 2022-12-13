@@ -1,15 +1,20 @@
 package HubertRoszyk.company.controller;
 
+import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Galaxy;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.User;
+import HubertRoszyk.company.enumTypes.BuildingType;
+import HubertRoszyk.company.enumStatus.PlanetStatus;
+import HubertRoszyk.company.service.BuildingService;
 import HubertRoszyk.company.service.GalaxyService;
 import HubertRoszyk.company.service.PlanetService;
 import HubertRoszyk.company.service.UserService;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
 @RestController
@@ -25,7 +30,16 @@ public class Binder {
     GalaxyService galaxyService;
 
     @Autowired
-    FactoryPointsController factoryPointsController;
+    GalaxyPointsController galaxyPointsController;
+
+    @Autowired
+    PlanetPointsController planetPointsController;
+
+    @Autowired
+    BuildingService buildingService;
+
+    @Autowired
+    BuildingsController buildingsController;
 
     @PostMapping("/binder/user/{userId}/planet/{planetId}")
     Planet bindPlanetToUser(@PathVariable int userId, @PathVariable int planetId) {
@@ -33,16 +47,22 @@ public class Binder {
         User user = userService.getUserById(userId);
         Planet planet = planetService.getPlanetById(planetId);
 
-        if (planet == null || user == null) {
-            return null;
-        } else {
-            planet.asignUser(user);
+        Set<Planet> userPlanets = planetService.getPlanetsByUserIdAndGalaxyId(userId, planet.getGalaxy().getId());
 
-            planetService.savePlanet(planet); //najpierw trzeba zapisać planetę usera a potem szukać jej punkty
-            factoryPointsController.getTotalIndustryPointsIncome(userId, planet.getGalaxy().getId());
 
-            return planet;
+        if (userPlanets.isEmpty()) {
+            int gotPlanetSize = planet.getSize();
+            int setPlanetSize = gotPlanetSize + 3;
+            planet.setSize(setPlanetSize);
+
         }
+
+        planet.asignUser(user);
+        planet.setPlanetStatus(PlanetStatus.CLAIMED);
+
+        planetService.savePlanet(planet);
+
+        return planet;
     }
     public Galaxy bindGalaxyToUser(int userId, int galaxyId) {
         User user = userService.getUserById(userId);
@@ -53,7 +73,7 @@ public class Binder {
         } else {
             galaxy.addUser();
 
-            factoryPointsController.createFactoryPoints(user, galaxy);
+            galaxyPointsController.createGalaxyPoints(user, galaxy);
 
             return galaxyService.saveGalaxy(galaxy);
         }

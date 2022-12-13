@@ -1,6 +1,7 @@
 package HubertRoszyk.company;
 
-import HubertRoszyk.company.entiti_class.BuildingType;
+import HubertRoszyk.company.converters.StringToBuildingsTypeConverter;
+import HubertRoszyk.company.enumTypes.BuildingType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +12,14 @@ class StringToBuildingTypeConverterTest {
     StringToBuildingsTypeConverter underTest;
 
     @BeforeEach
-    void StringToBuildingsTypeConverter (StringToBuildingsTypeConverter underTest) {
-        this.underTest = underTest;
+    void setUp () {
+        underTest = new StringToBuildingsTypeConverter();
     }
 
     @Test
     void shouldConvert() {
         //given
-        String stringValue = "DEFENCE";
+        String stringValue = "DEFENSE";
         //when
         BuildingType buildingType = underTest.convert(stringValue);
         //then

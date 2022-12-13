@@ -1,8 +1,9 @@
+/*
 package HubertRoszyk.company.service;
 
 import HubertRoszyk.company.entiti_class.Galaxy;
 import HubertRoszyk.company.entiti_class.Planet;
-import HubertRoszyk.company.entiti_class.PlanetType;
+import HubertRoszyk.company.enumTypes.PlanetType;
 import HubertRoszyk.company.repository.PlanetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -164,4 +165,4 @@ class PlanetServiceTest {
         //then
         assertThat(gotPlanets).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(planet);
     }
-}
+}*/

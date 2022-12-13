@@ -2,16 +2,9 @@ package HubertRoszyk.company.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.annotation.AccessType;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 @Getter
 @Setter
@@ -30,8 +23,6 @@ public class GameProperties {
     private int randomVariablesSum;
     @Value("${planetsSizes}")
     private int planetsSizes;
-    @Value("${period}")
-    private int period;
     @Value("${minDistanceBetweenPlanets}")
     private int minDistanceBetweenPlanets;
     @Value("${speed}")
@@ -40,4 +31,21 @@ public class GameProperties {
     @Value("${levelCostMultiplier}")
     private double levelCostMultiplier;
 
+    @Value("${armyCost}")
+    private int armyCost;
+
+    @Value("${attackBattleMultiplier}")
+    private double attackBattleMultiplier;
+    @Value("${defenceBattleMultiplier}")
+    private double defenceBattleMultiplier;
+
+    @Value("${attackColonisationMultiplier}")
+    private double attackColonisationMultiplier;
+    @Value("${defenceColonisationMultiplier}")
+    private double defenceColonisationMultiplier;
+
+    @Value("${attackPillageMultiplier}")
+    private double attackPillageMultiplier;
+    @Value("${defencePillageMultiplier}")
+    private double defencePillageMultiplier;
 }

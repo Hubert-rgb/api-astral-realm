@@ -1,20 +1,18 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.*;
-import HubertRoszyk.company.Validator;
 import HubertRoszyk.company.RandomDraw;
-import HubertRoszyk.company.service.ArmyPointsService;
-import HubertRoszyk.company.service.GalaxyService;
-import HubertRoszyk.company.service.PlanetService;
-import HubertRoszyk.company.service.UserService;
-import lombok.NonNull;
+import HubertRoszyk.company.enumTypes.PeriodType;
+import HubertRoszyk.company.enumTypes.PlanetType;
+import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -29,17 +27,18 @@ public class GalaxyController {
     UserService userService;
 
     @Autowired
-    ArmyPointsService armyPointsService;
+    PlanetPointsService planetPointsService;
+
+    @Autowired
+    TimerEntityService timerEntityService;
+
+    @Autowired
+    TimerEntityController timerEntityController;
 
     @Autowired
     Binder binder;
 
-    @Autowired
-    Validator validator;
-
-    //@CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
-
-    @GetMapping("/galaxy-controller/users/{userId}/galaxies/{galaxyId}")
+    @PostMapping("/galaxy-controller/users/{userId}/galaxies/{galaxyId}")
     public Set<Planet> connectToGalaxy(@PathVariable("userId") int userId, @PathVariable("galaxyId") int galaxyId) {
 
         User user = userService.getUserById(userId);
@@ -47,8 +46,8 @@ public class GalaxyController {
         Set<Planet> galaxyPlanets = planetService.getPlanetsByGalaxy(galaxyId);
 
         //nie wiem czy nie lepiej po prostu zawsze bindować
-        for (FactoryPoints factoryPoints : user.getPoints()) {
-            if (factoryPoints.getGalaxy().getId() == galaxyId) {
+        for (GalaxyPoints galaxyPoints : user.getPoints()) {
+            if (galaxyPoints.getGalaxy().getId() == galaxyId) {
                 return galaxyPlanets;
             }
         }
@@ -62,27 +61,34 @@ public class GalaxyController {
 
     @CrossOrigin(origins = "http://127.0.0.1:5500/", allowedHeaders = "*")
     @PostMapping("/galaxy-controller/galaxies")
-    public List<Planet> galaxyInit(/*@RequestHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN)*/ @RequestBody JSONObject jsonInput){ //do przeanalizowania bo nie wygląda za ładnie
-        //json to galaxy with jackson
+    public List<Planet> galaxyInit(@RequestBody JSONObject jsonInput){ //do przeanalizowania bo nie wygląda za ładnie
         int maximalUserNumber = (int) jsonInput.get("maximalUserNumber");
         String galaxyName = (String) jsonInput.get("galaxyName");
+        String periodTypeString = (String) jsonInput.get("periodType");
 
-        Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName);
+        PeriodType periodType = PeriodType.valueOf(periodTypeString);
+        //TODO period as Enum
+
+        Galaxy galaxy = new Galaxy(maximalUserNumber, galaxyName, periodType);
         galaxyService.saveGalaxy(galaxy);
+
+        TimerEntity timerEntity = new TimerEntity(0, LocalDateTime.now(), galaxy);
+        timerEntityService.saveTimerEntity(timerEntity);
+        timerEntityController.timerExecution(galaxy.getId());
 
         List<Planet> planets = new ArrayList<>();
 
-        //później można tworzyć galaktyki nie posiadające każdego typu planet
+        //crating galaxy with every type of planet
         for (PlanetType planetType : PlanetType.values()) {
             planets.addAll(createPlanet(planetType, galaxy));
         }
 
-        List<Planet> validatedPlanets = validator.validatePlanetPositionInGalaxy(planets);
-        planetService.savePlanetsList(validatedPlanets);
+        planetService.savePlanetsList(planets);
 
-        return validatedPlanets;
+        return planets;
     }
-    public List<Planet> createPlanet(PlanetType planetType, Galaxy galaxy) {
+    /** creating planets */
+    private List<Planet> createPlanet(PlanetType planetType, Galaxy galaxy) {
         List<Planet> planets = new ArrayList<>();
 
         int planetsNum = galaxy.getMaximalUserNumber() + 1;
@@ -90,42 +96,50 @@ public class GalaxyController {
 
         for(int i = 0; i < planetsNum; i++){
             int size = RandomDraw.sizeDraw(planetType);
-            size++;
 
-            int localRandomVariablesSum = randomVariablesSum - size;
+            //Draw a size, industry multiplier and science multiplier
 
-            int industryPointsMultiplier = RandomDraw.industryPointsMultiplierDraw(localRandomVariablesSum); //te dwie linijki coś bym zmienił
+            int localRandomVariablesSum = randomVariablesSum - size / 2;
+
+            int industryPointsMultiplier = RandomDraw.industryPointsMultiplierDraw(localRandomVariablesSum);
             int sciencePointsMultiplier = localRandomVariablesSum - industryPointsMultiplier;
 
+            //TODO to recreate (radial positioning)
             PlanetLocation planetLocation = RandomDraw.locationDraw();
-            //validator
 
-            Planet planet = new Planet(planetType,industryPointsMultiplier, sciencePointsMultiplier, size, planetLocation.xLocation, planetLocation.yLocation);
-            ArmyPoints armyPoints = new ArmyPoints(planet);
+            //Creating planet
 
-            armyPointsService.saveArmyPoints(armyPoints);
+            Planet planet = new Planet(
+                    planetType,
+                    industryPointsMultiplier,
+                    sciencePointsMultiplier,
+                    size,
+                    planetLocation.getXLocation(),
+                    planetLocation.getYLocation(),
+                    galaxy
+            );
+            PlanetPoints planetPoints = new PlanetPoints(planet);
 
-            planet.asignGalaxy(galaxy);
+            Map<Integer, Integer> army = ArmyController.getEmptyArmy();
+            int armySizeMultiplier =(int) Math.ceil(RandomDraw.armyDivisionNumberDraw());
+            army.put(1, armySizeMultiplier * planetType.getDefaultArmySize());
+
+            planetPoints.setArmy(army);
+            planetService.savePlanet(planet);
+            planetPointsService.savePoints(planetPoints);
+
             planets.add(planet);
         }
+
         return planets;
     }
-
-    /*@GetMapping("/getPlanets")
-    public List<Planet> getPlanets() {
-        List<Planet> planets = planetService.getPlanetsList();
-
-
-        return planets;
-    }*/
     @GetMapping("/galaxy-controller/galaxies")
     public List<Galaxy> getGalaxies() {
         List<Galaxy> galaxies = galaxyService.getAllGalaxies();
         return galaxies;
     }
     @GetMapping("/galaxy-controller/galaxies/{galaxyId}")
-    Set<Planet> getGalaxyById(/*@RequestBody JSONObject galaxyId*/ @PathVariable int galaxyId) {
-        //int galaxyIdInt = (int) galaxyId.get("galaxyId");
+    Set<Planet> getGalaxyById(@PathVariable int galaxyId) {
         Galaxy galaxy = galaxyService.getGalaxyById(galaxyId);
         Set<Planet> planets = null;
         try {
