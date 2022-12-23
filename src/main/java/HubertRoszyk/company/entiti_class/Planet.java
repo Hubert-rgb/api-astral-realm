@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.RandomDraw;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.PlanetType;
@@ -42,6 +43,8 @@ public class Planet {
 
     private int planetLocationX;
     private int planetLocationY;
+
+    private int planetLookNumber;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
@@ -91,6 +94,8 @@ public class Planet {
 
         this.industryPointsProduce = planetType.getDefaultIndustryProduce();
         this.sciencePointsProduce = planetType.getDefaultScienceProduce();
+
+        this.planetLookNumber = RandomDraw.planetLookNumberDraw();
 
         PlanetLocation location = new PlanetLocation(xLocation, yLocation);
         planetLocation = location;

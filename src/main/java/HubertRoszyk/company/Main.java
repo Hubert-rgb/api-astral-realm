@@ -18,7 +18,7 @@ public class Main {
 
     /** general changes */
     //TODO radial positioning
-    //TODO galaxy settings (time in cycle)
+    //TODO random planet view 1-24 with random names
 
     /** attack update*/
     //On FRONTEND TODO planet protection period after battle (maby it can be checked in fronted?)
