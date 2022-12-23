@@ -40,4 +40,7 @@ public class RandomDraw {
         double armyDivisionsPercentage = armyDivisions / 10;
         return (1 + armyDivisionsPercentage);
     }
+    public static int planetLookNumberDraw(){
+        return random.nextInt(25) + 1; //range 1 - 25
+    }
 }
