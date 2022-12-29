@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableJpaRepositories
 @EntityScan()
 public class Main {
+    //DNT - Done not tested
+    //D - DONE
     /** get requests */
+    //SOLVED (it's received with planet points)  TODO get army
 
     /** general changes */
     //TODO radial positioning
-    //TODO random planet view 1-24 with random names
+    //DONE TODO default army generation redo
+    //D TODO give number (id) to every player joining galaxy
 
     /** attack update*/
     //On FRONTEND TODO planet protection period after battle (maby it can be checked in fronted?)
@@ -30,6 +34,7 @@ public class Main {
 
     /** code debuging*/
     //TO WATCH TODO switched place where level is upgraded while purchase
+    //D TODO building level change after building time
     public static void main(String[] args) {
         GameProperties configOperator = new GameProperties();
 

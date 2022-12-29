@@ -5,6 +5,7 @@ import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.controller.GalaxyPointsController;
 import HubertRoszyk.company.controller.PlanetPointsController;
 import HubertRoszyk.company.entiti_class.*;
+import HubertRoszyk.company.enumStatus.BuildingStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
@@ -45,6 +46,7 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
         int setBuildingLevel = gotBuildingLevel + 1;*/
 
         building.setBuildingLevel(setLevel);
+        building.setBuildingStatus(BuildingStatus.IN_BUILD);
 
         //return setBuildingLevel;
     }

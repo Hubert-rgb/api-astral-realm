@@ -34,6 +34,8 @@ public class GalaxyPoints {
 
     private double sciencePointsIncome;
 
+    private int userLookId;
+
     @ElementCollection(targetClass = MilitaryCardType.class)
     @JoinTable(name = "militaryCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
     @Column()
@@ -64,9 +66,11 @@ public class GalaxyPoints {
     @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
     private Galaxy galaxy;
 
-    public GalaxyPoints(User user, Galaxy galaxy) {
+    public GalaxyPoints(User user, Galaxy galaxy, int userLookId) {
         this.galaxy = galaxy;
         this.user = user;
+
+        this.userLookId = userLookId;
 
         sciencePoints = 0;
     }

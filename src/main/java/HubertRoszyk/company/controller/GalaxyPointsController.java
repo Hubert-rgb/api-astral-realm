@@ -33,8 +33,8 @@ public class GalaxyPointsController {
         return galaxyPoints;
     }
 
-    public void createGalaxyPoints(User user, Galaxy galaxy) {
-        GalaxyPoints galaxyPoints = new GalaxyPoints(user, galaxy);
+    public void createGalaxyPoints(User user, Galaxy galaxy, int userLookId) {
+        GalaxyPoints galaxyPoints = new GalaxyPoints(user, galaxy, userLookId);
         galaxyPointsService.savePoints(galaxyPoints);
     }
     public void getTotalSciencePointsIncome(int userId, int galaxyId) {

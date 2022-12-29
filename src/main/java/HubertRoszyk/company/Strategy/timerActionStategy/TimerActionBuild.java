@@ -3,6 +3,7 @@ package HubertRoszyk.company.Strategy.timerActionStategy;
 import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.TimerAction;
+import HubertRoszyk.company.enumStatus.BuildingStatus;
 import HubertRoszyk.company.service.BuildingService;
 
 public class TimerActionBuild implements TimerActionStrategy{
@@ -19,5 +20,8 @@ public class TimerActionBuild implements TimerActionStrategy{
         Building building = buildingService.getBuildingById(buildingId);
 
         buildingPurchase.updatePointsIncome(building.getBuildingType(), building.getPlanet().getId());
+        building.setBuildingStatus(BuildingStatus.BUILT);
+
+        buildingService.saveBuilding(building);
     }
 }
