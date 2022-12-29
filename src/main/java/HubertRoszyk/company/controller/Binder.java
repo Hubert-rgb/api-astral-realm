@@ -73,7 +73,7 @@ public class Binder {
         } else {
             galaxy.addUser();
 
-            galaxyPointsController.createGalaxyPoints(user, galaxy);
+            galaxyPointsController.createGalaxyPoints(user, galaxy, galaxy.getUserNumber());
 
             return galaxyService.saveGalaxy(galaxy);
         }

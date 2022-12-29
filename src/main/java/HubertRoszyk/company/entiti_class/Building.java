@@ -1,5 +1,6 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.enumStatus.BuildingStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
@@ -23,6 +24,9 @@ public class Building { // dane budynku, są zależmne od typu i poziomu
     @NonNull
     private BuildingType buildingType;
     private int buildingLevel = 0;
+
+    @Enumerated
+    private BuildingStatus buildingStatus;
     //private int buildingPrice;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

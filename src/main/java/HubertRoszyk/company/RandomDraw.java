@@ -36,11 +36,11 @@ public class RandomDraw {
         return battleMultiplierDecimal + 1;
     }
     public static double armyDivisionNumberDraw(){
-        double armyDivisions = random.nextInt(3) + 1; //range 1 - 3
+        double armyDivisions = random.nextInt(5) + 1; //range 1 - 5
         double armyDivisionsPercentage = armyDivisions / 10;
-        return (1 + armyDivisionsPercentage);
+        return (1 + armyDivisionsPercentage); //range 1 - 1.5
     }
     public static int planetLookNumberDraw(){
-        return random.nextInt(25) + 1; //range 1 - 25
+        return random.nextInt(24) + 1; //range 1 - 24
     }
 }
