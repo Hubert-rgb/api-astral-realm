@@ -1,7 +1,7 @@
 package HubertRoszyk.company.controller.shipController;
 
 import HubertRoszyk.company.controller.ArmyController;
-import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
+import HubertRoszyk.company.controller.industryPurchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;

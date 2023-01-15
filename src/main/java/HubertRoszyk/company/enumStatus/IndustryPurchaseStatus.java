@@ -1,6 +1,6 @@
 package HubertRoszyk.company.enumStatus;
 
-public enum PurchaseStatus {
+public enum IndustryPurchaseStatus {
     OK,
     MAX_LEVEL,
     NOT_ENOUGH_SPACE,

@@ -1,11 +1,8 @@
 package HubertRoszyk.company.entiti_class;
 
-import HubertRoszyk.company.enumTypes.cardsType.EconomyCardType;
-import HubertRoszyk.company.enumTypes.cardsType.MilitaryCardType;
-import HubertRoszyk.company.enumTypes.cardsType.PoliticalCardType;
+import HubertRoszyk.company.enumTypes.cardsType.ScienceCardType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,23 +32,15 @@ public class GalaxyPoints {
 
     private int userLookId;
 
-    @ElementCollection(targetClass = MilitaryCardType.class)
-    @JoinTable(name = "militaryCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
+    @ElementCollection(targetClass = ScienceCardType.class)
+    @JoinTable(name = "scienceCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
     @Column()
     @Enumerated()
-    private Set<MilitaryCardType> militaryCards;
+    private Set<ScienceCardType> scienceCards;
 
-    @ElementCollection(targetClass = PoliticalCardType.class)
-    @JoinTable(name = "politicalCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
-    @Column()
-    @Enumerated()
-    private Set<PoliticalCardType> politicalCards;
-
-    @ElementCollection(targetClass = EconomyCardType.class)
-    @JoinTable(name = "economyCards", joinColumns = @JoinColumn(name = "galaxyPointsId"))
-    @Column()
-    @Enumerated()
-    private Set<EconomyCardType> economyCards;
+    private int economicCardsNumber;
+    private int militaryCardsNumber;
+    private int politicalCardsNumber;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
@@ -73,5 +61,9 @@ public class GalaxyPoints {
         this.userLookId = userLookId;
 
         sciencePoints = 0;
+
+        economicCardsNumber = 0;
+        militaryCardsNumber = 0;
+        politicalCardsNumber = 0;
     }
 }

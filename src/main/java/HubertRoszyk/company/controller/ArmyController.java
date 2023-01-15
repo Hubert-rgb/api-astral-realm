@@ -1,8 +1,7 @@
 package HubertRoszyk.company.controller;
 
-import HubertRoszyk.company.controller.purchaseController.ArmyPurchase;
-import HubertRoszyk.company.entiti_class.PlanetPoints;
-import HubertRoszyk.company.enumStatus.PurchaseStatus;
+import HubertRoszyk.company.controller.industryPurchaseController.ArmyPurchase;
+import HubertRoszyk.company.enumStatus.IndustryPurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.PlanetService;
@@ -28,7 +27,7 @@ public class ArmyController {
     ArmyPurchase armyPurchase;
 
     @PostMapping("/army")
-    public PurchaseStatus addArmy(@RequestBody JSONObject jsonInput) {
+    public IndustryPurchaseStatus addArmy(@RequestBody JSONObject jsonInput) {
         int planetId = (int) jsonInput.get("planetId");
         int level = (int) jsonInput.get("level");
         int amount = (int) jsonInput.get("amount");
@@ -38,7 +37,7 @@ public class ArmyController {
         return armyPurchase.executePurchase(planetId, armyDivision, level, amount);
     }
     @PutMapping("/army")
-    public PurchaseStatus upgradeArmy(@RequestBody JSONObject jsonInput) {
+    public IndustryPurchaseStatus upgradeArmy(@RequestBody JSONObject jsonInput) {
         int planetId = (int) jsonInput.get("planetId");
         int level = (int) jsonInput.get("level");
         int amount = (int) jsonInput.get("amount");

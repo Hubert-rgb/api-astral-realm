@@ -1,17 +1,16 @@
-package HubertRoszyk.company.controller.purchaseController;
+package HubertRoszyk.company.controller.industryPurchaseController;
 
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.Ship;
-import HubertRoszyk.company.enumStatus.PurchaseStatus;
+import HubertRoszyk.company.enumStatus.IndustryPurchaseStatus;
 import HubertRoszyk.company.service.*;
-import org.springframework.lang.Nullable;
 
 public interface PurchaseInterface<T> { //TODO redo also for buying science cards
     PlanetPointsService getPlanetPointsService();
     PlanetService getPlanetService();
 
 
-    default PurchaseStatus executePurchase(int planetId, T object, int setLevel, int...amount) {
+    default IndustryPurchaseStatus executePurchase(int planetId, T object, int setLevel, int...amount) {
         PlanetPointsService planetPointsService = getPlanetPointsService();
         PlanetService planetService = getPlanetService();
 
@@ -44,15 +43,15 @@ public interface PurchaseInterface<T> { //TODO redo also for buying science card
         //TODO maybe strategy not if
         if (isEnoughPoints && isNotOnMaximumLevel  && isEnoughSpaceOnPlanet && isShipYardEnoughLevel) {  //strategy
             purchaseOk(object, planetPoints, setLevel, planetPointsService, gotIndustryPoints, price, amount);
-            return PurchaseStatus.OK;
+            return IndustryPurchaseStatus.OK;
         } else if (!isNotOnMaximumLevel) {
-            return PurchaseStatus.MAX_LEVEL;
+            return IndustryPurchaseStatus.MAX_LEVEL;
         } else if (!isEnoughSpaceOnPlanet){
-            return PurchaseStatus.NOT_ENOUGH_SPACE;
+            return IndustryPurchaseStatus.NOT_ENOUGH_SPACE;
         } else if(!isShipYardEnoughLevel) {
-            return PurchaseStatus.NOT_ENOUGH_SHIP_YARD_LEVEL;
+            return IndustryPurchaseStatus.NOT_ENOUGH_SHIP_YARD_LEVEL;
         } else {
-            return PurchaseStatus.NOT_ENOUGH_POINTS;
+            return IndustryPurchaseStatus.NOT_ENOUGH_POINTS;
         }
     }
     default void purchaseOk(T object, PlanetPoints planetPoints, int setLevel, PlanetPointsService planetPointsService, double gotIndustryPoints, double price, int...amount) {

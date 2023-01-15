@@ -62,6 +62,7 @@ public class Binder {
 
         planetService.savePlanet(planet);
 
+        galaxyPointsController.getTotalSciencePointsIncome(userId, planet.getGalaxy().getId());
         return planet;
     }
     public Galaxy bindGalaxyToUser(int userId, int galaxyId) {

@@ -1,18 +1,16 @@
 package HubertRoszyk.company.controller.shipController;
 
-import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
+import HubertRoszyk.company.controller.industryPurchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
-import HubertRoszyk.company.converters.serialize.ShipTypeSerialize;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.Ship;
-import HubertRoszyk.company.enumStatus.PurchaseStatus;
+import HubertRoszyk.company.enumStatus.IndustryPurchaseStatus;
 import HubertRoszyk.company.enumStatus.ShipLoadStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.ShipType;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.json.simple.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +22,7 @@ import java.util.List;
 @RequestMapping("/ship-controller")
 public interface ShipControllerInterface<ShipT, LoadType> {
     @PostMapping("/ship")
-    default PurchaseStatus buildShip(@RequestBody JSONObject jsonObject){
+    default IndustryPurchaseStatus buildShip(@RequestBody JSONObject jsonObject){
         ShipPurchase shipPurchase = getShipPurchase();
         UserService userService = getUserService();
         StringToShipTypeConverter stringToShipTypeConverter = getStringToShipTypeConverter();
@@ -43,7 +41,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
         return shipPurchase.executePurchase(planetId, (Ship) ship, level);
     }
     @PutMapping("/ship/{shipId}")
-    default PurchaseStatus upgradeShip(@PathVariable int shipId){
+    default IndustryPurchaseStatus upgradeShip(@PathVariable int shipId){
         ShipService shipService = getShipService();
         ShipPurchase shipPurchase = getShipPurchase();
 

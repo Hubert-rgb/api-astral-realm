@@ -2,13 +2,11 @@ package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.Strategy.timerActionStategy.*;
 import HubertRoszyk.company.controller.movingResources.MovementController;
-import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
-import HubertRoszyk.company.controller.shipController.ShipControllerInterface;
+import HubertRoszyk.company.controller.industryPurchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package HubertRoszyk.company.controller.purchaseController;
+package HubertRoszyk.company.controller.industryPurchaseController;
 
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.*;

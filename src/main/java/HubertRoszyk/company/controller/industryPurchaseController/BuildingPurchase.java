@@ -1,4 +1,4 @@
-package HubertRoszyk.company.controller.purchaseController;
+package HubertRoszyk.company.controller.industryPurchaseController;
 
 import HubertRoszyk.company.Strategy.update_points_produce_strategy.*;
 import HubertRoszyk.company.configuration.GameProperties;

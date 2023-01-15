@@ -1,12 +1,10 @@
 package HubertRoszyk.company.controller.shipController;
 
-import HubertRoszyk.company.controller.purchaseController.ShipPurchase;
+import HubertRoszyk.company.controller.industryPurchaseController.ShipPurchase;
 import HubertRoszyk.company.converters.StringToShipTypeConverter;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.entiti_class.ship.IndustryShip;
-import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumTypes.ShipType;
-import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.simple.JSONObject;

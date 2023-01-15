@@ -1,9 +1,9 @@
 package HubertRoszyk.company.controller;
 
-import HubertRoszyk.company.controller.purchaseController.BuildingPurchase;
+import HubertRoszyk.company.controller.industryPurchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.*;
 import HubertRoszyk.company.converters.StringToBuildingsTypeConverter;
-import HubertRoszyk.company.enumStatus.PurchaseStatus;
+import HubertRoszyk.company.enumStatus.IndustryPurchaseStatus;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.*;
 import org.json.simple.JSONObject;
@@ -32,7 +32,7 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
 
 
     @PostMapping("/building-controller/buildings")
-    public PurchaseStatus addBuilding(@RequestBody JSONObject jsonInput) { //exception not string
+    public IndustryPurchaseStatus addBuilding(@RequestBody JSONObject jsonInput) { //exception not string
         int planetId = (int) jsonInput.get("planetId");
         int userId = (int) jsonInput.get("userId");
         String buildingsTypeString = (String) jsonInput.get("buildingType");
@@ -44,7 +44,7 @@ public class BuildingsController { //dodaje, updatuje i usuwa budynki
         return buildingPurchase.executePurchase(building.getPlanet().getId(), building, 1);
     }
     @PutMapping("/building-controller/buildings/{buildingId}")
-    public PurchaseStatus upgradeBuilding(@PathVariable int buildingId) {
+    public IndustryPurchaseStatus upgradeBuilding(@PathVariable int buildingId) {
         Building building = buildingService.getBuildingById(buildingId);
         int level = building.getBuildingLevel();
 

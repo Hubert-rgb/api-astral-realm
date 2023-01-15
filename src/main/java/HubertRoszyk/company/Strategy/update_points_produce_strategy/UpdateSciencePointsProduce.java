@@ -12,6 +12,7 @@ public class UpdateSciencePointsProduce implements UpdatePointsProduceStrategy {
 
     public UpdateSciencePointsProduce(PlanetService planetService, GalaxyPointsController galaxyPointsController) {
         this.planetService = planetService;
+        this.galaxyPointsController = galaxyPointsController;
     }
 
     @Override

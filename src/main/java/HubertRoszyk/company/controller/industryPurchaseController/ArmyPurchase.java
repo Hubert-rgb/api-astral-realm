@@ -1,4 +1,4 @@
-package HubertRoszyk.company.controller.purchaseController;
+package HubertRoszyk.company.controller.industryPurchaseController;
 
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.entiti_class.Planet;
@@ -8,8 +8,6 @@ import HubertRoszyk.company.service.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
