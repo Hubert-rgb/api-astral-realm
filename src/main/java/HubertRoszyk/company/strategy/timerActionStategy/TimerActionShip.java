@@ -1,13 +1,14 @@
-package HubertRoszyk.company.Strategy.timerActionStategy;
+package HubertRoszyk.company.strategy.timerActionStategy;
 
 import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.service.ShipService;
 
-public class TimerActionIndustryCargo implements TimerActionStrategy{
-    ShipService shipService;
-    public TimerActionIndustryCargo(ShipService shipService) {
+public class TimerActionShip implements TimerActionStrategy{
+    private ShipService shipService;
+
+    public TimerActionShip(ShipService shipService){
         this.shipService = shipService;
     }
     @Override
@@ -16,6 +17,8 @@ public class TimerActionIndustryCargo implements TimerActionStrategy{
         Ship ship = shipService.getShipById(shipId);
 
         ship.setShipStatus(ShipStatus.DOCKED);
+        ship.getCapacity();
+
         shipService.saveShip(ship);
     }
 }

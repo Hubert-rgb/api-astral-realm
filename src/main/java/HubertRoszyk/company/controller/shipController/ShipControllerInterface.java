@@ -36,9 +36,12 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
         User user = userService.getUserById(userId);
 
-        ShipT ship = createShip(level, user);
+        ShipT ship = createShip(level, user, planetId);
 
-        return shipPurchase.executePurchase(planetId, (Ship) ship, level);
+        if (ship != null) {
+            return shipPurchase.executePurchase(planetId, (Ship) ship, level);
+        }
+        return IndustryPurchaseStatus.LACK_OF_REQUIRED_CARDS;
     }
     @PutMapping("/ship/{shipId}")
     default IndustryPurchaseStatus upgradeShip(@PathVariable int shipId){
@@ -190,7 +193,7 @@ public interface ShipControllerInterface<ShipT, LoadType> {
 
     LoadType getToLoad(JSONObject jsonObject) throws JsonProcessingException;
 
-    ShipT createShip(int level, User user);
+    ShipT createShip(int level, User user, int PlanetId);
 
     ShipService getShipService();
     ShipPurchase getShipPurchase();

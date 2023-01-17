@@ -1,6 +1,6 @@
 package HubertRoszyk.company.controller;
 
-import HubertRoszyk.company.Strategy.timerActionStategy.*;
+import HubertRoszyk.company.strategy.timerActionStategy.*;
 import HubertRoszyk.company.controller.movingResources.MovementController;
 import HubertRoszyk.company.controller.industryPurchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.TimerAction;

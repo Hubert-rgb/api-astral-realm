@@ -16,16 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class Main {
     //DNT - Done not tested
     //D - DONE
-    /** get requests */
-    //SOLVED (it's received with planet points)  TODO get army
+
+    /** science cards */
+    //TODO create concept for all cards
+    //TODO create those cards execution
+
+    /** not colonised planets */
 
     /** general changes */
     //TODO radial positioning
-    //DONE TODO default army generation redo
-    //D TODO give number (id) to every player joining galaxy
-
-    /** attack update*/
-    //On FRONTEND TODO planet protection period after battle (maby it can be checked in fronted?)
 
     /** code refreshment*/
     //TODO JACSON - every json to entity
@@ -33,8 +32,7 @@ public class Main {
     //TODO tests
 
     /** code debuging*/
-    //TO WATCH TODO switched place where level is upgraded while purchase
-    //D TODO building level change after building time
+
     public static void main(String[] args) {
         GameProperties configOperator = new GameProperties();
 

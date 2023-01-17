@@ -1,18 +1,15 @@
-package HubertRoszyk.company.Strategy.timerActionStategy;
+package HubertRoszyk.company.strategy.timerActionStategy;
 
-import HubertRoszyk.company.controller.movingResources.MovementController;
 import HubertRoszyk.company.entiti_class.Attack;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.TimerAction;
 import HubertRoszyk.company.entiti_class.TimerEntity;
 import HubertRoszyk.company.entiti_class.ship.AttackShip;
-import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.PlanetStatus;
 import HubertRoszyk.company.enumStatus.ShipStatus;
 import HubertRoszyk.company.enumTypes.TimerActionType;
 import HubertRoszyk.company.service.*;
 
-import java.util.List;
 import java.util.Set;
 
 public class TimerActionAttackCargo implements TimerActionStrategy{

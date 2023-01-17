@@ -45,8 +45,14 @@ public class IndustryShipController implements ShipControllerInterface<IndustryS
     TimerActionService timerActionService;
 
     @Override
-    public IndustryShip createShip(int level, User user) {
-        return new IndustryShip(ShipType.INDUSTRY_CARGO, level, user);
+    public IndustryShip createShip(int level, User user, int planetId) {
+        Planet planet = planetService.getPlanetById(planetId);
+        GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(user.getId(), planet.getGalaxy().getId());
+
+        if(galaxyPoints.canBuildIndustryShip()){
+            return new IndustryShip(ShipType.INDUSTRY_CARGO, level, user);
+        }
+        return null;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package HubertRoszyk.company.Strategy.timerActionStategy;
+package HubertRoszyk.company.strategy.timerActionStategy;
 
 import HubertRoszyk.company.controller.industryPurchaseController.BuildingPurchase;
 import HubertRoszyk.company.entiti_class.Building;

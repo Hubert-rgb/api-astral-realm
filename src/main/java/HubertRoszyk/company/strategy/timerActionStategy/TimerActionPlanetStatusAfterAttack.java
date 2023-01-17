@@ -1,4 +1,4 @@
-package HubertRoszyk.company.Strategy.timerActionStategy;
+package HubertRoszyk.company.strategy.timerActionStategy;
 
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.TimerAction;

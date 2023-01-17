@@ -1,7 +1,6 @@
-package HubertRoszyk.company.Strategy.timerActionStategy;
+package HubertRoszyk.company.strategy.timerActionStategy;
 
 import HubertRoszyk.company.entiti_class.TimerAction;
-import HubertRoszyk.company.enumTypes.TimerActionType;
 
 public interface TimerActionStrategy {
     void executeAction(TimerAction timerAction);

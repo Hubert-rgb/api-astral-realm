@@ -1,6 +1,6 @@
 package HubertRoszyk.company.controller.industryPurchaseController;
 
-import HubertRoszyk.company.Strategy.update_points_produce_strategy.*;
+import HubertRoszyk.company.strategy.updatePointsProduceStrategy.*;
 import HubertRoszyk.company.configuration.GameProperties;
 import HubertRoszyk.company.controller.GalaxyPointsController;
 import HubertRoszyk.company.controller.PlanetPointsController;

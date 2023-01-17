@@ -1,17 +1,16 @@
-package HubertRoszyk.company.Strategy.update_points_produce_strategy;
+package HubertRoszyk.company.strategy.updatePointsProduceStrategy;
 
 import HubertRoszyk.company.controller.PlanetPointsController;
-import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.PlanetPoints;
 import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.service.PlanetPointsService;
 
-public class UpdateTotalHarbourSize implements UpdatePointsProduceStrategy{
+public class UpdateTotalStorageSize implements UpdatePointsProduceStrategy{
     PlanetPointsService planetPointsService;
 
     PlanetPointsController planetPointsController;
 
-    public UpdateTotalHarbourSize(PlanetPointsService planetPointsService, PlanetPointsController planetPointsController){
+    public UpdateTotalStorageSize(PlanetPointsService planetPointsService, PlanetPointsController planetPointsController){
         this.planetPointsService = planetPointsService;
         this.planetPointsController = planetPointsController;
     }
@@ -19,14 +18,15 @@ public class UpdateTotalHarbourSize implements UpdatePointsProduceStrategy{
     public void update(BuildingType buildingType, int planetId) {
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
 
-        int gotHarbourSize = planetPoints.getTotalHarbourSize();
+        int gotStorageSize = planetPoints.getTotalStorageSize();
+        System.out.println(gotStorageSize);
         int updatedSize = buildingType.getVolume();
 
-        int setHarbourSize = gotHarbourSize + updatedSize;
-        planetPoints.setTotalHarbourSize(setHarbourSize);
+        int setStorageSize = gotStorageSize + updatedSize;
+        planetPoints.setTotalStorageSize(setStorageSize);
 
         planetPointsService.savePoints(planetPoints);
 
-        //planetPointsController.getTotalHarbourSize(planetId);
+        //planetPointsController.getTotalStorageSize(planetId);
     }
 }

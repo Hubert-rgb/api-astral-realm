@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -54,6 +55,30 @@ public class GalaxyPoints {
     @JoinColumn(name = "galaxyId", referencedColumnName = "galaxyId")
     private Galaxy galaxy;
 
+    /** SCIENCE CARDS EXECUTION VARIABLES */
+    /** Economy cards */
+
+    @Getter
+    @Accessors(fluent = true)
+    @Setter
+    private boolean canBuildIndustryShip;
+    private int constructionTimeSubtrahend; //TO ASK TODO subtract or divide
+    private int cargoShipSpeedAddition;
+    private int globalIndustryPointsMultiplier;
+    private int globalSciencePointsMultiplier;
+
+    /** Military cards */
+
+    private boolean canColonise;
+    private int armySpeedAddition;
+    private int armyCostSubtrahend;
+    private boolean canPillageUsersPlanets;
+    private boolean canBattleUsersPlanets;
+
+    /** Politician cards */
+
+
+
     public GalaxyPoints(User user, Galaxy galaxy, int userLookId) {
         this.galaxy = galaxy;
         this.user = user;
@@ -65,5 +90,23 @@ public class GalaxyPoints {
         economicCardsNumber = 0;
         militaryCardsNumber = 0;
         politicalCardsNumber = 0;
+
+        /** Economy cards */
+
+        canBuildIndustryShip = false;
+        constructionTimeSubtrahend = 0;
+        cargoShipSpeedAddition = 0;
+        globalIndustryPointsMultiplier = 1;
+        globalSciencePointsMultiplier = 1;
+
+        /** Military cards */
+
+        canColonise = false;
+        armySpeedAddition = 0;
+        armyCostSubtrahend = 0;
+        canPillageUsersPlanets = false;
+        canBattleUsersPlanets = false;
+
+        /** Politician cards */
     }
 }

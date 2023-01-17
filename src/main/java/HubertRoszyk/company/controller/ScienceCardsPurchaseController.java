@@ -7,6 +7,8 @@ import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.enumTypes.cardsType.CardType;
 import HubertRoszyk.company.enumTypes.cardsType.ScienceCardType;
 import HubertRoszyk.company.service.GalaxyPointsService;
+import HubertRoszyk.company.strategy.scienceCardExecutionStrategy.IndustryCargoShipCardExecution;
+import HubertRoszyk.company.strategy.scienceCardExecutionStrategy.ScienceCardExecutionContext;
 import org.json.simple.JSONObject;
 import org.springframework.aop.support.DelegatingIntroductionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,7 @@ public class ScienceCardsPurchaseController {
 
         //checking if all conditions are true
         if (isEnoughPoints && isCardNotOwned && isAllRequiredCards){
-            purchaseOk(price, scienceCardType, galaxyPoints);
+            purchaseOk(price, scienceCardType, galaxyPoints, galaxyId, userId);
             return SciencePurchaseStatus.OK;
         } else if (!isEnoughPoints){
             return SciencePurchaseStatus.NOT_ENOUGH_POINTS;
@@ -58,7 +60,7 @@ public class ScienceCardsPurchaseController {
             return SciencePurchaseStatus.ALREADY_OWNS_THE_CARS;
         }
     }
-    void purchaseOk(double price, ScienceCardType scienceCardType, GalaxyPoints galaxyPoints){
+    private void purchaseOk(double price, ScienceCardType scienceCardType, GalaxyPoints galaxyPoints, int galaxyId, int userId){
         //charging science points after the payment
         double gotSciencePoints = galaxyPoints.getSciencePoints();
         double setSciencePoints = gotSciencePoints - price;
@@ -76,8 +78,17 @@ public class ScienceCardsPurchaseController {
             case MILITARY -> galaxyPoints.setMilitaryCardsNumber(galaxyPoints.getMilitaryCardsNumber() + 1);
             case POLITICAL -> galaxyPoints.setPoliticalCardsNumber(galaxyPoints.getPoliticalCardsNumber() + 1);
         }
+        executeCard(scienceCardType, galaxyId, userId);
         //saving galaxy Points
         galaxyPointsService.savePoints(galaxyPoints);
+    }
+    private void executeCard(ScienceCardType scienceCardType, int galaxyId, int userId){
+        ScienceCardExecutionContext context = new ScienceCardExecutionContext();
+
+        switch (scienceCardType){
+            case INDUSTRY_CARGO_SHIP -> context.setStrategy(new IndustryCargoShipCardExecution());
+        }
+        context.executeStrategy(galaxyPointsService, galaxyId, userId);
     }
     private boolean getIsCardNotOwned(ScienceCardType scienceCardType, GalaxyPoints galaxyPoints){
         if (galaxyPoints.getScienceCards().contains(scienceCardType)) {

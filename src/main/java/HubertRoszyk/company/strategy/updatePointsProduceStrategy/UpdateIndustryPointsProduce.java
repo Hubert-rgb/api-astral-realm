@@ -1,4 +1,4 @@
-package HubertRoszyk.company.Strategy.update_points_produce_strategy;
+package HubertRoszyk.company.strategy.updatePointsProduceStrategy;
 
 import HubertRoszyk.company.controller.PlanetPointsController;
 import HubertRoszyk.company.entiti_class.Planet;

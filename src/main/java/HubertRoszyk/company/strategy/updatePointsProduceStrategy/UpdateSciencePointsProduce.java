@@ -1,6 +1,5 @@
-package HubertRoszyk.company.Strategy.update_points_produce_strategy;
+package HubertRoszyk.company.strategy.updatePointsProduceStrategy;
 
-import HubertRoszyk.company.entiti_class.Building;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.controller.GalaxyPointsController;
 import HubertRoszyk.company.enumTypes.BuildingType;

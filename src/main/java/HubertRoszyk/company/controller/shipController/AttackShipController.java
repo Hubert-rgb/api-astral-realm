@@ -122,7 +122,7 @@ public class AttackShipController implements ShipControllerInterface<AttackShip,
 
 
     @Override
-    public AttackShip createShip(int level, User user) {
+    public AttackShip createShip(int level, User user, int PlanetId) {
         return new AttackShip(ShipType.ATTACK_CARGO, level, user);
     }
 

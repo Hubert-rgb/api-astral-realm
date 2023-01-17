@@ -5,6 +5,6 @@ public enum IndustryPurchaseStatus {
     MAX_LEVEL,
     NOT_ENOUGH_SPACE,
     NOT_ENOUGH_POINTS,
-    NOT_ENOUGH_SHIP_YARD_LEVEL;
-
+    NOT_ENOUGH_SHIP_YARD_LEVEL,
+    LACK_OF_REQUIRED_CARDS
 }

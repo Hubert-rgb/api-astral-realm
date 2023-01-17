@@ -1,9 +1,6 @@
-package HubertRoszyk.company.Strategy.timerActionStategy;
+package HubertRoszyk.company.strategy.timerActionStategy;
 
-import HubertRoszyk.company.Strategy.update_points_produce_strategy.UpdatePointsProduceStrategy;
 import HubertRoszyk.company.entiti_class.TimerAction;
-import HubertRoszyk.company.enumTypes.BuildingType;
-import HubertRoszyk.company.enumTypes.TimerActionType;
 
 public class TimerActionContext {
     private TimerActionStrategy strategy;

@@ -11,7 +11,7 @@ public enum BuildingType {
     SCIENCE(6, 20, 2, 8),
     DEFENSE(4, 15, 1,7), //volume is capacity
     ATTACK(4, 15, 3, 7),
-    STORAGE(10,15,30,3),
+    STORAGE(10,15,30,4),
     SHIP_YARD(4, 25, 2, 10),
     HARBOUR(5, 30, 3, 10);
 
