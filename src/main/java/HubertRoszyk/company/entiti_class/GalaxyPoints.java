@@ -63,19 +63,39 @@ public class GalaxyPoints {
     @Setter
     private boolean canBuildIndustryShip;
     private int constructionTimeSubtrahend; //TO ASK TODO subtract or divide
-    private int cargoShipSpeedAddition;
-    private int globalIndustryPointsMultiplier;
-    private int globalSciencePointsMultiplier;
+    private int industryShipSpeedAddition;
+    private double globalIndustryPointsMultiplier;
+    private double globalSciencePointsMultiplier;
 
     /** Military cards */
 
+    @Getter
+    @Accessors(fluent = true)
+    @Setter
     private boolean canColonise;
     private int armySpeedAddition;
     private int armyCostSubtrahend;
+
+    @Getter
+    @Accessors(fluent = true)
+    @Setter
     private boolean canPillageUsersPlanets;
+
+    @Getter
+    @Accessors(fluent = true)
+    @Setter
     private boolean canBattleUsersPlanets;
 
     /** Politician cards */
+
+    @Getter
+    @Accessors(fluent = true)
+    @Setter
+    private boolean canColoniseInhabitedPlanets;
+    private int protectionPeriodAddition;
+
+    private boolean peaceAvailable;
+    private boolean allianceAvailable;
 
 
 
@@ -95,7 +115,7 @@ public class GalaxyPoints {
 
         canBuildIndustryShip = false;
         constructionTimeSubtrahend = 0;
-        cargoShipSpeedAddition = 0;
+        industryShipSpeedAddition = 0;
         globalIndustryPointsMultiplier = 1;
         globalSciencePointsMultiplier = 1;
 

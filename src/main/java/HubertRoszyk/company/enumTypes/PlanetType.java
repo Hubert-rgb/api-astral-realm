@@ -6,7 +6,10 @@ import lombok.Getter;
 public enum PlanetType {
     SMALL(3, 5, 10, 3,1, 0.5, 3, 25, 3),
     MEDIUM(4, 7, 15, 5, 1.5, 0.75, 4, 30, 4),
-    BIG(6, 9, 20, 7, 2, 1, 5, 35, 5);
+    BIG(6, 9, 20, 7, 2, 1, 5, 35, 5),
+    UNINHABITED_SMALL(3, 5, 10, 0, 0, 0, 1, 0, 0),
+    UNINHABITED_MEDIUM(4, 7, 15, 0, 0, 0, 1, 0, 0);
+
 
     private final int maximalSize;
     private final int randomVariablesSum;

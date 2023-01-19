@@ -58,7 +58,7 @@ public class ShipPurchase implements PurchaseInterface<Ship>{
     }
 
     @Override
-    public double getPrice(Ship ship, int...amount) {
+    public double getPrice(Ship ship, int...optionals) {
         int shipTypePrice = ship.getShipType().getShipPrice();
         double costMultiplier = gameProperties.getLevelCostMultiplier() * ship.getCapacityLevel();
         return shipTypePrice * costMultiplier;

@@ -1,16 +1,15 @@
 package HubertRoszyk.company.controller;
 
 import HubertRoszyk.company.entiti_class.GalaxyPoints;
-import HubertRoszyk.company.enumStatus.IndustryPurchaseStatus;
 import HubertRoszyk.company.enumStatus.SciencePurchaseStatus;
-import HubertRoszyk.company.enumTypes.BuildingType;
 import HubertRoszyk.company.enumTypes.cardsType.CardType;
 import HubertRoszyk.company.enumTypes.cardsType.ScienceCardType;
 import HubertRoszyk.company.service.GalaxyPointsService;
-import HubertRoszyk.company.strategy.scienceCardExecutionStrategy.IndustryCargoShipCardExecution;
+import HubertRoszyk.company.strategy.scienceCardExecutionStrategy.economyCards.*;
 import HubertRoszyk.company.strategy.scienceCardExecutionStrategy.ScienceCardExecutionContext;
+import HubertRoszyk.company.strategy.scienceCardExecutionStrategy.militaryCards.*;
+import HubertRoszyk.company.strategy.scienceCardExecutionStrategy.politicalCards.*;
 import org.json.simple.JSONObject;
-import org.springframework.aop.support.DelegatingIntroductionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +39,7 @@ public class ScienceCardsPurchaseController {
         ScienceCardType scienceCardType = ScienceCardType.valueOf(scienceCardTypeString);
         GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(userId, galaxyId);
 
-        double price = scienceCardType.getPrice();
+        double price = 15 + (4 * (galaxyPoints.getEconomicCardsNumber() + galaxyPoints.getPoliticalCardsNumber() + galaxyPoints.getMilitaryCardsNumber()));
         double gotSciencePoints = galaxyPoints.getSciencePoints();
 
         //getting conditions
@@ -87,6 +86,20 @@ public class ScienceCardsPurchaseController {
 
         switch (scienceCardType){
             case INDUSTRY_CARGO_SHIP -> context.setStrategy(new IndustryCargoShipCardExecution());
+            case PEACE -> context.setStrategy(new PeaceExecution());
+            case TRADE -> context.setStrategy(new TradeExecution());
+            case ALLIANCE -> context.setStrategy(new AllianceExecution());
+            case CHEAPER_ARMY -> context.setStrategy(new CheaperArmyExecution());
+            case BUILDS_FASTER -> context.setStrategy(new BuildsFasterExecution());
+            case FASTER_ARMY_SHIP -> context.setStrategy(new FasterArmyShipExecution());
+            case BATTLE_USERS_PLANETS -> context.setStrategy(new BattleUsersPlanetsExecution());
+            case FASTER_INDUSTRY_SHIP -> context.setStrategy(new FasterIndustryShipExecution());
+            case PILLAGE_USERS_PLANETS -> context.setStrategy(new PillageUsersPlanetsExecution());
+            case LONGER_PROTECTION_PERIOD -> context.setStrategy(new LongerProtectionPeriodExecution());
+            case SCIENCE_PRODUCE_INCREASE -> context.setStrategy(new ScienceProduceIncreaseExecution());
+            case INDUSTRY_PRODUCE_INCREASE -> context.setStrategy(new IndustryProduceIncreaseExecution());
+            case COLONISATION_INHABITED_PLANETS -> context.setStrategy(new ColonisationInhabitedPlanets());
+            case COLONISATION_UNINHABITED_PLANETS -> context.setStrategy(new ColonisationUninhabitedPlanetsExecution());
         }
         context.executeStrategy(galaxyPointsService, galaxyId, userId);
     }

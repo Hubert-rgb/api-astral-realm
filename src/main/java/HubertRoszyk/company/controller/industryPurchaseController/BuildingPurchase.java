@@ -57,7 +57,7 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
     }
 
     @Override
-    public double getPrice(Building building, int...amount) {
+    public double getPrice(Building building, int...optionals) {
         int buildingTypePrice = building.getBuildingType().getBuildingPrice();
         double costMultiplier = gameProperties.getLevelCostMultiplier() * building.getBuildingLevel();
         return buildingTypePrice * costMultiplier;
@@ -67,8 +67,11 @@ public class BuildingPurchase implements PurchaseInterface<Building> {
     public void executeTimerAction(Building building, int planetId, int setLevel) {
         /** timer action*/
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(building.getPlanet().getGalaxy().getId());
+
+        GalaxyPoints galaxyPoints = galaxyPointsController.getGalaxyPoints(building.getPlanet().getUser().getId(), building.getPlanet().getGalaxy().getId());
+
         int currentCycle = timerEntity.getCyclesNum();
-        int buildingEndCycle = building.getBuildingType().getConstructionCycles() + currentCycle;
+        int buildingEndCycle = building.getBuildingType().getConstructionCycles() + currentCycle - galaxyPoints.getConstructionTimeSubtrahend();
 
         TimerAction timerAction = new TimerAction(TimerActionType.BUILDING, buildingEndCycle, building.getId(), timerEntity);
 

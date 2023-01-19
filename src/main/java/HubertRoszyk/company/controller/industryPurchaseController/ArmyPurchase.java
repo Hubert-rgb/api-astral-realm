@@ -1,14 +1,17 @@
 package HubertRoszyk.company.controller.industryPurchaseController;
 
 import HubertRoszyk.company.configuration.GameProperties;
+import HubertRoszyk.company.entiti_class.GalaxyPoints;
 import HubertRoszyk.company.entiti_class.Planet;
 import HubertRoszyk.company.entiti_class.PlanetPoints;
+import HubertRoszyk.company.service.GalaxyPointsService;
 import HubertRoszyk.company.service.PlanetPointsService;
 import HubertRoszyk.company.service.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class ArmyPurchase implements PurchaseInterface<Map<Integer, Integer>> {
@@ -20,6 +23,9 @@ public class ArmyPurchase implements PurchaseInterface<Map<Integer, Integer>> {
 
     @Autowired
     GameProperties gameProperties;
+
+    @Autowired
+    GalaxyPointsService galaxyPointsService;
 
     @Override
     public PlanetPointsService getPlanetPointsService() {
@@ -85,10 +91,13 @@ public class ArmyPurchase implements PurchaseInterface<Map<Integer, Integer>> {
     }
 
     @Override
-    public double getPrice(Map<Integer, Integer> object, int...amount) {
+    public double getPrice(Map<Integer, Integer> object, int...optionals) {
         int level = object.keySet().iterator().next();
 
-        return level * amount[0] * gameProperties.getLevelCostMultiplier() * gameProperties.getArmyCost();
+        Planet planet = planetService.getPlanetById(optionals[1]);
+        GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(planet.getUser().getId(), planet.getGalaxy().getId());
+
+        return optionals[0] * (level * gameProperties.getLevelCostMultiplier() * gameProperties.getArmyCost() - galaxyPoints.getArmyCostSubtrahend());
     }
 
     @Override

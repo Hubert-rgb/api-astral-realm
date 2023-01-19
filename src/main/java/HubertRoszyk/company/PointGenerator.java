@@ -36,7 +36,7 @@ public class PointGenerator {
         for (GalaxyPoints galaxyPoints : galaxyPointsList) {
             double gotSciencePoints = galaxyPoints.getSciencePoints();
 
-            double setSciencePoints = gotSciencePoints + galaxyPoints.getSciencePointsIncome();
+            double setSciencePoints = gotSciencePoints + (galaxyPoints.getSciencePointsIncome() * galaxyPoints.getGlobalSciencePointsMultiplier());
 
             galaxyPoints.setSciencePoints(setSciencePoints);
 
@@ -44,15 +44,21 @@ public class PointGenerator {
         }
 
         for (PlanetPoints planetPoints : planetPointsList) {
+            double globalIndustryPointsMultiplier = 1;
+            if (planetPoints.getPlanet().getUser() != null){
+                GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(planetPoints.getPlanet().getUser().getId(), planetPoints.getPlanet().getGalaxy().getId());
+                globalIndustryPointsMultiplier = galaxyPoints.getGlobalIndustryPointsMultiplier();
+            }
+
             double gotIndustryPoints = planetPoints.getIndustryPoints();
 
             double setIndustryPoints;
 
             //planetPointsController.getTotalStorageSize(planetPoints.getPlanet().getId());
-            if (planetPoints.getTotalStorageSize() < gotIndustryPoints + planetPoints.getIndustryPointsIncome()){
+            if (planetPoints.getTotalStorageSize() < gotIndustryPoints + (planetPoints.getIndustryPointsIncome() * globalIndustryPointsMultiplier)){
                 setIndustryPoints = planetPoints.getTotalStorageSize();
             } else {
-                setIndustryPoints = gotIndustryPoints + planetPoints.getIndustryPointsIncome();
+                setIndustryPoints = gotIndustryPoints + (planetPoints.getIndustryPointsIncome() * globalIndustryPointsMultiplier);
             }
 
             planetPoints.setIndustryPoints(setIndustryPoints);

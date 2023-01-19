@@ -5,19 +5,21 @@ import HubertRoszyk.company.entiti_class.ship.Ship;
 import HubertRoszyk.company.enumStatus.IndustryPurchaseStatus;
 import HubertRoszyk.company.service.*;
 
+import java.util.Optional;
+
 public interface PurchaseInterface<T> { //TODO redo also for buying science cards
     PlanetPointsService getPlanetPointsService();
     PlanetService getPlanetService();
 
 
-    default IndustryPurchaseStatus executePurchase(int planetId, T object, int setLevel, int...amount) {
+    default IndustryPurchaseStatus executePurchase(int planetId, T object, int setLevel, int...optionals) {
         PlanetPointsService planetPointsService = getPlanetPointsService();
         PlanetService planetService = getPlanetService();
 
         PlanetPoints planetPoints = planetPointsService.getPointsByPlanetId(planetId);
         Planet planet = planetService.getPlanetById(planetId);
 
-        double price = getPrice(object, amount);
+        double price = getPrice(object, optionals);
         double gotIndustryPoints = planetPoints.getIndustryPoints();
 
         System.out.println("cena: " + price);
@@ -42,7 +44,7 @@ public interface PurchaseInterface<T> { //TODO redo also for buying science card
 
         //TODO maybe strategy not if
         if (isEnoughPoints && isNotOnMaximumLevel  && isEnoughSpaceOnPlanet && isShipYardEnoughLevel) {  //strategy
-            purchaseOk(object, planetPoints, setLevel, planetPointsService, gotIndustryPoints, price, amount);
+            purchaseOk(object, planetPoints, setLevel, planetPointsService, gotIndustryPoints, price, optionals);
             return IndustryPurchaseStatus.OK;
         } else if (!isNotOnMaximumLevel) {
             return IndustryPurchaseStatus.MAX_LEVEL;
@@ -74,7 +76,7 @@ public interface PurchaseInterface<T> { //TODO redo also for buying science card
 
     void upgradeLevel(T object, int setLevel, int planetId, int...amount);
     boolean getIsNotOnMaximumLevel(T object, int planetId);
-    double getPrice(T object, int...amount);
+    double getPrice(T object, int...optionals);
 
     void executeTimerAction(T object, int planetId, int setLevel);
 

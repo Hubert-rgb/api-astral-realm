@@ -1,11 +1,14 @@
 package HubertRoszyk.company.entiti_class;
 
+import HubertRoszyk.company.controller.GalaxyPointsController;
 import HubertRoszyk.company.entiti_class.ship.Ship;
+import HubertRoszyk.company.service.GalaxyPointsService;
 import HubertRoszyk.company.service.TimerEntityService;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
@@ -15,7 +18,9 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 public class TravelRoute {
-
+    @Autowired
+    @Transient
+    private GalaxyPointsService galaxyPointsService;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -55,7 +60,10 @@ public class TravelRoute {
         System.out.println("dist");
         System.out.println(distance);
 
-        int routeCyclesDuration =  ((int)distance / ship.getSpeed());
+        GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(ship.getUser().getId(), arrivalPlanet.getGalaxy().getId());
+
+        int speed = ship.getShipType().getSpeed() + galaxyPoints.getIndustryShipSpeedAddition();
+        int routeCyclesDuration =  ((int)distance / speed);
 
         System.out.println(routeCyclesDuration);
 

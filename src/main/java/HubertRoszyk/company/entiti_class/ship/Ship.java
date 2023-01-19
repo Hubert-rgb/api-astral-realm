@@ -39,9 +39,6 @@ abstract public class Ship{
 
     @Enumerated
     private ShipType shipType;
-
-    private int speedLevel; //developed by science cards, global
-    private int speed;
     private int capacityLevel; //developed by industry
 
     private int shipCapacity;
@@ -63,13 +60,10 @@ abstract public class Ship{
 
     public Ship(ShipType shipType, int capacityLevel, User user) {
         this.shipType = shipType;
-        this.speedLevel = 1; //TODO cards
         this.capacityLevel = capacityLevel;
         this.user = user;
 
         getCapacity();
-
-        this.speed = speedLevel * shipType.getSpeed();
     }
 
     public void getCapacity() {

@@ -9,10 +9,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 @RequestMapping("/army-controller")
 @RestController
@@ -34,7 +31,7 @@ public class ArmyController {
 
         Map<Integer, Integer> armyDivision = Collections.singletonMap(level, amount);
 
-        return armyPurchase.executePurchase(planetId, armyDivision, level, amount);
+        return armyPurchase.executePurchase(planetId, armyDivision, level, amount, planetId);
     }
     @PutMapping("/army")
     public IndustryPurchaseStatus upgradeArmy(@RequestBody JSONObject jsonInput) {
@@ -44,7 +41,7 @@ public class ArmyController {
 
         Map<Integer, Integer> armyDivision = Collections.singletonMap(level, amount);
 
-        return armyPurchase.executePurchase(planetId, armyDivision, level + 1, amount);
+        return armyPurchase.executePurchase(planetId, armyDivision, level + 1, amount, planetId);
     }
     public static Map<Integer, Integer> combineArmy(Map<Integer, Integer> armyA, Map<Integer, Integer> armyB){
         Map<Integer, Integer> combinedArmy = new HashMap<>();

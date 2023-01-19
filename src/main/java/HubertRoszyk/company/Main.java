@@ -21,7 +21,10 @@ public class Main {
     //TODO create concept for all cards
     //TODO create those cards execution
 
-    /** not colonised planets */
+    /** uninhabited planets */
+    //TODO longer protection period after colonising this planet
+    //TODO change type after colonising
+
 
     /** general changes */
     //TODO radial positioning

@@ -16,8 +16,6 @@ public class ScienceCardsSerializer extends StdSerializer<ScienceCardType> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeFieldName("name");
         jsonGenerator.writeString(scienceCardType.name());
-        jsonGenerator.writeFieldName("price");
-        jsonGenerator.writeNumber(scienceCardType.getPrice());
         jsonGenerator.writeFieldName("cardType");
         jsonGenerator.writeString(scienceCardType.getCardType().toString());
         jsonGenerator.writeFieldName("militaryCardsRequired");

@@ -52,6 +52,9 @@ public class MovementController{
     StringToAttackTypeConverter stringToAttackTypeConverter;
 
     @Autowired
+    GalaxyPointsService galaxyPointsService;
+
+    @Autowired
     TravelRouteService travelRouteService;
 
     @PostMapping("/attack-controller/battles")
@@ -68,28 +71,34 @@ public class MovementController{
         Planet attackPlanet = planetService.getPlanetById(attackPlanetId);
         Planet defensePlanet = planetService.getPlanetById(defensePlanetId);
         User user = userService.getUserById(userId);
+        GalaxyPoints galaxyPoints = galaxyPointsService.getPointsByUserIdAndGalaxyId(userId, attackPlanet.getGalaxy().getId());
 
         Set<AttackShip> attackShipSet = getShipsFromDatabase(attackShipsIdList);
         Set<IndustryShip> industryShipSet = getShipsFromDatabase(industryShipsIdList);
 
         TimerEntity timerEntity = timerEntityService.getTimerEntityByGalaxyId(defensePlanet.getGalaxy().getId());
 
-        Attack attack = new Attack(attackShipSet, industryShipSet, attackPlanetId, defensePlanet, user, attackType);
-        defensePlanet.setPlanetStatus(PlanetStatus.BEFORE_ATTACK);
-        battleService.saveBattle(attack);
-        planetService.savePlanet(defensePlanet);
+        if (attackType == AttackType.BATTLE && !galaxyPoints.canBattleUsersPlanets()){
+            //TODO somehow return it as a http response
+            System.out.println("you can't do this");
+        } else {
+            Attack attack = new Attack(attackShipSet, industryShipSet, attackPlanetId, defensePlanet, user, attackType);
+            defensePlanet.setPlanetStatus(PlanetStatus.BEFORE_ATTACK);
+            battleService.saveBattle(attack);
+            planetService.savePlanet(defensePlanet);
 
-        /** timer task*/
-        Iterator<AttackShip> attackShipIterator = attackShipSet.iterator();
-        TravelRoute travelRouteToTimerAction = new TravelRoute(attackPlanet, defensePlanet, attackShipIterator.next(), timerEntityService);
-        TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRouteToTimerAction.getRouteEndingCycle(), attack.getId(), timerEntity);
-        timerActionService.saveTimerAction(timerAction);
+            /** timer task*/
+            Iterator<AttackShip> attackShipIterator = attackShipSet.iterator();
+            TravelRoute travelRouteToTimerAction = new TravelRoute(attackPlanet, defensePlanet, attackShipIterator.next(), timerEntityService);
+            TimerAction timerAction = new TimerAction(TimerActionType.ATTACK_CARGO, travelRouteToTimerAction.getRouteEndingCycle(), attack.getId(), timerEntity);
+            timerActionService.saveTimerAction(timerAction);
 
-        Set<Ship> attackShipShipSet = getShipsFromDatabase(attackShipsIdList);
-        Set<Ship> industryShipShipSet = getShipsFromDatabase(industryShipsIdList);
+            Set<Ship> attackShipShipSet = getShipsFromDatabase(attackShipsIdList);
+            Set<Ship> industryShipShipSet = getShipsFromDatabase(industryShipsIdList);
 
-        createTravelRoutes(attackShipShipSet, attackPlanet, defensePlanet);
-        createTravelRoutes(industryShipShipSet, attackPlanet, defensePlanet);
+            createTravelRoutes(attackShipShipSet, attackPlanet, defensePlanet);
+            createTravelRoutes(industryShipShipSet, attackPlanet, defensePlanet);
+        }
     }
     public void attackExecution(Attack attack){
         AttackType attackType = attack.getAttackType();
